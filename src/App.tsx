@@ -1,9 +1,10 @@
 import './App.css'
+import MainHeader from './components/MainHeader'
 
 function App() {
   return (
     <>
-      <h1>Codeforge</h1>
+      <MainHeader />
     </>
   )
 }

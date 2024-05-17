@@ -1,0 +1,31 @@
+.main-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main-header .logo-img {
+    width: 220px;
+}
+
+ul.main-menu {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    list-style: none;
+}
+
+ul.main-menu li.menu-item a {
+    text-decoration: none;
+    color: #000;
+    padding: 10px;
+}
+
+.session-btns {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    list-style: none;
+}
+
