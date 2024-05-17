@@ -1,4 +1,4 @@
-![logo](./public/assets/logo.webp)
+![logo](./public/assets/logo.svg)
 
 # CodeForge Builders website
 
