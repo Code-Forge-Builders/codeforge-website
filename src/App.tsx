@@ -1,10 +1,12 @@
 import './App.css'
-import MainHeader from './components/MainHeader'
+
+import MainRouter from './routes'
 
 function App() {
   return (
     <>
-      <MainHeader />
+      <MainRouter />
+      
     </>
   )
 }
