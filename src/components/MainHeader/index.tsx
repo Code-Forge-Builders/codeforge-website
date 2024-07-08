@@ -4,7 +4,7 @@ import './MainHeader.css'
 const MainHeader: React.FC = () => {
     return (
         <div className='main-header'>
-            <a href="#" className='logo-link'><img className='logo-img' src="/assets/logo.svg" alt="logo" /></a>
+            <a href="#" className='logo-link'><img className='logo-img' src="assets/logo.svg" alt="logo" /></a>
             <ul className="main-menu">
                 <li className="menu-item"><a href="products">Products</a></li>
                 <li className="menu-item"><a href="company">Company</a></li>
