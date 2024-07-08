@@ -2,8 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches:
-      - "master" # change to the branch you wish to deploy from
+    branches: [ master ] 
 
 jobs:
   deploy:
