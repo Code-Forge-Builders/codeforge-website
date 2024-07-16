@@ -1,12 +1,22 @@
-
+// src/pages/Login.tsx
+import React from 'react';
+import LoginForm from '../../components/LoginForm';
 import './Login.css'
+import MainHeader from '../../components/MainHeader';
 
-function Login() {
+const Login: React.FC = () => {
+  const handleLogin = (username: string, password: string) => {
+    // Lógica de autenticação aqui
+    console.log('Login attempt:', { username, password });
+  };
+
   return (
-    <>
-  pagina de login
-    </>
-  )
-}
+      <>
+      <MainHeader/>
+      <LoginForm onLogin={handleLogin} />
+      </>
+    
+  );
+};
 
-export default Login
+export default Login;

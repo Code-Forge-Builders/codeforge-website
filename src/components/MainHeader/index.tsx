@@ -3,6 +3,7 @@ import './MainHeader.css'
 
 const MainHeader: React.FC = () => {
     return (
+        
         <div className='main-header'>
             <a href="#" className='logo-link'><img className='logo-img' src="assets/logo.svg" alt="logo" /></a>
             <ul className="main-menu">
@@ -17,6 +18,7 @@ const MainHeader: React.FC = () => {
                 <a href="#signup" id="signup">Sign Up</a>
             </div>
         </div>
+        
     );
 };
 
