@@ -31,16 +31,3 @@ ul.main-menu li.menu-item a {
     padding: 10px;
 }
 
-.session-btns {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    list-style: none;
-}
-
-.session-btns a {
-    border-radius: 5px;
-    border: 1px solid #c8c8c8;
-    padding: 4px 10px;
-}
-

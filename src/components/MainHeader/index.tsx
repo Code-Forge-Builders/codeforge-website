@@ -1,23 +1,37 @@
 import React from 'react';
 import './MainHeader.css'
+import MainMenu, { IMainMenuItem } from './MainMenu';
 
 const MainHeader: React.FC = () => {
-    return (
+    const menuItens: IMainMenuItem[] = [
+        {
+            label: 'Home',
+            to: '/'
+        },
+        {
+            label: 'Products',
+            to: '/products'
+        },
+        {
+            label: 'About',
+            to: '/about'
+        },
+        {
+            label: 'Pricing',
+            to: '/pricing'
+        },
+        {
+            label: 'Contact',
+            to: '/'
+        },
         
+    ]
+    
+    return (
         <div className="header-container">
             <div className='main-header'>
             <a href="#" className='logo-link'><img className='logo-img' src="assets/logo.svg" alt="logo" /></a>
-            <ul className="main-menu">
-                <li className="menu-item"><a href="#products">Products</a></li>
-                <li className="menu-item"><a href="#company">Company</a></li>
-                <li className="menu-item"><a href="#pricing">Pricing</a></li>
-                <li className="menu-item"><a href="#contact">Contact</a></li>
-                <li className="menu-item"><a href="#support">Support</a></li>
-            </ul>
-            <div className="session-btns">
-                <a href="#login" id="login">Login</a>
-                <a href="#signup" id="signup">Sign Up</a>
-            </div>
+            <MainMenu itens={menuItens}/>
         </div>
         </div>
         
