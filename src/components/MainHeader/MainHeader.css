@@ -30,4 +30,8 @@ ul.main-menu li.menu-item a {
     color: var(--main-text-color);
     padding: 10px;
 }
+li.menu-item a:hover {
+    color: #000;
+    border-bottom: 2px solid #fd6805;
+}
 
