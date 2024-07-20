@@ -1,3 +1,4 @@
+import Footer from '../../components/Footer'
 import MainHeader from '../../components/MainHeader'
 import './Home.css'
 
@@ -35,7 +36,7 @@ Proin quis arcu id nisi sagittis pellentesque et quis orci. Phasellus dapibus ni
 
 Fusce commodo ante ligula, id mattis dui aliquet vel. Praesent gravida est in consectetur commodo. Duis sed posuere tellus, in pellentesque dui. Pellentesque blandit quam eget ornare faucibus. Vestibulum blandit est lobortis neque tincidunt, ac sodales velit tristique. Phasellus quis ligula tortor. Nunc eu pretium lorem.
 
-
+    < Footer/>
     </>
   )
 }
