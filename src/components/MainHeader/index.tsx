@@ -22,14 +22,14 @@ const MainHeader: React.FC = () => {
     },
     {
       label: 'Contact',
-      to: '/',
+      to: '/contact',
     },
   ]
 
   return (
     <div className="header-container">
       <div className="main-header">
-        <a href="#" className="logo-link">
+        <a href="" className="logo-link">
           <img className="logo-img" src="assets/logo.svg" alt="logo" />
         </a>
         <MainMenu itens={menuItens} />

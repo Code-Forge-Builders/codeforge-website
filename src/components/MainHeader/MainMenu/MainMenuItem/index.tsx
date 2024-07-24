@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import './MainMenuItem.css'
 
 interface MainMenuItemProps {
   label: string
@@ -8,7 +9,7 @@ interface MainMenuItemProps {
 const MainMenuItem: React.FC<MainMenuItemProps> = ({ to, label }) => {
   return (
     <li className="menu-item">
-      <Link to={to}>{label}</Link>
+      <NavLink to={to}>{label}</NavLink>
     </li>
   )
 }

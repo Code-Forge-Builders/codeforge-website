@@ -1,0 +1,10 @@
+li.menu-item a {
+  text-decoration: none;
+  color: var(--main-text-color);
+  padding: 10px;
+}
+
+li.menu-item a:hover, li.menu-item a.active {
+  color: #000;
+  border-bottom: 2px solid #fd6805;
+}
