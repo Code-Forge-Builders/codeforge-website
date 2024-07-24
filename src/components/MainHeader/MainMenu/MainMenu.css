@@ -1,0 +1,6 @@
+ul.main-menu {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  list-style: none;
+}

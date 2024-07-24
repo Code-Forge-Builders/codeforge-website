@@ -1,4 +1,5 @@
 import MainMenuItem from './MainMenuItem'
+import './MainMenu.css'
 
 export interface IMainMenuItem {
   label: string
