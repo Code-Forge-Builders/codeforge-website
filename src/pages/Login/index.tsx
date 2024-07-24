@@ -2,7 +2,6 @@
 import React from 'react'
 import LoginForm from '../../components/LoginForm'
 import './Login.css'
-import MainHeader from '../../components/MainHeader'
 
 const Login: React.FC = () => {
   const handleLogin = (username: string, password: string) => {
@@ -12,7 +11,6 @@ const Login: React.FC = () => {
 
   return (
     <>
-      <MainHeader />
       <LoginForm onLogin={handleLogin} />
     </>
   )
