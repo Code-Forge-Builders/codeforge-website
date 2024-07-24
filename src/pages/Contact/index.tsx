@@ -1,10 +1,11 @@
 import React from 'react'
+import { Button, Form } from 'react-bootstrap'
 
 const Contact: React.FC = () => {
   return (
     <div className="contact-container">
       <h1>Contact Us</h1>
-      <form>
+      <Form>
         <div>
           <label htmlFor="name">Name:</label>
           <input type="text" id="name" required />
@@ -17,8 +18,8 @@ const Contact: React.FC = () => {
           <label htmlFor="message">Message:</label>
           <textarea id="message" required></textarea>
         </div>
-        <button type="submit">Send</button>
-      </form>
+        <Button type="submit">Send</Button>
+      </Form>
     </div>
   )
 }
