@@ -1,11 +1,8 @@
-import Footer from '../../components/Footer'
-import MainHeader from '../../components/MainHeader'
 import './Home.css'
 
 function Home() {
   return (
     <>
-      <MainHeader />
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in eleifend
       ligula. Sed sed varius purus, id porttitor diam. Nullam maximus nunc id
       dolor egestas aliquam. Vestibulum rutrum commodo ante, sit amet auctor
@@ -126,7 +123,6 @@ function Home() {
       posuere tellus, in pellentesque dui. Pellentesque blandit quam eget ornare
       faucibus. Vestibulum blandit est lobortis neque tincidunt, ac sodales
       velit tristique. Phasellus quis ligula tortor. Nunc eu pretium lorem.
-      <Footer />
     </>
   )
 }
