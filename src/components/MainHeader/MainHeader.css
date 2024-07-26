@@ -3,7 +3,7 @@
     display: flex;
     border-bottom: 1px solid var(--borders);
     background-color: rgba(255, 255, 255, 0.5); /* branco com 50% de opacidade */
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(3px);
     width: 100%;
     height: auto;
 }
@@ -21,22 +21,5 @@
 
 .main-header .logo-img {
     width: 220px;
-}
-
-ul.main-menu {
-    display: flex;
-    flex-direction: row;
-    gap: 2rem;
-    list-style: none;
-}
-
-ul.main-menu li.menu-item a {
-    text-decoration: none;
-    color: var(--main-text-color);
-    padding: 10px;
-}
-li.menu-item a:hover {
-    color: #000;
-    border-bottom: 2px solid #fd6805;
 }
 

@@ -1,13 +1,9 @@
-import Footer from '../../components/Footer'
-import MainHeader from '../../components/MainHeader'
 import './Home.css'
 
 function Home() {
   return (
     <>
-      <MainHeader />
-    <div className="home-container">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum molestie dignissim. In hac habitasse platea dictumst. Sed tincidunt ultricies dui, quis suscipit nunc. Nam eleifend leo quis magna pretium scelerisque. Curabitur eget arcu dapibus, luctus lectus a, faucibus nisi. Donec at tellus condimentum, dictum dolor ac, elementum quam. Suspendisse aliquet eros sed diam porta, nec feugiat neque elementum. Phasellus tristique enim nec maximus pulvinar. Aliquam erat volutpat. Etiam faucibus nibh ut felis mollis, ac eleifend mi facilisis.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam condimentum molestie dignissim. In hac habitasse platea dictumst. Sed tincidunt ultricies dui, quis suscipit nunc. Nam eleifend leo quis magna pretium scelerisque. Curabitur eget arcu dapibus, luctus lectus a, faucibus nisi. Donec at tellus condimentum, dictum dolor ac, elementum quam. Suspendisse aliquet eros sed diam porta, nec feugiat neque elementum. Phasellus tristique enim nec maximus pulvinar. Aliquam erat volutpat. Etiam faucibus nibh ut felis mollis, ac eleifend mi facilisis.
 
 Nam dignissim felis enim, non finibus orci pharetra et. Curabitur fermentum rutrum neque, ut interdum nibh fringilla et. Praesent fringilla, risus fermentum tincidunt ultricies, mauris leo rhoncus mi, vel feugiat erat erat vel mi. Morbi sit amet posuere libero. Integer scelerisque sodales nibh ac eleifend. Sed lorem massa, dictum eget tortor sit amet, ultrices bibendum mauris. Mauris sed efficitur diam. Donec mauris arcu, faucibus eu blandit nec, faucibus a sem. Integer fringilla eget enim vitae laoreet.
 
@@ -28,8 +24,6 @@ Curabitur tempor, justo et suscipit dictum, quam ligula vulputate nunc, sagittis
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ornare arcu quis nisl egestas cursus. Praesent felis augue, facilisis a arcu ut, porttitor lobortis justo. Integer dapibus scelerisque nibh ut tempus. Phasellus luctus commodo libero, eget tincidunt urna volutpat eu. Integer varius iaculis dui sed sollicitudin. Etiam libero ipsum, gravida ut aliquet in, faucibus sed diam. Vivamus eget nisi eu nisi laoreet sagittis non id mi. Aliquam sed quam ac sem placerat lacinia ut nec magna. Quisque vitae luctus urna. Donec enim enim, luctus in nunc in, pharetra condimentum ante. Curabitur lobortis nibh mauris, eu facilisis libero hendrerit eget. Suspendisse non nunc ultricies, lobortis est vitae, tempus libero. Aliquam erat volutpat. Quisque nunc orci, interdum vitae sem nec, tempor ultricies quam. Curabitur eu dui magna.
 
 Suspendisse potenti. Proin et commodo lectus. Vivamus malesuada purus non ex euismod aliquet. Aliquam molestie risus vitae ante hendrerit vestibulum. Proin porta convallis mi vel euismod. Ut interdum placerat est, quis tristique mi finibus in. Vestibulum consequat risus id hendrerit tempus. Donec eu auctor arcu. Ut dignissim, diam quis egestas auctor, mi quam elementum lacus, ut consequat purus est sed nulla. Nullam pharetra ligula at eleifend consequat. Quisque id ex sed diam auctor eleifend. Nulla cursus ipsum ac felis interdum eleifend. Maecenas id quam orci. Quisque lacinia ultricies semper.
-    </div>
-    < Footer/>
     </>
   )
 }

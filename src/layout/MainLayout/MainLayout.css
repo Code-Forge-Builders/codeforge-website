@@ -4,17 +4,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
-/* .home-container {
+.page-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 76px;
+  margin-top: 66.19px;
 
-} */
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
 }
