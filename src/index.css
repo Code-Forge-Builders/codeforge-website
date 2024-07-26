@@ -33,6 +33,7 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
+  background-image: url("../public/assets/background.png");
 }
 
 h1 {

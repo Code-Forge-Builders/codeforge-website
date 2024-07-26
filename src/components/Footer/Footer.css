@@ -17,16 +17,32 @@
   flex-direction: column;
 }
 
+/* .footer-section-content{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+} */
+.social-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 .footer-section ul {
     list-style-type: none; /* Remove os marcadores */
 
 }
 
 .footer-section ul li {
-    margin: 0.5rem 0;
+    margin: 0 0;
 }
+/* .footer-section-content a:hover {
+  color: #000;
+  border-bottom: 2px solid #fd6805;} */
 
-
+#footer-quick-links a:hover {
+    color: #000;
+    border-bottom: 2px solid #fd6805;}
+  
 .footer-section-title {
 
 }

@@ -4,3 +4,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+.page-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 66.19px;
+
+}
