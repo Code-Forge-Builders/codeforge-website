@@ -22,7 +22,7 @@ const MainHeader: React.FC = () => {
     },
     {
       label: 'Contact',
-      to: '/',
+      to: '/contact',
     },
   ]
 
