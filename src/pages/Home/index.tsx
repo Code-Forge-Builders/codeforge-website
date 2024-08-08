@@ -20,7 +20,7 @@ function Home() {
           </div>
         </div>
         <div className="hero-section" id="hero-image">
-          <img src="../../public/assets/hero-image.png" alt="Hero Image" />
+          <img src="/public/assets/hero-image.png" alt="Hero Image" />
         </div>
       </section>
       <div id="about">
