@@ -4,14 +4,6 @@
   will-change: filter;
   transition: filter 300ms;
 }
-/* .home-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 76px;
-
-} */
 
 /* Centraliza o contêiner na página */
 .contact-container {
@@ -26,22 +18,16 @@
   box-sizing: border-box;
 }
 
-/* Estilo do título */
-.contact-container h1 {
-  color:#0056b3;
-  font-style: italic;
-}
-
 /* Estilo do formulário */
 .contact-container-form {
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 2rem;
 }
 
-/* Estilo das divs dos campos */
-.contact-container-form div {
-  margin: 15px;
+.contact-container-form .first-form-line div {
+  width: 48%;
 }
 
 /* Estilo dos rótulos */
@@ -54,25 +40,22 @@
 }
 
 /* Estilo dos inputs e textarea */
-.contact-container-form input,
-.contact-container-form textarea {
-      color: #333;
-      font-size: 16px;
-      border: none;
-      border-bottom: solid 1px #2e31a6;
-      height: 100%;
-      display: block;
-      outline: none;
-      padding: 10px 0 8px;
-      background: transparent;
-      width: auto;
-      width: 100%;   
-  
+input,
+textarea {
+  color: #333;
+  font-size: 16px;
+  border: none;
+  border-bottom: solid 1px #2e31a6;
+  display: block;
+  outline: none;
+  padding: 10px 0 8px;
+  background: transparent;
+  width: 100%;
 }
 
 
-/* Estilo do botão */
-.contact-container-form button {
+/* Estilo dos botões */
+button {
   padding: 8px;
   background-color: #007bff;
   color: #fff;
@@ -83,7 +66,7 @@
   transition: background-color 0.3s;
 }
 
-.contact-container-form button:hover {
+button:hover {
   background-color: #0056b3;
 }
 
