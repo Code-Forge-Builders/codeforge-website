@@ -2,8 +2,7 @@
     position: fixed;
     display: flex;
     border-bottom: 1px solid var(--borders);
-    background-color: rgba(255, 255, 255, 0.5); /* branco com 50% de opacidade */
-    backdrop-filter: blur(3px);
+    background-color: rgba(255, 255, 255);
     width: 100%;
     height: auto;
 }

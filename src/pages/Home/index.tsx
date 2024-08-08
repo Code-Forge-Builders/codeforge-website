@@ -6,17 +6,23 @@ import { FaArrowRight } from 'react-icons/fa'
 function Home() {
   return (
     <>
-      <div className="d-flex main">
-        <section className="main-left-section">
-          <h1>
-            Criamos o seu sistema, site ou aplicativo com as melhores
+      <section className="hero-container">
+        <div className="hero-section" id="hero-content">
+          <div className="hero-text">
+            Criamos o seu
+            <strong> sistema, site ou aplicativo</strong> com as melhores
             tecnologias disponíveis
-          </h1>
-          <a href="" className="btn btn-primary">
-            Fale Conosco <FaArrowRight />
-          </a>
-        </section>
-      </div>
+          </div>
+          <div className="hero-buttons">
+            <a href="" className="btn btn-primary">
+              Fale Conosco <FaArrowRight />
+            </a>
+          </div>
+        </div>
+        <div className="hero-section" id="hero-image">
+          <img src="../../public/assets/hero-image.png" alt="Hero Image" />
+        </div>
+      </section>
       <div id="about">
         <h1>Sobre a Codeforge Builders</h1>
         <section>
