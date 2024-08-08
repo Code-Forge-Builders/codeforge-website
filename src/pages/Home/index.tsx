@@ -24,7 +24,7 @@ function Home() {
         </div>
       </section>
       <div id="about">
-        <h1>Sobre a Codeforge Builders</h1>
+        <h1>Quem Somos</h1>
         <section>
           <p>
             Somos uma pequena startup criada por um desenvolvedor com alguns
