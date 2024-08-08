@@ -14,7 +14,7 @@ function Home() {
             tecnologias disponíveis
           </div>
           <div className="hero-buttons">
-            <a href="" className="btn btn-primary">
+            <a href="#contact" className="btn btn-primary">
               Fale Conosco <FaArrowRight />
             </a>
           </div>
