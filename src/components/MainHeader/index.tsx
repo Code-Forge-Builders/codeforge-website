@@ -9,20 +9,20 @@ const MainHeader: React.FC = () => {
       to: '/',
     },
     {
-      label: 'Products',
-      to: '/products',
+      label: 'Sobre Nós',
+      to: '/#about',
     },
     {
-      label: 'About',
-      to: '/about',
+      label: 'Time',
+      to: '/#team',
     },
     {
-      label: 'Pricing',
-      to: '/pricing',
+      label: 'Projetos',
+      to: '/#projects',
     },
     {
       label: 'Contact',
-      to: '/contact',
+      to: '/#contact',
     },
   ]
 

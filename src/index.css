@@ -20,6 +20,7 @@
 
   --borders: #c8c8c8;
   --main-text-color: #05182d;
+  --btn-primary: #0d3c71
 }
 
 a {
@@ -33,10 +34,14 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
-
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.btn, .btn-primary, button {
+  background-color: var(--btn-primary) !important;
+  border: solid 1px var(--btn-primary) !important;
 }

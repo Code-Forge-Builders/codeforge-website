@@ -5,20 +5,9 @@ const Footer = () => {
   return (
     <footer className="footer px-5">
       <div className="footer-container">
-        <div className="footer-section">
+        <div className="footer-section" id="footer-quick-links">
           <div className="footer-section-title">
-            <h2>About Us</h2>
-          </div>
-          <div className="footer-section-content">
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              non urna nec.
-            </p>
-          </div>
-        </div>
-        <div className="footer-section">
-          <div className="footer-section-title" id="footer-quick-links">
-            <h2>Quick Links</h2>
+            <h2>Links Úteis</h2>
           </div>
           <div className="footer-section-content">
             <ul>
@@ -26,34 +15,31 @@ const Footer = () => {
                 <a href="">Home</a>
               </li>
               <li>
-                <a href="products">Products</a>
-              </li>
-              <li>
                 <a href="about">About</a>
               </li>
               <li>
-                <a href="pricing">Pricing</a>
+                <a href="projects">Projetos</a>
               </li>
               <li>
-                <a href="contact">Contact</a>
+                <a href="contact">Contato</a>
               </li>
             </ul>
           </div>
         </div>
         <div className="footer-section">
           <div className="footer-section-title">
-            <h2>Contact Us</h2>
+            <h2>Fale Conosco</h2>
           </div>
           <div className="footer-section-content">
             <p>Email: contact@mywebsite.com</p>
             <p>
-              Phone: <a href="tel:+5571989380393">+55 (71) 98938-0393</a>
+              Telefone: <a href="tel:+5571989380393">+55 (71) 98938-0393</a>
             </p>
           </div>
         </div>
         <div className="footer-section">
           <div className="footer-section-title">
-            <h2>Follow Us</h2>
+            <h2>Siga-nos</h2>
           </div>
           <div className="footer-section-content">
             <div className="social-links d-flex justify-content-around p-2 align-items-center align-middle">
@@ -90,7 +76,8 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2024 Codeforge Builders. All rights reserved.</p>
+        <p>&copy; 2024 Codeforge Builders. Todos os direitos reservados.</p>
+        <p>Desenvolvido pelo time da Codeforge Builders</p>
       </div>
     </footer>
   )

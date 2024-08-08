@@ -1,9 +1,20 @@
-import React, { PropsWithChildren } from 'react'
+import React, { PropsWithChildren, useEffect } from 'react'
 import MainHeader from '../../components/MainHeader'
 import Footer from '../../components/Footer'
 import './MainLayout.css'
+import { useLocation } from 'react-router-dom'
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
+  const location = useLocation()
+  useEffect(() => {
+    if (location.hash) {
+      const element = document.getElementById(location.hash)
+
+      if (element) {
+        element.scrollIntoView()
+      }
+    }
+  }, [location])
   return (
     <>
       <MainHeader />

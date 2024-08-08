@@ -1,9 +1,9 @@
+import { Button, Form, FormGroup } from 'react-bootstrap'
 import './Home.css'
-import { useNavigate } from 'react-router-dom'
+import { phoneMask } from '../../utils/masks'
+import { FaArrowRight } from 'react-icons/fa'
 
 function Home() {
-  const navigate = useNavigate()
-
   return (
     <>
       <section className="hero-container">
@@ -14,18 +14,67 @@ function Home() {
             tecnologias disponíveis
           </div>
           <div className="hero-buttons">
-            <button
-              className="btn btn-primary"
-              onClick={() => navigate('/contact')}
-            >
-              Fale conosco
-            </button>
+            <a href="" className="btn btn-primary">
+              Fale Conosco <FaArrowRight />
+            </a>
           </div>
         </div>
         <div className="hero-section" id="hero-image">
           <img src="../../public/assets/hero-image.png" alt="Hero Image" />
         </div>
       </section>
+      <div id="about">
+        <h1>Sobre a Codeforge Builders</h1>
+        <section>
+          <p>
+            Somos uma pequena startup criada por um desenvolvedor com alguns
+            poucos anos de experiência e que está sempre buscando novos
+            conhecimentos para construir novas soluções em software.
+          </p>
+          <p>
+            Nosso time é extremamente enxuto e eficiente, buscando entregar as
+            soluções no menor tempo possível dentro do escopo de conhecimento do
+            time.
+          </p>
+        </section>
+      </div>
+      <div id="team"></div>
+      <div className="contact-container" id="#contact">
+        <div className="contact-container-tittle">
+          <h1>Fale conosco</h1>
+        </div>
+        <Form className="contact-container-form d-flex">
+          <FormGroup className="d-flex justify-content-between first-form-line">
+            <FormGroup>
+              <label htmlFor="name">Nome</label>
+              <input type="text" id="name" required />
+            </FormGroup>
+            <FormGroup>
+              <label htmlFor="phone">Telefone/Whatsapp</label>
+              <input
+                type="text"
+                id="phone"
+                onChange={(event) => {
+                  event.target.value = phoneMask(event.target.value)
+                }}
+                required
+                maxLength={15}
+              />
+            </FormGroup>
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="email">Email</label>
+            <input type="email" id="email" required />
+          </FormGroup>
+          <FormGroup>
+            <label htmlFor="message">Messagem</label>
+            <textarea id="message" required></textarea>
+          </FormGroup>
+          <FormGroup className="d-flex justify-content-end">
+            <Button type="submit">Enviar</Button>
+          </FormGroup>
+        </Form>
+      </div>
     </>
   )
 }
