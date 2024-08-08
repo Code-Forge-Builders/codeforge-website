@@ -8,8 +8,9 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const location = useLocation()
   useEffect(() => {
     if (location.hash) {
-      const element = document.getElementById(location.hash)
+      const element = document.getElementById(location.hash.replace('#', ''))
 
+      console.log(element)
       if (element) {
         element.scrollIntoView()
       }

@@ -6,7 +6,7 @@ import { FaArrowRight } from 'react-icons/fa'
 function Home() {
   return (
     <>
-      <section className="hero-container">
+      <section className="hero-container" id="hero-container">
         <div className="hero-section" id="hero-content">
           <div className="hero-text">
             Criamos o seu
@@ -39,7 +39,7 @@ function Home() {
         </section>
       </div>
       <div id="team"></div>
-      <div className="contact-container" id="#contact">
+      <div className="contact-container" id="contact">
         <div className="contact-container-tittle">
           <h1>Fale conosco</h1>
         </div>
