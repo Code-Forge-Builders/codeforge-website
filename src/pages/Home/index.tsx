@@ -37,9 +37,9 @@ function Home() {
             <label htmlFor="message">Messagem</label>
             <textarea id="message" required></textarea>
           </FormGroup>
-          <Button className="w-100" type="submit">
-            Enviar
-          </Button>
+          <FormGroup className="d-flex justify-content-end">
+            <Button type="submit">Enviar</Button>
+          </FormGroup>
         </Form>
       </div>
     </>
