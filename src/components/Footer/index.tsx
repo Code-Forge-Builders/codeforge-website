@@ -7,18 +7,25 @@ const Footer = () => {
       <div className="footer-container">
         <div className="footer-section">
           <div className="footer-section-title">
-            <h2>About Us</h2>
+            <h2>Sobre Nós</h2>
           </div>
           <div className="footer-section-content">
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-              non urna nec.
+              Somos uma pequena startup criada por um desenvolvedor com alguns
+              poucos anos de experiência e que está sempre buscando novos
+              conhecimentos para construir novas soluções em software.
+            </p>
+
+            <p>
+              Nosso time é extremamente enxuto e eficiente, buscando entregar as
+              soluções no menor tempo possível dentro do escopo de conhecimento
+              do time.
             </p>
           </div>
         </div>
-        <div className="footer-section">
-          <div className="footer-section-title" id="footer-quick-links">
-            <h2>Quick Links</h2>
+        <div className="footer-section" id="footer-quick-links">
+          <div className="footer-section-title">
+            <h2>Links Úteis</h2>
           </div>
           <div className="footer-section-content">
             <ul>
@@ -26,16 +33,13 @@ const Footer = () => {
                 <a href="">Home</a>
               </li>
               <li>
-                <a href="products">Products</a>
-              </li>
-              <li>
                 <a href="about">About</a>
               </li>
               <li>
-                <a href="pricing">Pricing</a>
+                <a href="projects">Projetos</a>
               </li>
               <li>
-                <a href="contact">Contact</a>
+                <a href="contact">Contato</a>
               </li>
             </ul>
           </div>
@@ -90,7 +94,8 @@ const Footer = () => {
         </div>
       </div>
       <div className="footer-bottom">
-        <p>&copy; 2024 Codeforge Builders. All rights reserved.</p>
+        <p>&copy; 2024 Codeforge Builders. Todos os direitos reservados.</p>
+        <p>Desenvolvido pelo time da Codeforge Builders</p>
       </div>
     </footer>
   )

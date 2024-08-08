@@ -4,7 +4,7 @@ li.menu-item a {
   padding: 10px;
 }
 
-li.menu-item a:hover, li.menu-item a.active {
+li.menu-item a:hover {
   color: #000;
   border-bottom: 2px solid #fd6805;
 }

@@ -41,10 +41,8 @@
 
 #footer-quick-links a:hover {
     color: #000;
-    border-bottom: 2px solid #fd6805;}
-  
-.footer-section-title {
-
+    border-bottom: 2px solid #fd6805;
+    text-decoration: none;
 }
 
 .footer-section .social-links {

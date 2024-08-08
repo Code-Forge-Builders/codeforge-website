@@ -4,7 +4,6 @@ import { lazy, Suspense } from 'react'
 import PageLoading from '@/components/PageLoading'
 
 const Home = lazy(() => import('@/pages/Home'))
-const Contact = lazy(() => import('@/pages/Contact'))
 
 function MainRouter() {
   return (
@@ -13,7 +12,7 @@ function MainRouter() {
         <MainLayout>
           <Routes>
             <Route path={`/`} element={<Home />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="*" element={'Página não encontrada'} />
           </Routes>
         </MainLayout>
       </Suspense>
