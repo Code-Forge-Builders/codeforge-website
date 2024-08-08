@@ -18,3 +18,32 @@
     animation: logo-spin infinite 20s linear;
   }
 }
+.hero-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+}
+.hero-section{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  justify-content: center;
+  margin: 16px;
+}
+#hero-content div{
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin: 8px;
+}
+.hero-text{
+  font-size: 36px;
+  text-align: left;
+}
+.hero-section img{
+  width: 90%;
+  height: auto;
+}
+
