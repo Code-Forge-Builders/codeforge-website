@@ -5,6 +5,18 @@
   transition: filter 300ms;
 }
 
+.main {
+  max-width: 1000px;
+}
+
+#about {
+  max-width: 1000px;
+}
+
+#about h1 {
+  margin-bottom: 2rem;
+}
+
 /* Centraliza o contêiner na página */
 .contact-container {
   display: flex;

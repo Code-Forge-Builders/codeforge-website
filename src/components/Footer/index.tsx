@@ -5,24 +5,6 @@ const Footer = () => {
   return (
     <footer className="footer px-5">
       <div className="footer-container">
-        <div className="footer-section">
-          <div className="footer-section-title">
-            <h2>Sobre Nós</h2>
-          </div>
-          <div className="footer-section-content">
-            <p>
-              Somos uma pequena startup criada por um desenvolvedor com alguns
-              poucos anos de experiência e que está sempre buscando novos
-              conhecimentos para construir novas soluções em software.
-            </p>
-
-            <p>
-              Nosso time é extremamente enxuto e eficiente, buscando entregar as
-              soluções no menor tempo possível dentro do escopo de conhecimento
-              do time.
-            </p>
-          </div>
-        </div>
         <div className="footer-section" id="footer-quick-links">
           <div className="footer-section-title">
             <h2>Links Úteis</h2>
@@ -46,18 +28,18 @@ const Footer = () => {
         </div>
         <div className="footer-section">
           <div className="footer-section-title">
-            <h2>Contact Us</h2>
+            <h2>Fale Conosco</h2>
           </div>
           <div className="footer-section-content">
             <p>Email: contact@mywebsite.com</p>
             <p>
-              Phone: <a href="tel:+5571989380393">+55 (71) 98938-0393</a>
+              Telefone: <a href="tel:+5571989380393">+55 (71) 98938-0393</a>
             </p>
           </div>
         </div>
         <div className="footer-section">
           <div className="footer-section-title">
-            <h2>Follow Us</h2>
+            <h2>Siga-nos</h2>
           </div>
           <div className="footer-section-content">
             <div className="social-links d-flex justify-content-around p-2 align-items-center align-middle">

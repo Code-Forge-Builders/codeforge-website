@@ -1,10 +1,37 @@
 import { Button, Form, FormGroup } from 'react-bootstrap'
 import './Home.css'
 import { phoneMask } from '../../utils/masks'
+import { FaArrowRight } from 'react-icons/fa'
 
 function Home() {
   return (
     <>
+      <div className="d-flex main">
+        <section className="main-left-section">
+          <h1>
+            Criamos o seu sistema, site ou aplicativo com as melhores
+            tecnologias disponíveis
+          </h1>
+          <a href="" className="btn btn-primary">
+            Fale Conosco <FaArrowRight />
+          </a>
+        </section>
+      </div>
+      <div id="about">
+        <h1>Sobre a Codeforge Builders</h1>
+        <section>
+          <p>
+            Somos uma pequena startup criada por um desenvolvedor com alguns
+            poucos anos de experiência e que está sempre buscando novos
+            conhecimentos para construir novas soluções em software.
+          </p>
+          <p>
+            Nosso time é extremamente enxuto e eficiente, buscando entregar as
+            soluções no menor tempo possível dentro do escopo de conhecimento do
+            time.
+          </p>
+        </section>
+      </div>
       <div id="team"></div>
       <div className="contact-container" id="#contact">
         <div className="contact-container-tittle">
@@ -13,14 +40,14 @@ function Home() {
         <Form className="contact-container-form d-flex">
           <FormGroup className="d-flex justify-content-between first-form-line">
             <FormGroup>
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">Nome</label>
               <input type="text" id="name" required />
             </FormGroup>
             <FormGroup>
-              <label htmlFor="name">Telefone/Whatsapp</label>
+              <label htmlFor="phone">Telefone/Whatsapp</label>
               <input
                 type="text"
-                id="name"
+                id="phone"
                 onChange={(event) => {
                   event.target.value = phoneMask(event.target.value)
                 }}
