@@ -8,7 +8,7 @@ function Home() {
       <div id="team"></div>
       <div className="contact-container" id="#contact">
         <div className="contact-container-tittle">
-          <h1>Contact Us</h1>
+          <h1>Fale conosco</h1>
         </div>
         <Form className="contact-container-form d-flex">
           <FormGroup className="d-flex justify-content-between first-form-line">

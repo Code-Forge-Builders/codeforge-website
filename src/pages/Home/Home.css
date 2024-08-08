@@ -18,6 +18,14 @@
   box-sizing: border-box;
 }
 
+.contact-container h1 {
+  text-transform: uppercase;
+  margin-bottom: 4rem;
+  font-weight: bold;
+  font-style: italic;
+  color: #2e31a6
+}
+
 /* Estilo do formulário */
 .contact-container-form {
   display: flex;
