@@ -10,11 +10,11 @@ import {
 import './TeamList.css'
 
 const TeamList: React.FC = () => {
-  const usernames = ['rainanDeveloper', 'cristianrlf']
-
   const [users, setUsers] = useState<IGithubUser[]>([])
 
   useEffect(() => {
+    const usernames = ['rainanDeveloper', 'cristianrlf']
+
     Promise.all(
       usernames.map(async (username) => {
         const result = await fetch(`https://api.github.com/users/${username}`)
