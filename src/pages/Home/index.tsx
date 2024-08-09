@@ -1,4 +1,12 @@
-import { Button, Form, FormGroup } from 'react-bootstrap'
+import {
+  Button,
+  Card,
+  CardBody,
+  CardText,
+  CardTitle,
+  Form,
+  FormGroup,
+} from 'react-bootstrap'
 import './Home.css'
 import { phoneMask } from '../../utils/masks'
 import { FaArrowRight } from 'react-icons/fa'
@@ -23,23 +31,81 @@ function Home() {
           <img src="/assets/hero-image.png" alt="Hero Image" />
         </div>
       </section>
-      <div id="about">
+      <section id="about">
         <h1>Quem Somos</h1>
         <section>
           <p>
-            Somos uma pequena startup criada por um desenvolvedor com alguns
-            poucos anos de experiência e que está sempre buscando novos
-            conhecimentos para construir novas soluções em software.
+            A CodeForge Builders é uma empresa baiana de software fundada por um
+            programador apaixonado por desafios e com vários anos de experiência
+            no desenvolvimento de soluções tecnológicas. Nascemos com o desejo
+            de transformar ideias em realidade, unindo criatividade e expertise
+            técnica para entregar o melhor em cada projeto.
           </p>
+          <p>
+            Especializados em desenvolvimento de software, nossa equipe é
+            dedicada a criar experiências excepcionais em três áreas principais:
+            aplicações web, desenvolvimento mobile e soluções personalizadas.
+          </p>
+          <div className="d-flex gap-3 mb-3">
+            <Card>
+              <CardBody>
+                <CardTitle>Desenvolvimento Web</CardTitle>
+                <CardText>
+                  Seja para criar um blog envolvente, uma plataforma robusta ou
+                  um site corporativo, nossa equipe é especialista em
+                  desenvolver aplicações web completas. Trabalhamos tanto no
+                  front-end quanto no back-end, garantindo que cada projeto não
+                  apenas funcione perfeitamente, mas também ofereça uma
+                  experiência de usuário intuitiva e atraente. Nossos serviços
+                  incluem o desenvolvimento de sistemas personalizados,
+                  integração com APIs e a implementação das melhores práticas em
+                  design responsivo.
+                </CardText>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardBody>
+                <CardTitle>Desenvolvimento Mobile</CardTitle>
+                <CardText>
+                  Em um mundo cada vez mais móvel, entendemos a importância de
+                  estar presente em todas as plataformas. Desenvolvemos
+                  aplicativos móveis para iOS e Android, focados em desempenho e
+                  usabilidade. Se você precisa de um aplicativo para engajar
+                  seus usuários em movimento ou para otimizar processos
+                  internos, temos a expertise necessária para entregar soluções
+                  eficazes e inovadoras.
+                </CardText>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardBody>
+                <CardTitle>Soluções Personalizadas</CardTitle>
+                <CardText>
+                  Além de criar sites atraentes e funcionais, também oferecemos
+                  soluções personalizadas que atendem às necessidades
+                  específicas do seu negócio. Seja para blogs dinâmicos,
+                  plataformas interativas ou sites corporativos, garantimos que
+                  cada solução seja alinhada com seus objetivos e proporcione
+                  uma presença online marcante.
+                </CardText>
+              </CardBody>
+            </Card>
+          </div>
           <p>
             Nosso time é extremamente enxuto e eficiente, buscando entregar as
             soluções no menor tempo possível dentro do escopo de conhecimento do
             time.
           </p>
+          <p>
+            Na Codeforge, nosso compromisso é com a excelência e a satisfação do
+            cliente. Trabalhamos em estreita colaboração com você para entender
+            suas necessidades e entregar produtos que superem suas expectativas.
+            Vamos juntos transformar sua visão digital em realidade!
+          </p>
         </section>
-      </div>
-      <div id="team"></div>
-      <div className="contact-container" id="contact">
+      </section>
+      <section id="team"></section>
+      <section className="contact-container" id="contact">
         <div className="contact-container-tittle">
           <h1>Fale conosco</h1>
         </div>
@@ -74,7 +140,7 @@ function Home() {
             <Button type="submit">Enviar</Button>
           </FormGroup>
         </Form>
-      </div>
+      </section>
     </>
   )
 }
