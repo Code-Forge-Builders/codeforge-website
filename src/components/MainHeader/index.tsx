@@ -6,7 +6,7 @@ const MainHeader: React.FC = () => {
   const menuItens: IMainMenuItem[] = [
     {
       label: 'Home',
-      to: '/#hero-container',
+      to: '/',
     },
     {
       label: 'Sobre Nós',
