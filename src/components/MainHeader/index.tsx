@@ -21,7 +21,7 @@ const MainHeader: React.FC = () => {
       to: '/#projects',
     },
     {
-      label: 'Contact',
+      label: 'Fale conosco',
       to: '/#contact',
     },
   ]

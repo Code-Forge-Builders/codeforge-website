@@ -10,6 +10,7 @@ import {
 import './Home.css'
 import { phoneMask } from '../../utils/masks'
 import { FaArrowRight } from 'react-icons/fa'
+import TeamList from '@/components/TeamList'
 
 function Home() {
   return (
@@ -113,9 +114,14 @@ function Home() {
           </section>
         </section>
       </section>
-      <section id="team"></section>
+      <section id="team">
+        <section className="container">
+          <h1>Time</h1>
+          <TeamList />
+        </section>
+      </section>
       <section className="contact-container" id="contact">
-        <div className="contact-container-tittle">
+        <div className="contact-container-title">
           <h1>Fale conosco</h1>
         </div>
         <Form className="contact-container-form d-flex">
