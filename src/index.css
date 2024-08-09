@@ -7,8 +7,6 @@
   font-family: OpenSans, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  background-color: #F8F8FF;
   
 
   font-synthesis: none;
@@ -20,7 +18,13 @@
 
   --borders: #c8c8c8;
   --main-text-color: #05182d;
-  --btn-primary: #0d3c71
+  --btn-primary: #0d3c71;
+  --main-bg: #F8F8FF;
+  --secondary-bg: #181d22;
+  --secondary-bg-light: #303438;
+
+  /* Default  */
+  background-color: var(--main-bg);
 }
 
 a {

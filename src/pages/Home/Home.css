@@ -5,8 +5,28 @@
   transition: filter 300ms;
 }
 
-.hero-container {
+section.container {
+  display: flex;
+  flex-direction: column;
+  max-width: 1200px;
+  margin: auto;
+  margin-top: 66px;
+}
+
+#hero-container {
   min-height: 100vh;
+}
+
+#about {
+  width: 100%;
+  background-color: var(--secondary-bg);
+  color: var(--main-bg);
+  padding: 1rem;
+}
+
+#about .card {
+  background-color: var(--secondary-bg-light);
+  color: var(--main-bg);
 }
 
 #about h1 {
@@ -103,4 +123,5 @@
   width: 90%;
   height: auto;
 }
+
 
