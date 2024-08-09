@@ -12,16 +12,16 @@ const Footer = () => {
           <div className="footer-section-content">
             <ul>
               <li>
-                <a href="">Home</a>
+                <a href="/#about">Quem Somos</a>
               </li>
               <li>
-                <a href="about">About</a>
+                <a href="/#team">Nosso Time</a>
               </li>
               <li>
-                <a href="projects">Projetos</a>
+                <a href="/#projects">Projetos</a>
               </li>
               <li>
-                <a href="contact">Contato</a>
+                <a href="/#contact">Fale Conosco</a>
               </li>
             </ul>
           </div>

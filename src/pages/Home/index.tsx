@@ -116,7 +116,7 @@ function Home() {
       </section>
       <section id="team">
         <section className="container">
-          <h1>Time</h1>
+          <h1>Nosso Time</h1>
           <TeamList />
         </section>
       </section>

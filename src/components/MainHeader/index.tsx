@@ -5,11 +5,11 @@ import MainMenu, { IMainMenuItem } from './MainMenu'
 const MainHeader: React.FC = () => {
   const menuItens: IMainMenuItem[] = [
     {
-      label: 'Sobre Nós',
+      label: 'Quem Somos',
       to: '/#about',
     },
     {
-      label: 'Time',
+      label: 'Nosso Time',
       to: '/#team',
     },
     {
