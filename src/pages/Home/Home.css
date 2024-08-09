@@ -33,6 +33,10 @@ section.container {
   color: var(--main-bg);
 }
 
+#about .cards .card {
+  max-width: 350px;
+}
+
 h1 {
   font-size: 36px;
   text-align: center;

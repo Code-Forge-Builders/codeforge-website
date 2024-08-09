@@ -32,7 +32,7 @@ const TeamList: React.FC = () => {
 
   return (
     <>
-      <div className="team-members d-flex gap-3">
+      <div className="team-members d-flex gap-3 flex-wrap">
         {users.map((user, idx) => (
           <Card key={idx}>
             <CardBody>

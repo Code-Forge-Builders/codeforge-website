@@ -54,7 +54,7 @@ function Home() {
               principais: aplicações web, desenvolvimento mobile e soluções
               personalizadas.
             </p>
-            <div className="d-flex gap-3 mb-3">
+            <div className="cards d-flex gap-3 mb-3 flex-wrap">
               <Card>
                 <CardBody>
                   <CardTitle>Desenvolvimento Web</CardTitle>

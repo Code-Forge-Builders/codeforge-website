@@ -1,4 +1,8 @@
 .user-github-profile-picture {
-    width: 8rem;
-    border-radius: 50%;
+  width: 8rem;
+  border-radius: 50%;
+}
+
+.team-members .card {
+  max-width: 30rem;
 }
