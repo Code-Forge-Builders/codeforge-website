@@ -24,6 +24,10 @@ section.container {
   padding: 1rem;
 }
 
+#about h1 {
+  color: var(--main-bg)
+}
+
 #about .card {
   background-color: var(--secondary-bg-light);
   color: var(--main-bg);
