@@ -1,6 +1,7 @@
 import React from 'react'
 import './MainHeader.css'
 import MainMenu, { IMainMenuItem } from './MainMenu'
+import ResponsiveMenu from './ResponsiveMenu'
 
 const MainHeader: React.FC = () => {
   const menuItens: IMainMenuItem[] = [
@@ -29,6 +30,7 @@ const MainHeader: React.FC = () => {
           <img className="logo-img" src="assets/logo.svg" alt="logo" />
         </a>
         <MainMenu itens={menuItens} />
+        <ResponsiveMenu itens={menuItens} />
       </div>
     </div>
   )

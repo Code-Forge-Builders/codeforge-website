@@ -1,14 +1,15 @@
 import { NavLink } from 'react-router-dom'
 import './MainMenuItem.css'
+import { HTMLProps } from 'react'
 
-interface MainMenuItemProps {
+interface MainMenuItemProps extends HTMLProps<HTMLElement> {
   label: string
   to: string
 }
 
-const MainMenuItem: React.FC<MainMenuItemProps> = ({ to, label }) => {
+const MainMenuItem: React.FC<MainMenuItemProps> = ({ to, label, onClick }) => {
   return (
-    <li className="menu-item">
+    <li className="menu-item" onClick={onClick}>
       <NavLink to={to}>{label}</NavLink>
     </li>
   )

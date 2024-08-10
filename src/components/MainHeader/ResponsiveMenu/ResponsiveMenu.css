@@ -1,0 +1,66 @@
+.responsive-menu-nav {
+    display: none;
+}
+
+.responsive-menu-nav .responsive-menu-container {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #3338;
+}
+
+@media screen and (max-width: 900px) {
+    ul.main-menu {
+        display: none !important;
+    }
+
+    .responsive-menu-nav {
+        display: flex;
+        align-items: flex-end;
+        gap: 2rem;
+    }
+
+    .responsive-menu-nav[aria-expanded=true] .responsive-menu-container {
+        display: flex;
+    }
+
+    .responsive-menu-nav .responsive-menu {
+        display: none;
+    }
+
+    
+    .responsive-menu-nav button, .responsive-menu-nav button:hover {
+        background-color: transparent !important;
+        border: none !important;
+        color: #555;
+    }
+    
+    .responsive-menu-nav[aria-expanded=true] .responsive-menu {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 10px;
+        background-color: var(--main-bg);
+        border-left: solid 1px #ccc;
+        height: 100vh;
+        text-decoration: none;
+    }
+
+    .responsive-menu-nav[aria-expanded=true] .responsive-menu ul {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin: 0;
+        padding: 0;
+    }
+
+    .responsive-menu-nav[aria-expanded=true] .responsive-menu ul li {
+        list-style: none;
+    }
+}
