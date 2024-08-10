@@ -17,7 +17,7 @@ function Home() {
     <>
       <section className="hero-container" id="hero-container">
         <section className="container">
-          <div className="d-flex">
+          <div className="responsive-wrap d-flex justify-content-between">
             <div className="hero-section" id="hero-content">
               <div className="hero-text">
                 Criamos o seu
@@ -31,7 +31,7 @@ function Home() {
               </div>
             </div>
             <div className="hero-section" id="hero-image">
-              <img src="/assets/hero-image.png" alt="Hero Image" />
+              <img width={200} src="/assets/hero-image.png" alt="Hero Image" />
             </div>
           </div>
         </section>
@@ -54,7 +54,7 @@ function Home() {
               principais: aplicações web, desenvolvimento mobile e soluções
               personalizadas.
             </p>
-            <div className="cards d-flex gap-3 mb-3 flex-wrap">
+            <div className="cards d-flex gap-3 mb-3 flex-wrap justify-content-center">
               <Card>
                 <CardBody>
                   <CardTitle>Desenvolvimento Web</CardTitle>
@@ -121,40 +121,42 @@ function Home() {
         </section>
       </section>
       <section className="contact-container" id="contact">
-        <div className="contact-container-title">
-          <h1>Fale conosco</h1>
-        </div>
-        <Form className="contact-container-form d-flex">
-          <FormGroup className="d-flex justify-content-between first-form-line">
-            <FormGroup>
-              <label htmlFor="name">Nome</label>
-              <input type="text" id="name" required />
+        <section className="container">
+          <div className="contact-container-title">
+            <h1>Fale conosco</h1>
+          </div>
+          <Form className="contact-container-form d-flex">
+            <FormGroup className="d-flex justify-content-between first-form-line">
+              <FormGroup>
+                <label htmlFor="name">Nome</label>
+                <input type="text" id="name" required />
+              </FormGroup>
+              <FormGroup>
+                <label htmlFor="phone">Telefone/Whatsapp</label>
+                <input
+                  type="text"
+                  id="phone"
+                  onChange={(event) => {
+                    event.target.value = phoneMask(event.target.value)
+                  }}
+                  required
+                  maxLength={15}
+                />
+              </FormGroup>
             </FormGroup>
             <FormGroup>
-              <label htmlFor="phone">Telefone/Whatsapp</label>
-              <input
-                type="text"
-                id="phone"
-                onChange={(event) => {
-                  event.target.value = phoneMask(event.target.value)
-                }}
-                required
-                maxLength={15}
-              />
+              <label htmlFor="email">Email</label>
+              <input type="email" id="email" required />
             </FormGroup>
-          </FormGroup>
-          <FormGroup>
-            <label htmlFor="email">Email</label>
-            <input type="email" id="email" required />
-          </FormGroup>
-          <FormGroup>
-            <label htmlFor="message">Messagem</label>
-            <textarea id="message" required></textarea>
-          </FormGroup>
-          <FormGroup className="d-flex justify-content-end">
-            <Button type="submit">Enviar</Button>
-          </FormGroup>
-        </Form>
+            <FormGroup>
+              <label htmlFor="message">Messagem</label>
+              <textarea id="message" required></textarea>
+            </FormGroup>
+            <FormGroup className="d-flex justify-content-end">
+              <Button type="submit">Enviar</Button>
+            </FormGroup>
+          </Form>
+        </section>
       </section>
     </>
   )
