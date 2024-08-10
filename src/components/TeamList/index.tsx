@@ -36,11 +36,16 @@ const TeamList: React.FC = () => {
         {users.map((user, idx) => (
           <Card key={idx}>
             <CardBody>
-              <a href={user.html_url} target="_blank" rel="noreferrer">
+              <a
+                href={user.html_url}
+                aria-label={`Link do github do usuário ${user.login}`}
+                target="_blank"
+                rel="noreferrer"
+              >
                 <img
                   className="user-github-profile-picture"
                   src={user.avatar_url}
-                  alt=""
+                  alt={`Imagem de perfil do usuário ${user.name}`}
                 />
               </a>
               <CardTitle>

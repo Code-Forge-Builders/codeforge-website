@@ -49,6 +49,7 @@ const Footer = () => {
               <div className="social-links d-flex justify-content-around p-2 align-items-center align-middle">
                 <a
                   href="https://facebook.com"
+                  aria-label="Link do facebook"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -56,6 +57,7 @@ const Footer = () => {
                 </a>
                 <a
                   href="https://twitter.com"
+                  aria-label="Link do twitter"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -63,6 +65,7 @@ const Footer = () => {
                 </a>
                 <a
                   href="https://instagram.com"
+                  aria-label="Link do instagram"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -70,6 +73,7 @@ const Footer = () => {
                 </a>
                 <a
                   href="https://api.whatsapp.com/send?phone=5571989380393&text=Ol%C3%A1%2C%20tenho%20interesse%20em%20conhecer%20suas%20solu%C3%A7%C3%B5es"
+                  aria-label="Link do whatsapp"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
