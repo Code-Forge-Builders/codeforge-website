@@ -25,7 +25,11 @@ function Home() {
                 tecnologias disponíveis
               </div>
               <div className="hero-buttons">
-                <a href="#contact" className="btn btn-primary">
+                <a
+                  href="#contact"
+                  aria-label="Botão fale conosco"
+                  className="btn btn-primary"
+                >
                   Fale Conosco <FaArrowRight />
                 </a>
               </div>
@@ -153,7 +157,9 @@ function Home() {
               <textarea id="message" required></textarea>
             </FormGroup>
             <FormGroup className="d-flex justify-content-end">
-              <Button type="submit">Enviar</Button>
+              <Button aria-label="Enviar formulário de contato" type="submit">
+                Enviar
+              </Button>
             </FormGroup>
           </Form>
         </section>

@@ -20,13 +20,16 @@ const ResponsiveMenu: React.FC<MainMenuProps> = ({ itens }) => {
   return (
     <>
       <nav className="responsive-menu-nav flex-column" aria-expanded={isActive}>
-        <Button onClick={() => setIsActive(true)}>
+        <Button aria-label="Abrir menu" onClick={() => setIsActive(true)}>
           <GiHamburgerMenu size={40} />
         </Button>
         <div className="responsive-menu-container">
           <nav className="responsive-menu">
             <div className="d-flex justify-content-end">
-              <Button onClick={() => setIsActive(false)}>
+              <Button
+                aria-label="Fechar menu"
+                onClick={() => setIsActive(false)}
+              >
                 <FiX />
               </Button>
             </div>
