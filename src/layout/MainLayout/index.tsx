@@ -3,6 +3,7 @@ import MainHeader from '../../components/MainHeader'
 import Footer from '../../components/Footer'
 import './MainLayout.css'
 import { useLocation } from 'react-router-dom'
+import { Analytics } from '@vercel/analytics/react'
 
 const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
   const location = useLocation()
@@ -21,6 +22,7 @@ const MainLayout: React.FC<PropsWithChildren> = ({ children }) => {
       <MainHeader />
       <div className="page-container">{children}</div>
       <Footer />
+      <Analytics />
     </>
   )
 }
