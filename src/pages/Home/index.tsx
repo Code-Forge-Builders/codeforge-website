@@ -11,8 +11,34 @@ import './Home.css'
 import { phoneMask } from '../../utils/masks'
 import { FaArrowRight } from 'react-icons/fa'
 import TeamList from '@/components/TeamList'
+import { useForm } from 'react-hook-form'
+import { toast, Toaster } from 'sonner'
+
+interface ISendEmailForm {
+  name: string
+  phone: string
+  email: string
+  message: string
+}
 
 function Home() {
+  const { register, handleSubmit } = useForm<ISendEmailForm>()
+
+  async function handleSendEmail(data: ISendEmailForm) {
+    const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
+
+    const response = await fetch(`${baseUrl}/prospect/send-email`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+
+    if (response.status === 200) {
+      toast.success('Email enviado com sucesso!')
+    } else {
+      toast.error('Erro ao enviar email')
+    }
+  }
+
   return (
     <>
       <section className="hero-container" id="hero-container">
@@ -129,32 +155,52 @@ function Home() {
           <div className="contact-container-title">
             <h1>Fale conosco</h1>
           </div>
-          <Form className="contact-container-form d-flex">
+          <Form
+            onSubmit={handleSubmit(handleSendEmail)}
+            className="contact-container-form d-flex"
+          >
             <FormGroup className="d-flex justify-content-between first-form-line">
               <FormGroup>
                 <label htmlFor="name">Nome</label>
-                <input type="text" id="name" required />
+                <input
+                  id="name"
+                  type="text"
+                  {...register('name', { required: true })}
+                />
               </FormGroup>
               <FormGroup>
                 <label htmlFor="phone">Telefone/Whatsapp</label>
                 <input
                   type="text"
                   id="phone"
-                  onChange={(event) => {
-                    event.target.value = phoneMask(event.target.value)
-                  }}
-                  required
                   maxLength={15}
+                  {...register('phone', {
+                    required: true,
+                    maxLength: 15,
+                    onChange: (event) => {
+                      event.target.value = phoneMask(event.target.value)
+                    },
+                  })}
                 />
               </FormGroup>
             </FormGroup>
             <FormGroup>
               <label htmlFor="email">Email</label>
-              <input type="email" id="email" required />
+              <input
+                type="email"
+                id="email"
+                {...register('email', { required: true })}
+              />
             </FormGroup>
             <FormGroup>
               <label htmlFor="message">Messagem</label>
-              <textarea id="message" required></textarea>
+              <textarea
+                id="message"
+                defaultValue={
+                  'Olá, tenho interesse em construir uma solução de software...'
+                }
+                {...register('message', { required: true })}
+              ></textarea>
             </FormGroup>
             <FormGroup className="d-flex justify-content-end">
               <Button aria-label="Enviar formulário de contato" type="submit">
@@ -164,6 +210,14 @@ function Home() {
           </Form>
         </section>
       </section>
+      <Toaster
+        toastOptions={{
+          classNames: {
+            error: 'error-toast',
+            success: 'success-toast',
+          },
+        }}
+      />
     </>
   )
 }
