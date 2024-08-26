@@ -41,6 +41,9 @@ function Home() {
       toast.error('Erro ao enviar email')
     }
     reset({
+      name: '',
+      email: '',
+      phone: '',
       message: 'Olá, tenho interesse em construir uma solução de software...',
     })
     setLoading(false)
@@ -200,7 +203,7 @@ function Home() {
               />
             </FormGroup>
             <FormGroup>
-              <label htmlFor="message">Messagem</label>
+              <label htmlFor="message">Mensagem</label>
               <textarea
                 id="message"
                 defaultValue={
