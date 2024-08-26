@@ -13,6 +13,7 @@ import { FaArrowRight } from 'react-icons/fa'
 import TeamList from '@/components/TeamList'
 import { useForm } from 'react-hook-form'
 import { toast, Toaster } from 'sonner'
+import { useState } from 'react'
 
 interface ISendEmailForm {
   name: string
@@ -22,9 +23,11 @@ interface ISendEmailForm {
 }
 
 function Home() {
-  const { register, handleSubmit } = useForm<ISendEmailForm>()
+  const { register, handleSubmit, reset } = useForm<ISendEmailForm>()
+  const [loading, setLoading] = useState(false)
 
   async function handleSendEmail(data: ISendEmailForm) {
+    setLoading(true)
     const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8080/api'
 
     const response = await fetch(`${baseUrl}/prospect/send-email`, {
@@ -37,6 +40,10 @@ function Home() {
     } else {
       toast.error('Erro ao enviar email')
     }
+    reset({
+      message: 'Olá, tenho interesse em construir uma solução de software...',
+    })
+    setLoading(false)
   }
 
   return (
@@ -203,8 +210,12 @@ function Home() {
               ></textarea>
             </FormGroup>
             <FormGroup className="d-flex justify-content-end">
-              <Button aria-label="Enviar formulário de contato" type="submit">
-                Enviar
+              <Button
+                aria-label="Enviar formulário de contato"
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? 'Enviando...' : 'Enviar'}
               </Button>
             </FormGroup>
           </Form>
