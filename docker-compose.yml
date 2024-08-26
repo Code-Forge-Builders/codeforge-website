@@ -1,0 +1,7 @@
+services:
+  codeforge-website-1:
+    container_name: 'codeforge-website-1'
+    build: .
+    restart: unless-stopped
+    ports: 
+      - "80:80"
