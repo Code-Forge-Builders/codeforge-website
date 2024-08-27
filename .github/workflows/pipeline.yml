@@ -19,6 +19,7 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         source: "."
         target: "~/codeforge-website"
+        rm: true
 
     - name: Executing remote command
       uses: appleboy/ssh-action@master
@@ -29,4 +30,6 @@ jobs:
         key: ${{ secrets.SSHKEY }}
         script: |
           cd ~/codeforge-website
-          docker compose up -d --build
+          npm ci
+          npm run build
+          cp -r dist/* /var/www/codeforgebuilders.com.br/html/
