@@ -71,3 +71,8 @@
   }
 
 }
+@media screen and (max-width: 600px){
+  .footer-body .dark-logo-container img {
+    width: 100%;
+  }
+}
