@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://codeforgebuilders.com.br",
+  "homepage": "https://code-forge-builders.github.io/codeforge-website/",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
