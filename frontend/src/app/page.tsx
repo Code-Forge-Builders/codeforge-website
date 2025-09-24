@@ -1,4 +1,4 @@
-// app/page.tsx
+import { allowedLocales } from './consts/locales.ts'
 import { redirect } from "next/navigation";
 
 export default function RootPage() {
@@ -6,7 +6,7 @@ export default function RootPage() {
   let lang = "en"; // default
   if (typeof navigator !== "undefined") {
     const browserLang = navigator.language.slice(0, 2);
-    if (["en", "pt", "es"].includes(browserLang)) {
+    if (allowedLocales.includes(browserLang)) {
       lang = browserLang;
     }
   }

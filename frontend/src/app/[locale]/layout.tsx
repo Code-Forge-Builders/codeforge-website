@@ -1,41 +1,44 @@
+import { notFound } from 'next/navigation';
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Open_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
+import { allowedLocales } from '../consts/locales'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const openSans = Open_Sans({
+  variable: "--font-open-sans",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const sourceCodePro = Source_Code_Pro({
+  variable: "--font-source-code-pro",
   subsets: ["latin"],
-});
+})
 
 export const metadata: Metadata = {
   title: "CodeForge Builders",
   description: "Desenvolvimento web e mobile para empresas em busca de crescimento",
 };
 
-export const generateStaticParams = () => {
-  return [
-    { locale: 'en' },
-    { locale: 'pt' },
-    { locale: 'es' },
-  ];
+export const generateStaticParams = (): { locale: string }[] => {
+  return allowedLocales.map((locale: string): { locale: string } => ({ locale }))
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
   params,
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }>) {
+  const { locale } = await params;
+  if (!allowedLocales.includes(locale)) {
+    notFound();
+  }
+
   return (
-    <html lang={params.locale}>
+    <html lang={locale}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${openSans.variable} ${sourceCodePro.variable} bg-background text-foreground antialiased `}
       >
         {children}
       </body>
