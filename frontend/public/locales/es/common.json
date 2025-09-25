@@ -1,0 +1,12 @@
+{
+  "menu": {
+    "Home": "Inicio",
+    "Services": "Servicios",
+    "Products": "Productos",
+    "AboutUs": "Sobre Nosotros",
+    "Team": "Equipo",
+    "ContactUs": "Contacto"
+  },
+  "logo_alt": "Imagen del logotipo de la CodeForge",
+  "CTAButtonLabel": "Construye con Nosotros"
+}
