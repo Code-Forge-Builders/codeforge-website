@@ -2,7 +2,8 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from "next";
 import { Open_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
-import { allowedLocales } from '../consts/locales'
+import { NextIntlClientProvider } from 'next-intl';
+import { locales } from '@/i18n/locales';
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export const generateStaticParams = (): { locale: string }[] => {
-  return allowedLocales.map((locale: string): { locale: string } => ({ locale }))
+  return locales.map((locale: string): { locale: string } => ({ locale }))
 };
 
 export default async function RootLayout({
@@ -31,7 +32,15 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>
 }>) {
   const { locale } = await params;
-  if (!allowedLocales.includes(locale)) {
+  if (!locales.includes(locale as any)) {
+    notFound();
+  }
+
+  let messages;
+  try {
+    messages = (await import(`../../../public/locales/${locale}/common.json`))
+      .default;
+  } catch (error) {
     notFound();
   }
 
@@ -40,7 +49,9 @@ export default async function RootLayout({
       <body
         className={`${openSans.variable} ${sourceCodePro.variable} bg-background text-foreground antialiased `}
       >
-        {children}
+        <NextIntlClientProvider>
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );

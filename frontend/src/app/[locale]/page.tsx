@@ -1,13 +1,12 @@
 import Image from 'next/image';
-import { allowedLocales } from '../consts/locales'
 import { useTranslations } from 'next-intl';
+import { locales } from '@/i18n/locales';
 
 export const generateStaticParams = (): { locale: string }[] => {
-  return allowedLocales.map((locale: string): { locale: string } => ({ locale }))
+  return locales.map((locale: string): { locale: string } => ({ locale }))
 };
 
-export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
-  const { locale } = await params;
+export default function Home({ params }: { params: Promise<{ locale: string }> }) {
   const t = useTranslations();
 
   return (
