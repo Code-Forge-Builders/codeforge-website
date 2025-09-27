@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { Open_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import { NextIntlClientProvider } from 'next-intl';
-import { locales } from '@/i18n/locales';
+import { getLocale, getMessages, setRequestLocale } from 'next-intl/server';
+import { routing } from '@/i18n/routing';
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -20,10 +21,6 @@ export const metadata: Metadata = {
   description: "Desenvolvimento web e mobile para empresas em busca de crescimento",
 };
 
-export const generateStaticParams = (): { locale: string }[] => {
-  return locales.map((locale: string): { locale: string } => ({ locale }))
-};
-
 export default async function RootLayout({
   children,
   params,
@@ -31,25 +28,27 @@ export default async function RootLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>
 }>) {
-  const { locale } = await params;
-  if (!locales.includes(locale as any)) {
+  let { locale } = await params;
+
+  if (!locale) {
+    locale = routing.defaultLocale
+  }
+
+  const messages = await getMessages()
+
+  if (!routing.locales.includes(locale as any)) {
     notFound();
   }
 
-  let messages;
-  try {
-    messages = (await import(`../../../public/locales/${locale}/common.json`))
-      .default;
-  } catch (error) {
-    notFound();
-  }
+  // This is the key line: set the locale for next-intl
+  setRequestLocale(locale);
 
   return (
     <html lang={locale}>
       <body
         className={`${openSans.variable} ${sourceCodePro.variable} bg-background text-foreground antialiased `}
       >
-        <NextIntlClientProvider>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
         </NextIntlClientProvider>
       </body>
