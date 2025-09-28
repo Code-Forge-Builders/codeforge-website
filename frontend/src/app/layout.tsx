@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Open_Sans, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import { NextIntlClientProvider } from 'next-intl';
-import { getLocale, getMessages, setRequestLocale } from 'next-intl/server';
+import { getMessages, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
 
 const openSans = Open_Sans({
@@ -34,11 +34,11 @@ export default async function RootLayout({
     locale = routing.defaultLocale
   }
 
-  const messages = await getMessages()
-
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }
+
+  const messages = await getMessages()
 
   // This is the key line: set the locale for next-intl
   setRequestLocale(locale);
