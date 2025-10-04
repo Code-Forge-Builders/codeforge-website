@@ -15,8 +15,6 @@ export default function LanguageSwitcher({ languages }: { languages: string[] })
   return (
     <div className='flex gap-2'>
       {languages.map((locale) => {
-        if (locale === params.locale) return null;
-
         let href: string;
 
         if (pathname === '/' || pathname === '') {
@@ -28,7 +26,7 @@ export default function LanguageSwitcher({ languages }: { languages: string[] })
         }
 
         return (
-          <Link key={locale} href={href} onClick={() => handleClick(locale)}>
+          <Link className={`px-1 rounded ${locale === params.locale ? 'bg-background-light text-foreground-light' : ''}`} key={locale} href={href} onClick={() => handleClick(locale)}>
             {locale.toUpperCase()}
           </Link>
         );
