@@ -23,25 +23,25 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
   return (
     <div>
       <nav>
-        <Image width={300} height={63} src="/banner-logo-dark-300x63.webp" alt={t("logo_alt")} />
+        <Image width={300} height={63} src="/banner-logo-dark-300x63.webp" alt={t("LogoAltText")} />
         <ul>
           <li>
-            <Link href="#">{t('menu.Home')}</Link>
+            <Link href="#">{t('Menu.Home')}</Link>
           </li>
           <li>
-            <Link href="#">{t('menu.Services')}</Link>
+            <Link href="#">{t('Menu.Services')}</Link>
           </li>
           <li>
-            <Link href="#">{t('menu.Products')}</Link>
+            <Link href="#">{t('Menu.Products')}</Link>
           </li>
           <li>
-            <Link href="#">{t('menu.AboutUs')}</Link>
+            <Link href="#">{t('Menu.AboutUs')}</Link>
           </li>
           <li>
-            <Link href="#">{t('menu.Team')}</Link>
+            <Link href="#">{t('Menu.Team')}</Link>
           </li>
           <li>
-            <Link href="#">{t('menu.ContactUs')}</Link>
+            <Link href="#">{t('Menu.ContactUs')}</Link>
           </li>
         </ul>
         <LanguageSwitcher languages={['en', 'pt', 'es']} />
