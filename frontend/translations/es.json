@@ -1,5 +1,6 @@
 {
-  "menu": {
+  "LogoAltText": "Imagen del logotipo de la CodeForge",
+  "Menu": {
     "Home": "Inicio",
     "Services": "Servicios",
     "Products": "Productos",
@@ -7,6 +8,13 @@
     "Team": "Equipo",
     "ContactUs": "Contacto"
   },
-  "logo_alt": "Imagen del logotipo de la CodeForge",
-  "CTAButtonLabel": "Construye con Nosotros"
+  "Hero": {
+    "Title": "CodeForge – Convertimos ideas en código",
+    "Content": [
+      "Ayudamos a startups y empresas a diseñar, desarrollar y escalar sus productos digitales con tecnologías modernas como Next.js, React, Node.js y Golang.",
+      "Nuestra misión es transformar ideas en software confiable y fácil de usar que crezca con su negocio.",
+      "Más allá de los proyectos de los clientes, también creamos nuestras propias herramientas para impulsar la innovación y ofrecer software que se destaque."
+    ],
+    "CTAButtonLabel": "Construye Con Nosotros"
+  }
 }
