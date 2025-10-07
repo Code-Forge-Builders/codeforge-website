@@ -28,7 +28,7 @@ export default function Menu() {
     },
   ]
 
-  return <section className="w-full bg-background flex justify-center">
+  return <section className="w-full bg-background flex justify-center sticky">
     <nav className="w-11/12 flex gap-2 justify-between items-center">
       <Link href="/"><Image width={300} height={63} src="/banner-logo-dark-300x63.webp" alt={t("LogoAltText")} /></Link>
       <ul className="flex gap-4">
