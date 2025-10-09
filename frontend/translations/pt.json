@@ -10,11 +10,11 @@
   },
   "Hero": {
     "Title": "CodeForge – Transformamos ideias em código",
-    "Content": [
-      "Ajudamos startups e empresas a projetar, desenvolver e escalar seus produtos digitais com tecnologias modernas como Next.js, React, Node.js e Golang.",
-      "Nossa missão é transformar ideias em software confiável e fácil de usar que cresça com o seu negócio.",
-      "Além dos projetos dos clientes, também criamos nossas próprias ferramentas para impulsionar a inovação e entregar software que se destaque."
-    ],
+    "Content": {
+      "0": "Ajudamos startups e empresas a projetar, desenvolver e escalar seus produtos digitais com tecnologias modernas como Next.js, React, Node.js e Golang.",
+      "1": "Nossa missão é transformar ideias em software confiável e fácil de usar que cresça com o seu negócio.",
+      "2": "Além dos projetos dos clientes, também criamos nossas próprias ferramentas para impulsionar a inovação e entregar software que se destaque."
+    },
     "CTAButtonLabel": "Construa Conosco"
   }
 }
