@@ -7,5 +7,5 @@ type PrimaryLinkButtonProps = LinkProps & {
 };
 
 export default function PrimaryLinkButton({ className, children, ...props }: PrimaryLinkButtonProps) {
-  return <Link className={`bg-primary px-4 py-2 rounded`} {...props} >{children}</Link>
+  return <Link className={`bg-primary px-4 py-2 rounded ${className}`} {...props} >{children}</Link>
 }
