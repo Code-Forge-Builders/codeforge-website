@@ -17,7 +17,7 @@ export default function Hero() {
             <p className='text-xl' key={i}>{text}</p>
           ))
         }
-        <PrimaryLinkButton href="#" className='flex gap-2'>🚀{t('Hero.CTAButtonLabel')}</PrimaryLinkButton>
+        <PrimaryLinkButton href="#" className='flex gap-2'><span>🚀</span> {t('Hero.CTAButtonLabel')}</PrimaryLinkButton>
       </div>
     </div>
   </section>
