@@ -11,18 +11,21 @@ export default function Menu() {
   const menuItems: IMenuItem[] = [
     {
       title: t('Menu.Home'),
-      url: '#'
+      url: '#hero'
     },
     {
       title: t('Menu.Services'),
-      url: '#'
-    }, {
+      url: '#our-services'
+    },
+    {
       title: t('Menu.Products'),
       url: '#'
-    }, {
+    },
+    {
       title: t('Menu.AboutUs'),
       url: '#'
-    }, {
+    },
+    {
       title: t('Menu.Team'),
       url: '#'
     },
