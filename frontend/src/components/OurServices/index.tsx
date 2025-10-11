@@ -20,8 +20,8 @@ export default function OurServices() {
     content: string;
   }>;
 
-  return <section id="our-services" className="bg-zinc-900 w-screen h-screen flex justify-center">
-    <section className="flex flex-col w-11/12 gap-4">
+  return <section id="our-services" className="bg-zinc-900 w-screen min-h-screen flex justify-center">
+    <section className="flex flex-col w-11/12 gap-4 pb-8">
       <div id="our-services-header" className="flex flex-col p-8 mt-[63px] gap-4">
         <h2 className="text-center text-6xl font-semibold">{t('OurServices.title')}</h2>
         <p className="text-center text-xl">{t('OurServices.subtitle')}</p>
