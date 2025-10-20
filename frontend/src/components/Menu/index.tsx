@@ -37,8 +37,8 @@ export default function Menu() {
   ]
 
   return <section className="w-full bg-background flex justify-center fixed">
-    <nav className="w-11/12 flex gap-2 justify-between items-center">
-      <Link href="/"><Image width={300} height={63} src="/banner-logo-dark-300x63.webp" alt={t("LogoAltText")} /></Link>
+    <nav className="w-11/12 flex gap-2 justify-between items-center py-2 md:py-0">
+      <Link href="/"><Image width={300} height={63} src="/banner-logo-dark-300x63.webp" alt={t("LogoAltText")} className="w-40 md:w-[300px] h-auto" /></Link>
       {/* Desktop Menu */}
       <ul className="hidden md:flex gap-4">
         {
@@ -64,7 +64,7 @@ export default function Menu() {
     </nav>
     {/* Mobile Overlay Menu */}
       {isMenuOpen && (
-        <div className="fixed inset-0 bg-background bg-opacity-95 z-40 flex flex-col items-center justify-start space-y-6 text-center">
+        <div className="fixed top-10 left-0 right-0 bottom-0 bg-background bg-opacity-95 z-40 flex flex-col p-2 items-start justify-start space-y-6 text-center pt-8">
         {menuItems.map((item, i) => (
           <Link
             key={i}
