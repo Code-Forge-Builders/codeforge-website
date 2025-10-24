@@ -42,5 +42,21 @@
         "content": "Soluções personalizadas e automação para o seu negócio."
       }
     ]
+  },
+  "AboutUs": {
+    "title": "Quem Somos",
+    "contentItens": [
+      "Somos uma equipe pequena, mas apaixonada, de tecnólogos com uma grande visão.",
+      "Fundada por dois amigos - um com mais de 8 anos de experiência em desenvolvimento de software e outro com sólida experiência em suporte técnico e soluções de software - nossa jornada começou com uma ideia simples: criar um espaço onde possamos construir nossos próprios produtos enquanto ajudamos outras pessoas a dar vida às suas ideias digitais.",
+      "Ainda estamos no estágio inicial, mas nosso foco é claro:",
+      {
+        "listItems": [
+          "Criar software confiável e moderno com tecnologias nas quais acreditamos.",
+          "Desenvolver nossas próprias ferramentas e pequenos produtos que impulsionam a inovação.",
+          "Trabalhar com clientes que valorizam qualidade, transparência e criatividade."
+        ]
+      },
+      "Para nós, não se trata apenas de fornecer código. Trata-se de construir soluções que durem - para nós mesmos e para aqueles que confiam em nós para construir com eles."
+    ]
   }
 }

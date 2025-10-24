@@ -38,9 +38,25 @@
         "content": "Infraestructura orientada al rendimiento que crece con usted."
       },
       {
-        "title": "Custom Tools",
-        "content": "Tailored solutions and automation for your business."
+        "title": "Herramientas Personalizadas",
+        "content": "Soluciones a medida y automatización para tu negocio."
       }
+    ]
+  },
+  "AboutUs": {
+    "title": "Quiénes Somos",
+    "contentItens": [
+      "Somos un equipo pequeño pero apasionado de tecnólogos con una gran visión.",
+      "Fundada por dos amigos, uno con más de 8 años de experiencia en desarrollo de software y el otro con una sólida formación en soporte técnico y soluciones de software, nuestro viaje comenzó con una idea simple: crear un espacio donde podamos construir nuestros propios productos mientras ayudamos a otros a dar vida a sus ideas digitales.",
+      "Todavía estamos en la etapa inicial, pero nuestro enfoque es claro:",
+      {
+        "listItems": [
+          "Cree software confiable y moderno con tecnologías en las que creemos.",
+          "Desarrollar nuestras propias herramientas y pequeños productos que impulsen la innovación.",
+          "Trabajar con clientes que valoran la calidad, la transparencia y la creatividad."
+        ]
+      },
+      "Para nosotros, no se trata solo de entregar código. Se trata de crear soluciones duraderas, tanto para nosotros como para quienes confían en nosotros para desarrollarlas."
     ]
   }
 }
