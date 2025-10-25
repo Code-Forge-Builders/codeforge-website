@@ -1,5 +1,5 @@
 .heroSection {
-  background: linear-gradient(#00153B5A, #00153B5A), url('/banner/banner-1920x1080.webp');
+  background: linear-gradient(#00153B5A, #00153B5A), url('/assets/banner/banner-1920x1080.webp');
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: cover;
