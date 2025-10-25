@@ -5,11 +5,12 @@ import { routing } from '@/i18n/routing';
 import Menu from '@/components/Menu';
 import Hero from '@/components/Hero';
 import OurServices from '@/components/OurServices';
+import AboutUs from '@/components/AboutUs';
 
 export default function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
 
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale)) {
     notFound();
   }
 
@@ -21,6 +22,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
       <Menu />
       <Hero />
       <OurServices />
+      <AboutUs />
     </div>
   );
 }

@@ -42,5 +42,21 @@
         "content": "Tailored solutions and automation for your business."
       }
     ]
+  },
+  "AboutUs": {
+    "title": "Who We Are",
+    "contentItens": [
+      "We’re a small but passionate team of technologists with a big vision.",
+      "Founded by two friends - one with over 8 years of experience in software development, and the other with a strong background in tech support and software solutions - our journey started with a simple idea: create a space where we can build our own products while helping others bring their digital ideas to life.",
+      "We’re still at the early stage, but our focus is clear:",
+      {
+        "listItems": [
+          "Craft reliable, modern software with technologies we believe in.",
+          "Develop our own tools and small products that push innovation forward.",
+          "Work with clients who value quality, transparency, and creativity."
+        ]
+      },
+      "For us, it’s not just about delivering code. It’s about building solutions that last - for ourselves, and for those who trust us to build with them."
+    ]
   }
 }
