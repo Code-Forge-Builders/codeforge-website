@@ -6,6 +6,7 @@ import Menu from '@/components/Menu';
 import Hero from '@/components/Hero';
 import OurServices from '@/components/OurServices';
 import AboutUs from '@/components/AboutUs';
+import OurTeam from '@/components/OurTeam';
 
 export default function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
@@ -23,6 +24,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
       <Hero />
       <OurServices />
       <AboutUs />
+      <OurTeam />
     </div>
   );
 }
