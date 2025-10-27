@@ -14,11 +14,11 @@ export default async function OurTeam() {
   console.log(timestamp);
 
   return <section id="our-team" className="bg-zinc-900 w-screen flex justify-center">
-    <section className="flex flex-col w-7/12 gap-4 pb-8">
+    <section className="flex flex-col w-11/12 md:w-7/12 gap-4 pb-8">
       <div id="our-services-header" className="flex flex-col p-8 mt-[63px] gap-4">
         <h2 className="text-center text-4xl md:text-6xl font-semibold">{t('OurTeam.title')}</h2>
       </div>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-col md:flex-row gap-4">
         {
           githubUsersData.map((userData, id) => <UserCard key={id} user={userData} />)
         }

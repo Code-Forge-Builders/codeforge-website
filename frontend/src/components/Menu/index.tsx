@@ -32,7 +32,7 @@ export default function Menu() {
     },
     {
       title: t('Menu.Team'),
-      url: '#'
+      url: '#our-team'
     },
   ]
 

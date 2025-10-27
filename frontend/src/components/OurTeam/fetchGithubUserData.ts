@@ -6,8 +6,8 @@ export interface GithubUserData {
   bio: string
 }
 
-export async function fetchGithubUserData(userName: string): Promise<GithubUserData | null> {
-  if (!userName) return null;
+export async function fetchGithubUserData(userName: string): Promise<GithubUserData | undefined> {
+  if (!userName) return undefined;
 
   const revalidatePeriod = 60 * 60; // revalidate every hour
 
