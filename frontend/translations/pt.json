@@ -61,5 +61,30 @@
   },
   "OurTeam": {
     "title": "Nosso Time"
+  },
+  "ContactUs": {
+    "title": "Fale Conosco",
+    "fields": {
+      "nameField": {
+        "label": "Nome",
+        "placeholder": "Nome"
+      },
+      "emailField": {
+        "label": "Email",
+        "placeholder": "exemplo@email.com"
+      },
+      "phoneWhatsappField": {
+        "label": "Telefone/Whatsapp",
+        "placeholder": ""
+      },
+      "serviceField": {
+        "label": "Serviço"
+      },
+      "projectDescriptionField": {
+        "label": "Descrição do Projeto",
+        "placeholder": "Descreva o seu projeto em poucas linhas..."
+      }
+    }
   }
+
 }

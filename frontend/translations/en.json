@@ -61,5 +61,29 @@
   },
   "OurTeam": {
     "title": "Our Team"
+  },
+  "ContactUs": {
+    "title": "Contact Us",
+    "fields": {
+      "nameField": {
+        "label": "Name",
+        "placeholder": "Name"
+      },
+      "emailField": {
+        "label": "Email",
+        "placeholder": "example@email.com"
+      },
+      "phoneWhatsappField": {
+        "label": "Phone/Whatsapp",
+        "placeholder": ""
+      },
+      "serviceField": {
+        "label": "Service"
+      },
+      "projectDescriptionField": {
+        "label": "Project Description",
+        "placeholder": "Describe your project in few lines..."
+      }
+    }
   }
 }
