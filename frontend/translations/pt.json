@@ -78,7 +78,34 @@
         "placeholder": ""
       },
       "serviceField": {
-        "label": "Serviço"
+        "label": "Serviço",
+        "placeholder": "Selecione um serviço...",
+        "options": [
+          {
+            "label": "Desenvolvimento de ferramentas personalizadas",
+            "value": "CustomToolDevelopment"
+          },
+          {
+            "label": "Desenvolvimento de Aplicativos Web & Mobile",
+            "value": "WebMobileAppDevelopment"
+          },
+          {
+            "label": "Automação de Processos",
+            "value": "ProcessAutomation"
+          },
+          {
+            "label": "Soluções de Dados e Relatórios",
+            "value": "DataReportingSolutions"
+          },
+          {
+            "label": "Integração de Sistemas e Configuração de Nuvem",
+            "value": "SystemIntegrationCloudSetup"
+          },
+          {
+            "label": "Descoberta de Produtos e Consultoria Tecnológica",
+            "value": "ProductDiscoveryTechConsulting"
+          }
+        ]
       },
       "projectDescriptionField": {
         "label": "Descrição do Projeto",

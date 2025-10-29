@@ -78,7 +78,34 @@
         "placeholder": ""
       },
       "serviceField": {
-        "label": "Service"
+        "label": "Service",
+        "placeholder": "Select a service...",
+        "options": [
+          {
+            "label": "Custom Tool Development",
+            "value": "CustomToolDevelopment"
+          },
+          {
+            "label": "Web & Mobile App Development",
+            "value": "WebMobileAppDevelopment"
+          },
+          {
+            "label": "Process Automation",
+            "value": "ProcessAutomation"
+          },
+          {
+            "label": "Data & Reporting Solutions",
+            "value": "DataReportingSolutions"
+          },
+          {
+            "label": "System Integration & Cloud Setup",
+            "value": "SystemIntegrationCloudSetup"
+          },
+          {
+            "label": "Product Discovery & Tech Consulting",
+            "value": "ProductDiscoveryTechConsulting"
+          }
+        ]
       },
       "projectDescriptionField": {
         "label": "Project Description",
