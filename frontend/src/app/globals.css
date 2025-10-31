@@ -19,6 +19,10 @@
   --font-mono: var(--font-source-code-pro);
 }
 
+* {
+  outline: none;
+}
+
 html {
   font-size: var(--font-size-base);
 }

@@ -61,5 +61,57 @@
   },
   "OurTeam": {
     "title": "Nuestro Equipo"
+  },
+  "ContactUs": {
+    "title": "Contacto",
+    "fields": {
+      "nameField": {
+        "label": "Nombre",
+        "placeholder": "Nombre"
+      },
+      "emailField": {
+        "label": "Email",
+        "placeholder": "ejemplo@email.com"
+      },
+      "phoneWhatsappField": {
+        "label": "Teléfono/Whatsapp",
+        "placeholder": ""
+      },
+      "serviceField": {
+        "label": "Servicio",
+        "placeholder": "Seleccione un servicio...",
+        "options": [
+          {
+            "label": "Desarrollo de Herramientas Personalizadas",
+            "value": "CustomToolDevelopment"
+          },
+          {
+            "label": "Desarrollo de Aplicaciones Web y Móviles",
+            "value": "WebMobileAppDevelopment"
+          },
+          {
+            "label": "Automatización de Procesos",
+            "value": "ProcessAutomation"
+          },
+          {
+            "label": "Soluciones de Datos e Informes",
+            "value": "DataReportingSolutions"
+          },
+          {
+            "label": "Integración de Sistemas y Configuración de la Nube",
+            "value": "SystemIntegrationCloudSetup"
+          },
+          {
+            "label": "Descubrimiento de Productos y Consultoría Tecnológica",
+            "value": "ProductDiscoveryTechConsulting"
+          }
+        ]
+
+      },
+      "projectDescriptionField": {
+        "label": "Descripción del Proyecto",
+        "placeholder": "Describe tu proyecto en pocas líneas..."
+      }
+    }
   }
 }
