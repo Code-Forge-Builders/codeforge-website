@@ -5,7 +5,8 @@ import PhoneInput from "../PhoneInput";
 import Select, { ISelectOption } from "../Select";
 import Textarea from "../Textarea";
 import { CountryData } from "./fetchCountryData";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
+import PrimaryButton from "../PrimaryButton";
 
 interface ContactUsFormClientComponentProps {
   countryData: CountryData[]
@@ -14,10 +15,17 @@ interface ContactUsFormClientComponentProps {
 export function ContactUsFormClientComponent({ countryData }: ContactUsFormClientComponentProps) {
   const t = useTranslations();
 
+  const [loading, setLoading] = useState(false);
+
   const SelectOptions: ISelectOption[] = t.raw("ContactUs.fields.serviceField.options") as ISelectOption[];
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    setLoading(true)
+
+    setTimeout(() => {
+      setLoading(false) // Add actual logic later
+    }, 1500)
   }
 
   return <section id="our-team" className="bg-zinc-900 w-screen flex justify-center">
@@ -34,7 +42,7 @@ export function ContactUsFormClientComponent({ countryData }: ContactUsFormClien
         </div>
         <Textarea required name="project-description-input" label={t('ContactUs.fields.projectDescriptionField.label')} placeholder={t('ContactUs.fields.projectDescriptionField.placeholder')} rows={4} />
         <div className="flex justify-end">
-          <button className="bg-primary px-4 py-2 rounded cursor-pointer">{t('Hero.CTAButtonLabel')}</button>
+          <PrimaryButton loading={loading}>{t('Hero.CTAButtonLabel')}</PrimaryButton>
         </div>
       </form>
     </section>
