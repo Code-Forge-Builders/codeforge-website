@@ -1,11 +1,11 @@
+import { getCountryPhoneCode, IDD } from "@/utils/phone"
+
 interface FetchedCountryData {
   name?: {
     common?: string
   },
   cca2?: string,
-  idd?: {
-    root?: string
-  }
+  idd?: IDD
 }
 
 export interface CountryData {
@@ -30,7 +30,7 @@ export async function fetchCountryData(): Promise<CountryData[]> {
 
   return data.map(country => ({
     name: country.name?.common ?? '',
-    phoneCode: country.idd?.root ?? '',
+    phoneCode: getCountryPhoneCode(country.idd),
     code: country.cca2 ?? ''
   })).filter(country => country.name && country.phoneCode && country.code)
     .map(country => ({
