@@ -1,5 +1,5 @@
 'use client'
-import { forwardRef, useEffect, useState } from "react"
+import { forwardRef, useState } from "react"
 import { CountryData } from "../ContactUsForm/fetchCountryData";
 import CountrySelect from "./CountrySelect";
 import { maskGenericPhone } from "@/utils/phone";
@@ -11,12 +11,6 @@ interface PhoneInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(({ label, id, className, countries, ...rest }: PhoneInputProps, ref) => {
   const [selectedCountry, setSelectedCountry] = useState<CountryData | undefined>(countries.find(country => country.code === 'BR'))
-
-  useEffect(() => {
-    if (countries.length) {
-      setSelectedCountry(countries.find(country => country.code === 'BR'))
-    }
-  }, [countries])
 
   const prefix = selectedCountry?.phoneCode || '';
 
