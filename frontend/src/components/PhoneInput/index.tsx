@@ -1,5 +1,5 @@
 'use client'
-import { forwardRef, useState } from "react"
+import { forwardRef, useEffect, useState } from "react"
 import { CountryData } from "../ContactUsForm/fetchCountryData";
 import CountrySelect from "./CountrySelect";
 import { maskGenericPhone } from "@/utils/phone";
@@ -10,7 +10,14 @@ interface PhoneInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(({ label, id, className, countries, ...rest }: PhoneInputProps, ref) => {
-  const [selectedCountry, setSelectedCountry] = useState<CountryData | undefined>(countries.find(country => country.code === 'US'))
+  const [selectedCountry, setSelectedCountry] = useState<CountryData | undefined>(countries.find(country => country.code === 'BR'))
+
+  useEffect(() => {
+    if (countries.length) {
+      setSelectedCountry(countries.find(country => country.code === 'BR'))
+    }
+  }, [countries])
+
   const prefix = selectedCountry?.phoneCode || '';
 
   return <div className={`flex flex-col gap-2 ${className}`}>
@@ -26,7 +33,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(({ label, id, c
           }
         }
         event.target.value = maskGenericPhone(event.target.value, prefix)
-      }} className="px-2 py-1 min-w-0 w-full md:w-40 rounded-r-sm bg-zinc-800 text-white" id={id} {...rest} />
+      }} className="px-2 py-1 rounded-r-sm bg-zinc-800 text-white" id={id} {...rest} />
     </div>
   </div>
 });
