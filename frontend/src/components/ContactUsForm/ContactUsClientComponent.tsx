@@ -28,7 +28,7 @@ export function ContactUsFormClientComponent({ countryData }: ContactUsFormClien
     }, 1500)
   }
 
-  return <section id="our-team" className="bg-zinc-900 w-screen flex justify-center">
+  return <section id="contact-us" className="bg-zinc-900 w-screen flex justify-center">
     <section className="flex flex-col w-11/12 md:w-6/12 gap-4 pb-8">
       <div id="our-services-header" className="flex flex-col p-8 mt-[63px] gap-4">
         <h2 className="text-center text-4xl md:text-6xl font-semibold">{t('ContactUs.title')}</h2>

@@ -126,7 +126,7 @@ const CountrySelect: React.FC<CountrySelectProps> = ({
 
     {
       isOpen && (
-        <div className={`flex flex-col absolute bg-zinc-800 border border-zinc-700 rounded shadow-md z-50 ${openDown ? 'top-full mt-1' : 'bottom-full mb-1'
+        <div className={`flex flex-col absolute bg-zinc-800 border border-zinc-700 rounded shadow-md z-30 ${openDown ? 'top-full mt-1' : 'bottom-full mb-1'
           }`}
           style={{ maxHeight, overflowY: 'auto' }}
         >
