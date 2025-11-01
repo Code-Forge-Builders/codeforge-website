@@ -8,6 +8,7 @@ import OurServices from '@/components/OurServices';
 import AboutUs from '@/components/AboutUs';
 import OurTeam from '@/components/OurTeam';
 import { ContactUsForm } from '@/components/ContactUsForm';
+import Footer from '@/components/Footer';
 
 export default function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
@@ -27,6 +28,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
       <AboutUs />
       <OurTeam />
       <ContactUsForm />
+      <Footer />
     </div>
   );
 }

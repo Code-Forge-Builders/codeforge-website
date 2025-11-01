@@ -27,7 +27,7 @@ const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(({ label, id, c
           }
         }
         event.target.value = maskGenericPhone(event.target.value, prefix)
-      }} className="px-2 py-1 rounded-r-sm bg-zinc-800 text-white" id={id} {...rest} />
+      }} className="px-2 py-1 rounded-r-sm bg-zinc-800 text-white w-full" id={id} {...rest} />
     </div>
   </div>
 });

@@ -22,10 +22,10 @@ export default function Menu() {
       title: t('Menu.Services'),
       url: '#our-services'
     },
-    {
+    /**{
       title: t('Menu.Products'),
       url: '#'
-    },
+    },*/
     {
       title: t('Menu.AboutUs'),
       url: '#about-us'
@@ -36,7 +36,7 @@ export default function Menu() {
     },
   ]
 
-  return <section className="w-full bg-background flex justify-center fixed">
+  return <section className="w-full bg-background flex justify-center fixed z-50">
     <nav className="w-11/12 flex gap-2 justify-between items-center py-2 md:py-0">
       <Link href="/"><Image width={300} height={63} src="/assets/banner-logo-dark-300x63.webp" alt={t("LogoAltText")} className="w-40 md:w-[300px] h-auto" /></Link>
       {/* Desktop Menu */}
@@ -51,7 +51,7 @@ export default function Menu() {
       </ul>
       <section className="hidden md:flex gap-2 items-center">
         <LanguageSwitcher languages={['en', 'pt', 'es']} />
-        <PrimaryLinkButton href="#">{t('Menu.ContactUs')}</PrimaryLinkButton>
+        <PrimaryLinkButton href="#contact-us">{t('Menu.ContactUs')}</PrimaryLinkButton>
       </section>
       {/* Mobile Hamburger */}
       <button
@@ -64,7 +64,7 @@ export default function Menu() {
     </nav>
     {/* Mobile Overlay Menu */}
     {isMenuOpen && (
-      <div className="fixed top-10 left-0 right-0 bottom-0 bg-background bg-opacity-95 z-40 flex flex-col p-2 items-start justify-start space-y-6 text-center pt-8">
+      <div className="fixed top-10 left-0 right-0 bottom-0 bg-background bg-opacity-95 z-50 flex flex-col p-2 items-start justify-start space-y-6 text-center pt-8">
         {menuItems.map((item, i) => (
           <Link
             key={i}
@@ -77,7 +77,7 @@ export default function Menu() {
         ))}
 
         <LanguageSwitcher languages={['en', 'pt', 'es']} />
-        <PrimaryLinkButton href="#" className="mt-4">
+        <PrimaryLinkButton href="#contact-us" className="mt-4" onClick={() => setIsMenuOpen(false)}>
           {t('Menu.ContactUs')}
         </PrimaryLinkButton>
       </div>
