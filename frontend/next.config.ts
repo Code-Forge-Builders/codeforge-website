@@ -6,7 +6,14 @@ const withNextIntl = createNextIntlPlugin()
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
-    domains: ['placehold.co', 'avatars.githubusercontent.com'],
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: 'placehold.co',
+    },
+    {
+      protocol: 'https',
+      hostname: 'avatars.githubusercontent.com'
+    }],
   },
 };
 
