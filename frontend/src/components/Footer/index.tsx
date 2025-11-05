@@ -3,7 +3,7 @@ import Image from "next/image";
 import { IMenuItem } from "../Menu/interfaces/menu-item.interface";
 import Link from "next/link";
 import PrimaryLinkButton from "../PrimaryLinkButton";
-import { FaLinkedin, FaWhatsapp } from "react-icons/fa";
+import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
 import { SlSocialInstagram, SlSocialLinkedin, SlSocialTwitter } from "react-icons/sl";
 
 export default function Footer() {
@@ -33,6 +33,12 @@ export default function Footer() {
     },
   ]
 
+  const whatsappMessageParams = new URLSearchParams();
+
+  whatsappMessageParams.set('text', t('WhatsappMessage'));
+
+  const whatsappUrl = `https://wa.me/+5571984754843?${whatsappMessageParams.toString()}`;
+
   return <section id="about-us" className="flex w-screen justify-center">
     <div className="md:w-11/12 w-full flex-col">
       <div className="flex flex-col md:flex-row items-start justify-between">
@@ -56,16 +62,19 @@ export default function Footer() {
       <div className="flex flex-col md:flex-row justify-between gap-4 items-center my-4">
         <span>CodeForge {new Date().getFullYear()} ©</span>
         <div className="flex flex-row gap-2">
-          <a href="#" className="border-1 border-white rounded-lg p-2">
+          <a href="https://www.linkedin.com/company/codeforge-dev/" target="_blank" rel="noopener noreferrer nofollow" className="border-1 border-white rounded-lg p-2">
             <SlSocialLinkedin size={20} />
           </a>
           <a href="#" className="border-1 border-white rounded-lg p-2">
             <SlSocialTwitter size={20} />
           </a>
-          <a href="#" className="border-1 border-white rounded-lg p-2">
+          <a href="https://github.com/Code-Forge-Builders" target="_blank" rel="noopener noreferrer nofollow" className="border-1 border-white rounded-lg p-2">
+            <FaGithub size={22} />
+          </a>
+          <a href="https://www.instagram.com/codeforgebr/" target="_blank" rel="noopener noreferrer nofollow" className="border-1 border-white rounded-lg p-2">
             <SlSocialInstagram size={20} />
           </a>
-          <a href="#" className="border-1 border-white rounded-lg p-2">
+          <a href={whatsappUrl} target="_blank" rel="noopener noreferrer nofollow" className="border-1 border-white rounded-lg p-2">
             <FaWhatsapp size={22} />
           </a>
         </div>
