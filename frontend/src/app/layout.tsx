@@ -21,19 +21,21 @@ export const metadata: Metadata = {
   description: "Desenvolvimento web e mobile para empresas em busca de crescimento",
 };
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 export default async function RootLayout({
   children,
   params,
-}: Readonly<{
-  children: React.ReactNode;
-  params: Promise<{ locale: string }>
-}>) {
+}: {
+  children: any,
+  params: Promise<any>
+}) {
   let { locale } = await params;
 
   if (!locale) {
     locale = routing.defaultLocale
   }
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   if (!routing.locales.includes(locale as any)) {
     notFound();
   }

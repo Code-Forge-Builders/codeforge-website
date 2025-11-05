@@ -3,7 +3,7 @@ import Image from "next/image";
 import { IMenuItem } from "../Menu/interfaces/menu-item.interface";
 import Link from "next/link";
 import PrimaryLinkButton from "../PrimaryLinkButton";
-import { FaGithub, FaLinkedin, FaWhatsapp } from "react-icons/fa";
+import { FaGithub, FaWhatsapp } from "react-icons/fa";
 import { SlSocialInstagram, SlSocialLinkedin, SlSocialTwitter } from "react-icons/sl";
 
 export default function Footer() {

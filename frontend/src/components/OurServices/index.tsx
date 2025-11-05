@@ -7,6 +7,7 @@ import { RiCodeView } from "react-icons/ri";
 export default function OurServices() {
   const t = useTranslations();
 
+  /* eslint-disable  @typescript-eslint/no-explicit-any */
   const iconsArr: Array<any> = [
     CiEdit,
     RiCodeView,
