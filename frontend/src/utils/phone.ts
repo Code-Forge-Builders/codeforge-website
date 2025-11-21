@@ -1,36 +1,43 @@
-export interface IDD {
-  root?: string | null;
-  suffixes?: string[] | null;
-}
+import { AsYouType, CountryCode, isPossiblePhoneNumber, isValidPhoneNumber } from "libphonenumber-js";
+import { parsePhoneNumber } from "libphonenumber-js/min";
 
-export function getCountryPhoneCode(idd: IDD | undefined): string {
-  if (!idd?.root) return '';
+export function phoneMaskAsYouType(phone: string, region: CountryCode = 'BR') {
+  const rawPhone = phone.replace(/[^\d+]/g, '').slice(0, 18);
 
-  const validSuffix =
-    idd.suffixes && idd.suffixes.length === 1 && idd.suffixes[0].length === 1
-      ? idd.suffixes[0]
-      : '';
+  let formattedPhone = new AsYouType(region).input(rawPhone);
 
-  return `${idd.root}${validSuffix}`;
-}
-
-export function maskGenericPhone(raw: string, prefix: string): string {
-  if (!raw) return prefix || '';
-
-  // Ensure prefix starts with "+"
-  if (prefix && !prefix.startsWith('+')) prefix = `+${prefix}`;
-
-  // Remove all non-digit characters
-  let digits = raw.replace(/\D/g, '');
-
-  // Ensure prefix is included
-  if (prefix && !digits.startsWith(prefix.replace('+', ''))) {
-    digits = prefix.replace('+', '') + digits;
+  if (isValidPhoneNumber(formattedPhone, region)) {
+    formattedPhone = parsePhoneNumber(formattedPhone, region).format('INTERNATIONAL');
+  }
+  else {
+    if (isValidPhoneNumber(formattedPhone)) {
+      formattedPhone = parsePhoneNumber(formattedPhone).format('INTERNATIONAL');
+    }
   }
 
-  // Limit to max 15 digits (E.164 standard)
-  digits = digits.slice(0, 15);
-
-  return '+' + digits;
+  return formattedPhone;
 }
 
+export function phoneUnmask(phone: string) {
+  return parsePhoneNumber(phone).format('E.164')
+}
+
+export function isValidPhone(phone: string) {
+  return isPossiblePhoneNumber(phone) && isValidPhoneNumber(phone);
+}
+
+export function detectRegion(locale: string): CountryCode {
+  // Check if the user's locale is Brazilian Portuguese (pt-BR)
+  if (locale === 'pt') {
+    return 'BR';  // Set region to Brazil if the locale is pt-BR
+  }
+  
+  // Check if the user's locale is Spanish (es-*)
+  if (locale === 'es') {
+    // Here you could refine further to check for specific Spanish-speaking countries
+    return 'ES';  // Default to Spain for Spanish speakers; modify based on your needs
+  }
+  
+  // Default region for other locales could be "US", or any other default you'd like
+  return 'US';
+}
