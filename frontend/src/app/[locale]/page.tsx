@@ -27,7 +27,7 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
       <OurServices />
       <AboutUs />
       <OurTeam />
-      <ContactUsForm />
+      <ContactUsForm locale={locale} />
       <Footer />
     </div>
   );
