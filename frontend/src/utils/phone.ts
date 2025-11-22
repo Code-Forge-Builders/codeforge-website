@@ -2,17 +2,21 @@ import { AsYouType, CountryCode, isPossiblePhoneNumber, isValidPhoneNumber } fro
 import { parsePhoneNumber } from "libphonenumber-js/min";
 
 export function phoneMaskAsYouType(phone: string, region: CountryCode = 'BR') {
-  const rawPhone = phone.replace(/[^\d+]/g, '').slice(0, 18);
+  const rawPhone = phone
+                      .replace(/[^\d+]/g, '')
+                      .split('')
+                      .reduce((prev, curr) => {
+                        if (prev !== '' && curr === '+') {
+                          return prev;
+                        }
+                        return prev + curr;
+                      }, '')
+                      .slice(0, 17);
 
   let formattedPhone = new AsYouType(region).input(rawPhone);
 
   if (isValidPhoneNumber(formattedPhone, region)) {
     formattedPhone = parsePhoneNumber(formattedPhone, region).format('INTERNATIONAL');
-  }
-  else {
-    if (isValidPhoneNumber(formattedPhone)) {
-      formattedPhone = parsePhoneNumber(formattedPhone).format('INTERNATIONAL');
-    }
   }
 
   return formattedPhone;
