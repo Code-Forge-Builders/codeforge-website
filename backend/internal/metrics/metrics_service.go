@@ -41,6 +41,6 @@ func getRegionFromIp(ip string) IPAPIResponse {
 
 	defer res.Body.Close()
 	var data IPAPIResponse
-	json.NewDecoder(res.Body).Decode(data)
+	json.NewDecoder(res.Body).Decode(&data)
 	return data
 }
