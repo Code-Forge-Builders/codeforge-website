@@ -1,6 +1,10 @@
 package metrics
 
-import "github.com/gin-gonic/gin"
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 func CreateMetrics(c *gin.Context) {
 	ip := c.ClientIP()
@@ -14,5 +18,5 @@ func CreateMetrics(c *gin.Context) {
 		Locale:    locale,
 	})
 
-	c.Status(201)
+	c.Status(http.StatusCreated)
 }

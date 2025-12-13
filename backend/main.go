@@ -3,6 +3,7 @@ package main
 import (
 	"codeforge/website-prospecting-api/internal/config"
 	"codeforge/website-prospecting-api/internal/db"
+	"codeforge/website-prospecting-api/internal/db/migrations"
 	"codeforge/website-prospecting-api/internal/router"
 	"log"
 	"os"
@@ -45,7 +46,7 @@ func main() {
 	}
 
 	log.Print("Auto migrating database...")
-	db.Migrate()
+	migrations.Migrate()
 
 	r := router.SetupRouter()
 

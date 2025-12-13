@@ -2,7 +2,6 @@ package db
 
 import (
 	"codeforge/website-prospecting-api/internal/config"
-	"codeforge/website-prospecting-api/internal/metrics/models"
 	"fmt"
 	"time"
 
@@ -21,7 +20,7 @@ func Connect() error {
 	}
 
 	gormConfig := &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Silent),
 	}
 
 	db, err := gorm.Open(postgres.Open(cfg.GetDSN()), gormConfig)
@@ -44,17 +43,5 @@ func Connect() error {
 	}
 
 	DB = db
-	return nil
-}
-
-func Migrate() error {
-	if DB == nil {
-		return fmt.Errorf("database is not initialized")
-	}
-
-	if err := DB.AutoMigrate(&models.Metrics{}); err != nil {
-		return fmt.Errorf("migration failed: %w", err)
-	}
-
 	return nil
 }

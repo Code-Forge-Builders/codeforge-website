@@ -1,4 +1,4 @@
-package models
+package metrics
 
 import (
 	"time"
@@ -9,11 +9,13 @@ import (
 
 type Metrics struct {
 	ID        uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
-	AccessAt  time.Time `gorm:"index:idx_logs_access_at,sort:desc;not null"`
+	AccessAt  time.Time `gorm:"index:idx_metrics_access_at,sort:desc;not null"`
 	UserAgent string    `gorm:"type:text"`
-	IpHash    string    `gorm:"type:text;index:idx_logs_ip_hash"`
+	IpHash    string    `gorm:"type:text;index:idx_metrics_ip_hash"`
 	Locale    string    `gorm:"size:20"`
-	Region    string    `gorm:"size:8;index:idx_logs_region"`
+	Country   string    `gorm:"size:8;index:idx_metrics_country"`
+	Region    string    `gorm:"size:8;index:idx_metrics_region"`
+	City      string    `gorm:"size:8;index:idx_metrics_region"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
