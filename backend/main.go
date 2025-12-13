@@ -3,12 +3,10 @@ package main
 import (
 	"codeforge/website-prospecting-api/internal/config"
 	"codeforge/website-prospecting-api/internal/db"
+	"codeforge/website-prospecting-api/internal/router"
 	"log"
-	"net/http"
 	"os"
 	"time"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -46,15 +44,10 @@ func main() {
 		return
 	}
 
-	r := gin.Default()
+	log.Print("Auto migrating database...")
+	db.Migrate()
 
-	api := r.Group("api")
-
-	api.GET("/", func(c *gin.Context) { // Add basic healthcheck
-		c.JSON(http.StatusOK, gin.H{
-			"status": "ok",
-		})
-	})
+	r := router.SetupRouter()
 
 	log.Printf("Application started on port 8080")
 

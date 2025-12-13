@@ -2,7 +2,7 @@ package db
 
 import (
 	"codeforge/website-prospecting-api/internal/config"
-	"codeforge/website-prospecting-api/internal/log"
+	"codeforge/website-prospecting-api/internal/metrics/models"
 	"fmt"
 	"time"
 
@@ -52,7 +52,7 @@ func Migrate() error {
 		return fmt.Errorf("database is not initialized")
 	}
 
-	if err := DB.AutoMigrate(&log.Log{}); err != nil {
+	if err := DB.AutoMigrate(&models.Metrics{}); err != nil {
 		return fmt.Errorf("migration failed: %w", err)
 	}
 
