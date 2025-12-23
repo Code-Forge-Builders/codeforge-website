@@ -5,11 +5,14 @@ import (
 	"codeforge/website-prospecting-api/internal/metrics"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	r := gin.New()
+
+	r.Use(cors.Default())
 
 	api := r.Group("api")
 

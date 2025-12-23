@@ -1,6 +1,7 @@
 package inquiries
 
 import (
+	"codeforge/website-prospecting-api/internal/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +33,8 @@ func HandleCreateInquiry(c *gin.Context) {
 		})
 		return
 	}
+
+	createInquiryDto.CustomerPhone = utils.NormalizePhone(createInquiryDto.CustomerPhone)
 
 	newInquiry, err := CreateInquiryService(createInquiryDto)
 

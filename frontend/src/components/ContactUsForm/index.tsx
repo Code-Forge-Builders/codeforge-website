@@ -6,6 +6,8 @@ import Textarea from "../Textarea";
 import { FormEvent, useRef, useState } from "react";
 import PrimaryButton from "../PrimaryButton";
 import { detectRegion, isValidPhone, phoneMaskAsYouType } from "@/utils/phone";
+import { InquiryBodyPayload, submitInquiry } from "./submitInquiry";
+import { error } from "console";
 
 export function ContactUsForm({locale}: {locale: string}) {
   const t = useTranslations();
@@ -24,9 +26,48 @@ export function ContactUsForm({locale}: {locale: string}) {
     event.preventDefault()
     setLoading(true)
 
-    setTimeout(() => {
-      setLoading(false) // Add actual logic later
-    }, 1500)
+    if (
+    !nameInputRef.current ||
+    !emailInputRef.current ||
+    !phoneInputRef.current ||
+    !serviceSelectRef.current ||
+    !descriptionTextareaRef.current
+  ) {
+    setLoading(false);
+    return;
+  }
+
+  const customer_name = nameInputRef.current.value || "";
+  const customer_email = emailInputRef.current.value || "";
+  const customer_phone = phoneInputRef.current.value || "";
+  const service_key = serviceSelectRef.current.value || "";
+  const project_description = descriptionTextareaRef.current.value || "";
+  
+  const payload: InquiryBodyPayload = {
+    customer_name,
+    customer_email,
+    customer_phone,
+    service_key,
+    project_description
+  }
+
+  submitInquiry(payload)
+    .then(() => {
+      if (
+        !nameInputRef.current ||
+        !emailInputRef.current ||
+        !phoneInputRef.current ||
+        !serviceSelectRef.current ||
+        !descriptionTextareaRef.current
+      ) {
+        return;
+      }
+      nameInputRef.current.value = "";
+      emailInputRef.current.value = "";
+      phoneInputRef.current.value = "";
+      serviceSelectRef.current.value = "";
+      descriptionTextareaRef.current.value = "";
+    }).finally(() => setLoading(false))
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
