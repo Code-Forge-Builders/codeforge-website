@@ -7,7 +7,6 @@ import { FormEvent, useRef, useState } from "react";
 import PrimaryButton from "../PrimaryButton";
 import { detectRegion, isValidPhone, phoneMaskAsYouType } from "@/utils/phone";
 import { InquiryBodyPayload, submitInquiry } from "./submitInquiry";
-import { error } from "console";
 
 export function ContactUsForm({locale}: {locale: string}) {
   const t = useTranslations();
