@@ -1,6 +1,7 @@
 package router
 
 import (
+	"codeforge/website-prospecting-api/internal/inquiries"
 	"codeforge/website-prospecting-api/internal/metrics"
 	"net/http"
 
@@ -19,6 +20,7 @@ func SetupRouter() *gin.Engine {
 	})
 
 	metrics.RegisterRoutes(api)
+	inquiries.RegisterRoutes(api)
 
 	return r
 }

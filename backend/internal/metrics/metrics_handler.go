@@ -6,13 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func CreateMetrics(c *gin.Context) {
+func HandleCreateMetrics(c *gin.Context) {
 	ip := c.ClientIP()
 	userAgent := c.Request.UserAgent()
 	locale := c.GetHeader("Accept-Language")
 
 	// Create record
-	CreateRecord(CreateMetricsDto{
+	CreateMetricsService(CreateMetricsDto{
 		Ip:        ip,
 		UserAgent: userAgent,
 		Locale:    locale,

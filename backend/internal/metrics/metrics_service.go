@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func CreateRecord(createMetricsDto CreateMetricsDto) (*Metrics, error) {
+func CreateMetricsService(createMetricsDto CreateMetricsDto) (*Metrics, error) {
 	ipInfo := getRegionFromIp(createMetricsDto.Ip)
 
 	IpHash := utils.HashIpUnrecoverable(createMetricsDto.Ip)
