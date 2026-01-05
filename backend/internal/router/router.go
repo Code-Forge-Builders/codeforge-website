@@ -1,14 +1,18 @@
 package router
 
 import (
+	"codeforge/website-prospecting-api/internal/inquiries"
 	"codeforge/website-prospecting-api/internal/metrics"
 	"net/http"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func SetupRouter() *gin.Engine {
 	r := gin.New()
+
+	r.Use(cors.Default())
 
 	api := r.Group("api")
 
@@ -19,6 +23,7 @@ func SetupRouter() *gin.Engine {
 	})
 
 	metrics.RegisterRoutes(api)
+	inquiries.RegisterRoutes(api)
 
 	return r
 }
