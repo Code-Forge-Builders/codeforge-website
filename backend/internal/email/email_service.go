@@ -38,7 +38,7 @@ func (s *emailService) SendEmail(email Email) error {
 		return fmt.Errorf("failed to mount multipart email: %w", err)
 	}
 
-	smtpAddr := fmt.Sprintf("%s:%d%", s.emailConfig.SMTPHost, s.emailConfig.SMTPPort)
+	smtpAddr := fmt.Sprintf("%s:%d", s.emailConfig.SMTPHost, s.emailConfig.SMTPPort)
 
 	var auth smtp.Auth
 	if s.emailConfig.SMTPUser != "" && s.emailConfig.SMTPPassword != "" {
