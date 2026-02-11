@@ -7,9 +7,12 @@ import { FormEvent, useRef, useState } from "react";
 import PrimaryButton from "../PrimaryButton";
 import { detectRegion, isValidPhone, phoneMaskAsYouType } from "@/utils/phone";
 import { InquiryBodyPayload, submitInquiry } from "./submitInquiry";
+import { useToast } from "../Toast/ToastContext";
 
 export function ContactUsForm({locale}: {locale: string}) {
   const t = useTranslations();
+
+  const { showToast } = useToast()
 
   const [loading, setLoading] = useState(false);
 
@@ -66,7 +69,18 @@ export function ContactUsForm({locale}: {locale: string}) {
       phoneInputRef.current.value = "";
       serviceSelectRef.current.value = "";
       descriptionTextareaRef.current.value = "";
-    }).finally(() => setLoading(false))
+      showToast({
+        message: "Formulário enviado com sucesso!",
+        type: "success",
+      })
+    })
+    .catch(() => {
+      showToast({
+        message: "Erro ao enviar formulário",
+        type: "error"
+      })
+    })
+    .finally(() => setLoading(false))
   }
 
   /* eslint-disable @typescript-eslint/no-explicit-any */

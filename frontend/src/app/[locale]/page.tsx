@@ -9,6 +9,8 @@ import AboutUs from '@/components/AboutUs';
 import OurTeam from '@/components/OurTeam';
 import { ContactUsForm } from '@/components/ContactUsForm';
 import Footer from '@/components/Footer';
+import { ToastProvider } from '@/components/Toast/ToastContext';
+import { ToastContainer } from '@/components/Toast/ToastContainer';
 
 export default function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
@@ -21,14 +23,17 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
   setRequestLocale(locale);
 
   return (
-    <div>
-      <Menu />
-      <Hero />
-      <OurServices />
-      <AboutUs />
-      <OurTeam />
-      <ContactUsForm locale={locale} />
-      <Footer />
-    </div>
+    <ToastProvider>
+      <div>
+        <Menu />
+        <Hero />
+        <OurServices />
+        <AboutUs />
+        <OurTeam />
+        <ContactUsForm locale={locale} />
+        <Footer />
+      </div>
+      <ToastContainer/>
+    </ToastProvider>
   );
 }
