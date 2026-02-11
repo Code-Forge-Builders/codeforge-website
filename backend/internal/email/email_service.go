@@ -7,6 +7,7 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
+	"mime"
 	"net/smtp"
 	"os"
 	"strings"
@@ -32,7 +33,7 @@ type emailService struct {
 }
 
 func (s *emailService) SendEmail(email Email) error {
-	emailBody, err := s.mountMultipartEmail(email)
+	emailBody, err := s.mountEmailContent(email)
 
 	if err != nil {
 		return fmt.Errorf("failed to mount multipart email: %w", err)
@@ -92,7 +93,7 @@ func (s *emailService) SendEmail(email Email) error {
 	return smtpClient.Quit()
 }
 
-func (s *emailService) mountMultipartEmail(email Email) ([]byte, error) {
+func (s *emailService) mountEmailContent(email Email) ([]byte, error) {
 	boundaryBytes := make([]byte, 16)
 	if _, err := rand.Read(boundaryBytes); err != nil {
 		return nil, fmt.Errorf("failed to generate random boundary: %w", err)
@@ -107,10 +108,19 @@ func (s *emailService) mountMultipartEmail(email Email) ([]byte, error) {
 		topType = "mixed"
 	}
 
+	// Use friendly From name if available
+	from := s.emailConfig.SMTPFromEmail
+	if s.emailConfig.SMTPFromName != "" {
+		from = fmt.Sprintf("%s <%s>", s.emailConfig.SMTPFromName, s.emailConfig.SMTPFromEmail)
+	}
+
+	// Encode from name to handle special characters
+	from = mime.QEncoding.Encode("utf-8", from)
+
 	headers := map[string]string{ // map to all needed headers
-		"From":         s.emailConfig.SMTPFromEmail,
-		"To":           strings.Join(email.To, ","),
-		"Subject":      email.Subject,
+		"From":         from,
+		"To":           strings.Join(email.To, ", "),
+		"Subject":      mime.QEncoding.Encode("utf-8", email.Subject),
 		"MIME-Version": "1.0",
 		"Content-Type": fmt.Sprintf("multipart/%s; boundary=%s", topType, boundary),
 		"Message-ID":   fmt.Sprintf("<%s@%s>", hex.EncodeToString(boundaryBytes[:8]), s.emailConfig.SMTPHost),
@@ -140,7 +150,7 @@ func (s *emailService) mountMultipartEmail(email Email) ([]byte, error) {
 
 		// Now, add attachments
 		for _, attachment := range email.Attachments {
-			if err := addAttachment(&msg, attachment, topBoundary); err != nil {
+			if err := addAttachment(&msg, attachment, boundary); err != nil {
 				return nil, fmt.Errorf("failed to add attachment: %w", err)
 			}
 		}
@@ -164,13 +174,13 @@ func writeAlternativePart(msg *bytes.Buffer, email Email, boundary string) {
 	if textBody == "" {
 		textBody = "[This email requires HTML-capable email client to view properly]"
 	}
-	msg.WriteString(textBody + "\r\n")
+	msg.WriteString("\r\n" + textBody + "\r\n")
 
 	// Write HTML body
 	msg.WriteString(fmt.Sprintf("--%s\r\n", boundary))
 	msg.WriteString("Content-Type: text/html; charset=UTF-8\r\n")
 	msg.WriteString("Content-Transfer-Encoding: 7bit\r\n")
-	msg.WriteString(email.HTML + "\r\n")
+	msg.WriteString("\r\n" + email.HTML + "\r\n")
 }
 
 func addAttachment(msg *bytes.Buffer, attachment string, boundary string) error {
