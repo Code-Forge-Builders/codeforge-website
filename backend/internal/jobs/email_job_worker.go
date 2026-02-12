@@ -13,7 +13,7 @@ import (
 	"gorm.io/gorm/clause"
 )
 
-type EmailJobService interface {
+type EmailJobWorker interface {
 	Start() error
 	Stop() error
 
@@ -27,29 +27,29 @@ type EmailJobPayload struct {
 	Data         any
 }
 
-type emailJobService struct {
+type emailJobWorker struct {
 	emailService email.EmailService
 	stopChan     chan struct{}
 }
 
-func (s *emailJobService) Start() error {
-	s.stopChan = make(chan struct{})
-	go s.run()
+func (w *emailJobWorker) Start() error {
+	w.stopChan = make(chan struct{})
+	go w.run()
 	return nil
 }
 
-func (s *emailJobService) Stop() error {
+func (w *emailJobWorker) Stop() error {
 	select {
-	case <-s.stopChan:
+	case <-w.stopChan:
 		// Job is already stopped
 	default:
-		close(s.stopChan)
+		close(w.stopChan)
 	}
 
 	return nil
 }
 
-func (s *emailJobService) Enqueue(job *BackgroundJob) error {
+func (w *emailJobWorker) Enqueue(job *BackgroundJob) error {
 	job.Status = BackgroundJobStatusPending
 	job.Attempts = 0
 	job.MaxAttempts = 3
@@ -65,7 +65,7 @@ func (s *emailJobService) Enqueue(job *BackgroundJob) error {
 	return nil
 }
 
-func (s *emailJobService) claimNextJob(tx *gorm.DB) (*BackgroundJob, error) {
+func (w *emailJobWorker) claimNextJob(tx *gorm.DB) (*BackgroundJob, error) {
 	now := time.Now()
 	job := BackgroundJob{}
 
@@ -101,7 +101,7 @@ func (s *emailJobService) claimNextJob(tx *gorm.DB) (*BackgroundJob, error) {
 	return &job, nil
 }
 
-func (s *emailJobService) processJob(job *BackgroundJob) error {
+func (w *emailJobWorker) processJob(job *BackgroundJob) error {
 	now := time.Now()
 	payload := EmailJobPayload{}
 	err := json.Unmarshal(job.Payload, &payload)
@@ -119,7 +119,7 @@ func (s *emailJobService) processJob(job *BackgroundJob) error {
 		return fmt.Errorf("failed to render email template: %v", err)
 	}
 
-	err = s.emailService.SendEmail(newEmail)
+	err = w.emailService.SendEmail(newEmail)
 
 	job.UpdatedAt = now // Update the updated_at timestamp to the current time
 
@@ -143,6 +143,7 @@ func (s *emailJobService) processJob(job *BackgroundJob) error {
 	job.Status = BackgroundJobStatusSuccess
 	job.FinishedAt = &now // Update the finished_at timestamp to the current time
 	job.LockedAt = nil
+	job.UpdatedAt = now
 
 	result := db.DB.Save(job)
 	if result.Error != nil {
@@ -152,16 +153,16 @@ func (s *emailJobService) processJob(job *BackgroundJob) error {
 	return nil
 }
 
-func (s *emailJobService) run() {
+func (w *emailJobWorker) run() {
 	for {
 		select {
-		case <-s.stopChan:
+		case <-w.stopChan:
 			return
 		default:
 			var job *BackgroundJob
 			err := db.DB.Transaction(func(tx *gorm.DB) error {
 				var err error
-				job, err = s.claimNextJob(tx)
+				job, err = w.claimNextJob(tx)
 				return err
 			})
 
@@ -175,7 +176,7 @@ func (s *emailJobService) run() {
 				continue
 			}
 
-			err = s.processJob(job)
+			err = w.processJob(job)
 			if err != nil {
 				log.Printf("failed to process email job: %v\n", err)
 				continue
