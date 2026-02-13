@@ -16,8 +16,6 @@ import (
 type EmailJobWorker interface {
 	Start() error
 	Stop() error
-
-	Enqueue(job *BackgroundJob) error
 }
 
 type EmailJobPayload struct {
@@ -44,22 +42,6 @@ func (w *emailJobWorker) Stop() error {
 		// Job is already stopped
 	default:
 		close(w.stopChan)
-	}
-
-	return nil
-}
-
-func (w *emailJobWorker) Enqueue(job *BackgroundJob) error {
-	job.Status = BackgroundJobStatusPending
-	job.Attempts = 0
-	job.MaxAttempts = 3
-	job.CreatedAt = time.Now()
-	job.UpdatedAt = time.Now()
-
-	result := db.DB.Create(job)
-
-	if result.Error != nil {
-		return fmt.Errorf("failed to enqueue email job: %v", result.Error)
 	}
 
 	return nil

@@ -4,6 +4,7 @@ import (
 	"codeforge/website-prospecting-api/internal/db"
 	"codeforge/website-prospecting-api/internal/inquiries"
 	"codeforge/website-prospecting-api/internal/metrics"
+	"codeforge/website-prospecting-api/internal/jobs"
 	"fmt"
 )
 
@@ -12,7 +13,11 @@ func Migrate() error {
 		return fmt.Errorf("database is not initialized")
 	}
 
-	if err := db.DB.AutoMigrate(&metrics.Metrics{}, &inquiries.Inquiries{}); err != nil {
+	if err := db.DB.AutoMigrate(
+		&metrics.Metrics{},
+		&inquiries.Inquiries{},
+		&jobs.BackgroundJob{},
+	); err != nil {
 		return fmt.Errorf("migration failed: %w", err)
 	}
 
