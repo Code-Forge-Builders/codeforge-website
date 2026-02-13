@@ -12,6 +12,7 @@ import (
 	"golang.org/x/net/html"
 )
 
+//go:embed templates/*.gohtml
 var templateFS embed.FS
 
 var (
@@ -31,13 +32,13 @@ var (
 func InitTemplates() error {
 	templateOnce.Do(func() {
 		tmpl = template.New("email").Funcs(funcMap)
-		tmpl, initErr = tmpl.ParseFS(templateFS, "templates/*gohtml")
+		tmpl, initErr = tmpl.ParseFS(templateFS, "templates/*.gohtml")
 		if initErr != nil {
 			return
 		}
 	})
 
-	return fmt.Errorf("failed to parse templates: %w", initErr)
+	return initErr
 }
 
 func RenderTemplate(name string, data any) (string, error) {
@@ -47,7 +48,7 @@ func RenderTemplate(name string, data any) (string, error) {
 
 	var buf bytes.Buffer
 	if err := tmpl.ExecuteTemplate(&buf, name, data); err != nil {
-		return "", fmt.Errorf("failed to render template: %w", err)
+		return "", fmt.Errorf("failed to render template: %v", err)
 	}
 	return buf.String(), nil
 }
@@ -55,7 +56,7 @@ func RenderTemplate(name string, data any) (string, error) {
 func HTMLToPlainText(htmlStr string) (string, error) {
 	doc, err := html.Parse(strings.NewReader(htmlStr))
 	if err != nil {
-		return "", fmt.Errorf("failed to parse HTML: %w", err)
+		return "", fmt.Errorf("failed to parse HTML: %v", err)
 	}
 
 	var buf bytes.Buffer
