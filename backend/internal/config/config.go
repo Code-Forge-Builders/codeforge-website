@@ -22,6 +22,10 @@ type Config struct {
 	// Optional: app settings
 	Port       string `env:"PORT" envDefault:"8080"`
 	IpHashSalt string `env:"IP_HASH_SALT" envDefault:"aa328a3ea9da7b9c926d093b243ee0fd0fd00b55e3674211506100afa5ed20af"`
+
+	// Optional: jobs settings
+	JobWorkerAmountFactor    float64 `env:"JOB_WORKER_AMOUNT_FACTOR" envDefault:"1.0"`
+	EmailJobWorkersMaxAmount int     `env:"EMAIL_JOB_WORKERS_MAX_AMOUNT" envDefault:"32"`
 }
 
 var (

@@ -8,7 +8,7 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func HandleCreateInquiry(c *gin.Context) {
+func HandleCreateInquiry(c *gin.Context, inquiryService InquiryService) {
 	var createInquiryDto CreateInquiryDto
 
 	if err := c.ShouldBindJSON(&createInquiryDto); err != nil {
@@ -36,7 +36,7 @@ func HandleCreateInquiry(c *gin.Context) {
 
 	createInquiryDto.CustomerPhone = utils.NormalizePhone(createInquiryDto.CustomerPhone)
 
-	newInquiry, err := CreateInquiryService(createInquiryDto)
+	newInquiry, err := inquiryService.Create(createInquiryDto)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

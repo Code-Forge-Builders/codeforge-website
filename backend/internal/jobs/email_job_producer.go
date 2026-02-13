@@ -15,6 +15,7 @@ type emailJobProducer struct {
 
 func (p *emailJobProducer) Enqueue(job *BackgroundJob) error {
 	job.Status = BackgroundJobStatusPending
+	job.Type = BackgroundJobTypeEmail
 	job.Attempts = 0
 	job.MaxAttempts = 3
 	job.CreatedAt = time.Now()
@@ -27,4 +28,8 @@ func (p *emailJobProducer) Enqueue(job *BackgroundJob) error {
 	}
 
 	return nil
+}
+
+func NewEmailJobProducer() EmailJobProducer {
+	return &emailJobProducer{}
 }

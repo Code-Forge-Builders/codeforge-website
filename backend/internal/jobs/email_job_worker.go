@@ -30,6 +30,13 @@ type emailJobWorker struct {
 	stopChan     chan struct{}
 }
 
+func NewEmailJobWorker(emailService email.EmailService) EmailJobWorker {
+	return &emailJobWorker{
+		emailService: emailService,
+		stopChan:     make(chan struct{}),
+	}
+}
+
 func (w *emailJobWorker) Start() error {
 	w.stopChan = make(chan struct{})
 	go w.run()
@@ -60,6 +67,7 @@ func (w *emailJobWorker) claimNextJob(tx *gorm.DB) (*BackgroundJob, error) {
 		Where("type = ?", BackgroundJobTypeEmail).
 		Where("locked_at IS NULL OR locked_at < ?", now.Add(-1*time.Minute)).
 		Where("attempts < max_attempts").
+		Where("updated_at < ?", now.Add(-1*time.Minute)). // If the job was tried on the last minute, skip it to avoid sequential retries
 		Order("created_at ASC").
 		Order("updated_at ASC").
 		First(&job)
@@ -96,17 +104,32 @@ func (w *emailJobWorker) processJob(job *BackgroundJob) error {
 		Subject: payload.Subject,
 	}
 
+	job.UpdatedAt = now // Update the updated_at timestamp to the current time
+	job.Attempts++      // Increment the attempts count just before rendering the template
+
 	newEmail.HTML, err = email.RenderTemplate(payload.TemplateName, payload.Data)
 	if err != nil {
+		// Setup to pending state or dead letter again - failure on rendering, not sending email
+		job.Status = BackgroundJobStatusPending
+		job.UpdatedAt = now
+		job.LockedAt = nil
+
+		if job.Attempts >= job.MaxAttempts {
+			job.Status = BackgroundJobStatusFailed // Dead letter
+		} else {
+			job.Status = BackgroundJobStatusPending // Retry
+		}
+
+		result := db.DB.Save(job)
+		if result.Error != nil {
+			return fmt.Errorf("failed to update email job: %v", result.Error)
+		}
 		return fmt.Errorf("failed to render email template: %v", err)
 	}
 
 	err = w.emailService.SendEmail(newEmail)
 
-	job.UpdatedAt = now // Update the updated_at timestamp to the current time
-
 	if err != nil {
-		job.Attempts++
 		job.LockedAt = nil
 
 		if job.Attempts >= job.MaxAttempts {

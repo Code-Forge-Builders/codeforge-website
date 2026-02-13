@@ -15,10 +15,10 @@ import (
 var templateFS embed.FS
 
 var (
-	once    sync.Once
-	tmpl    *template.Template
-	initErr error
-	funcMap = template.FuncMap{
+	templateOnce sync.Once
+	tmpl         *template.Template
+	initErr      error
+	funcMap      = template.FuncMap{
 		"formatDate": func(t time.Time) string {
 			return t.Format("02/01/2006 15:04")
 		},
@@ -29,7 +29,7 @@ var (
 )
 
 func InitTemplates() error {
-	once.Do(func() {
+	templateOnce.Do(func() {
 		tmpl = template.New("email").Funcs(funcMap)
 		tmpl, initErr = tmpl.ParseFS(templateFS, "templates/*gohtml")
 		if initErr != nil {

@@ -11,7 +11,10 @@ import (
 	"net/smtp"
 	"os"
 	"strings"
+	"sync"
 	"time"
+
+	"github.com/caarlos0/env/v11"
 )
 
 type EmailService interface {
@@ -30,6 +33,32 @@ type EmailConfig struct {
 
 type emailService struct {
 	emailConfig EmailConfig
+}
+
+var (
+	emailConfig *EmailConfig
+	emailOnce   sync.Once
+	err         error
+)
+
+func LoadEmailConfig() (*EmailConfig, error) {
+	emailOnce.Do(func() {
+		var c EmailConfig
+		if err = env.Parse(&c); err != nil {
+			err = fmt.Errorf("failed to load email config: %w", err)
+			return
+		}
+
+		emailConfig = &c
+	})
+
+	return emailConfig, err
+}
+
+func NewEmailService(emailConfig EmailConfig) EmailService {
+	return &emailService{
+		emailConfig: emailConfig,
+	}
 }
 
 func (s *emailService) SendEmail(email Email) error {
