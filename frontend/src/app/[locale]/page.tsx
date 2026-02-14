@@ -11,6 +11,7 @@ import { ContactUsForm } from '@/components/ContactUsForm';
 import Footer from '@/components/Footer';
 import { ToastProvider } from '@/components/Toast/ToastContext';
 import { ToastContainer } from '@/components/Toast/ToastContainer';
+import Metrics from '@/components/Metrics';
 
 export default function Home({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = use(params);
@@ -21,19 +22,22 @@ export default function Home({ params }: { params: Promise<{ locale: string }> }
 
   // Again, ensure next-intl knows the locale
   setRequestLocale(locale);
-
+  
   return (
-    <ToastProvider>
-      <div>
-        <Menu />
-        <Hero />
-        <OurServices />
-        <AboutUs />
-        <OurTeam />
-        <ContactUsForm locale={locale} />
-        <Footer />
-      </div>
-      <ToastContainer/>
-    </ToastProvider>
+    <>
+      <Metrics locale={locale} />
+      <ToastProvider>
+        <div>
+          <Menu />
+          <Hero />
+          <OurServices />
+          <AboutUs />
+          <OurTeam />
+          <ContactUsForm locale={locale} />
+          <Footer />
+        </div>
+        <ToastContainer/>
+      </ToastProvider>
+    </>
   );
 }
