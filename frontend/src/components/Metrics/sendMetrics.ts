@@ -1,7 +1,7 @@
-import { httpClient } from "@/lib/httpClient";
+import { apiHttpClient } from "@/lib/httpClient";
 
 export async function sendMetrics(locale: string) {
-  await httpClient.post("/metrics", {
+  await apiHttpClient.post("/metrics", {
     headers: { "Accept-Language": locale },
   });
 }

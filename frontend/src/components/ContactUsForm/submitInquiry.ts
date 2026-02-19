@@ -1,4 +1,4 @@
-import { httpClient } from "@/lib/httpClient";
+import { apiHttpClient } from "@/lib/httpClient";
 
 export interface InquiryBodyPayload {
   customer_name: string
@@ -18,5 +18,5 @@ export interface Inquiry {
 }
 
 export async function submitInquiry(inquiryPayload: InquiryBodyPayload) {
-  return httpClient.post<Inquiry>("/inquiries", { body: inquiryPayload });
+  return apiHttpClient.post<Inquiry>("/inquiries", { body: inquiryPayload });
 }

@@ -25,26 +25,26 @@ export interface RequestOptions {
   body?: unknown;
 }
 
-function buildUrl(baseUrl: string, path: string, query?: Record<string, string>): string {
-  const base = baseUrl.replace(/\/$/, "");
-  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-  const url = new URL(`${base}${normalizedPath}`);
-  if (query) {
-    Object.entries(query).forEach(([key, value]) => {
-      url.searchParams.set(key, value);
-    });
+export class HttpClient {
+  constructor(private readonly baseUrl?: string) {
+    this.baseUrl = baseUrl ?? getBaseUrl();
   }
-  return url.toString();
-}
 
-async function request<T = unknown>(
-  method: string,
-  path: string,
-  options: RequestOptions = {}
-): Promise<T> {
-  const baseUrl = getBaseUrl();
-  const { headers = {}, query, body } = options;
-  const url = buildUrl(baseUrl, path.startsWith("/") ? path : `/${path}`, query);
+  private buildUrl(path: string, query?: Record<string, string>): string {
+    const base = this.baseUrl?.replace(/\/$/, "");
+    const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+    const url = new URL(`${base}${normalizedPath}`);
+    if (query) {
+      Object.entries(query).forEach(([key, value]) => {
+        url.searchParams.set(key, value);
+      });
+    }
+    return url.toString();
+  }
+
+  async request<T = unknown>(method: string, path: string, options: RequestOptions = {}): Promise<T> {
+    const { headers = {}, query, body } = options;
+    const url = this.buildUrl(path, query);
 
   const fetchOptions: RequestInit = {
     method,
@@ -82,30 +82,27 @@ async function request<T = unknown>(
   }
 
   return (responseBody ?? undefined) as T;
-}
-
-export const httpClient = {
-  request<T = unknown>(method: string, path: string, options: RequestOptions = {}): Promise<T> {
-    return request<T>(method, path, options);
-  },
+  }
 
   get<T = unknown>(path: string, options: Omit<RequestOptions, "body"> = {}): Promise<T> {
-    return request<T>("GET", path, options);
-  },
+    return this.request<T>("GET", path, options);
+  }
 
   post<T = unknown>(path: string, options: RequestOptions = {}): Promise<T> {
-    return request<T>("POST", path, options);
-  },
+    return this.request<T>("POST", path, options);
+  }
 
   put<T = unknown>(path: string, options: RequestOptions = {}): Promise<T> {
-    return request<T>("PUT", path, options);
-  },
+    return this.request<T>("PUT", path, options);
+  }
 
   patch<T = unknown>(path: string, options: RequestOptions = {}): Promise<T> {
-    return request<T>("PATCH", path, options);
-  },
+    return this.request<T>("PATCH", path, options);
+  }
 
   delete<T = unknown>(path: string, options: RequestOptions = {}): Promise<T> {
-    return request<T>("DELETE", path, options);
-  },
-};
+    return this.request<T>("DELETE", path, options);
+  }
+}
+
+export const apiHttpClient = new HttpClient();
