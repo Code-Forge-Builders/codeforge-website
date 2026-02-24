@@ -36,7 +36,7 @@ export default function Login() {
   }
   
   return <div className="flex flex-col w-full max-w-sm bg-zinc-100 p-6 rounded-md border border-zinc-300 mx-4">
-    <form className="flex flex-col column gap-2" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
       <Image width={300} height={63} src="/assets/banner-logo-light-300x63.webp" alt="Codeforge's logo" className="w-[300px] h-auto mb-4" />
       <Input
         id="login-input"
