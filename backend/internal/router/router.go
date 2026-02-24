@@ -10,6 +10,7 @@ import (
 )
 
 func SetupRouter() *gin.Engine {
+	gin.SetMode(gin.ReleaseMode) // Set release mode for production
 	r := gin.New()
 
 	r.Use(cors.Default())

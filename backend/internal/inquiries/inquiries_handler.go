@@ -8,7 +8,18 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func HandleCreateInquiry(c *gin.Context) {
+func HandleCreateInquiry(c *gin.Context, inquiryService InquiryService, rateLimiter *utils.RateLimiter) {
+	ip := c.ClientIP()
+
+	if rateLimiter.TooManyRequests(ip) {
+		c.JSON(http.StatusTooManyRequests, gin.H{
+			"message": "You have made too many requests. Please try again later.",
+		})
+		return
+	}
+
+	rateLimiter.DelayAccordinglyToIp(ip)
+
 	var createInquiryDto CreateInquiryDto
 
 	if err := c.ShouldBindJSON(&createInquiryDto); err != nil {
@@ -36,7 +47,7 @@ func HandleCreateInquiry(c *gin.Context) {
 
 	createInquiryDto.CustomerPhone = utils.NormalizePhone(createInquiryDto.CustomerPhone)
 
-	newInquiry, err := CreateInquiryService(createInquiryDto)
+	newInquiry, err := inquiryService.Create(createInquiryDto)
 
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{

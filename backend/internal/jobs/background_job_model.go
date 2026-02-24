@@ -8,11 +8,21 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	BackgroundJobStatusPending    = 0
+	BackgroundJobStatusInProgress = 1
+	BackgroundJobStatusSuccess    = 2
+	BackgroundJobStatusFailed     = 3
+	BackgroundJobStatusCancelled  = 4
+
+	BackgroundJobTypeEmail = 1
+)
+
 type BackgroundJob struct {
 	ID          uuid.UUID       `gorm:"type:uuid;primaryKey;"`
 	Type        int8            `gorm:"type:smallint;not null;comment:'1: email';"`
 	Payload     json.RawMessage `gorm:"type:jsonb;not null;"`
-	Status      int8            `gorm:"type:smallint;not null;comment:'0: pending, 1: in progress, 2: success, 3: failed, 4: cancelled';"`
+	Status      int8            `gorm:"type:smallint;not null;comment:'0: pending, 1: in progress, 2: success, 3: failed, 4: cancelled';default:0;"`
 	Attempts    int8            `gorm:"type:smallint;not null;default:0;"`
 	MaxAttempts int8            `gorm:"type:smallint;not null;default:3;"`
 
@@ -21,8 +31,8 @@ type BackgroundJob struct {
 	UpdatedAt time.Time `gorm:"type:timestamp;not null;"`
 
 	// Status timestamp fields
-	LockedAt   time.Time `gorm:"type:timestamp;"`
-	FinishedAt time.Time `gorm:"type:timestamp;"`
+	LockedAt   *time.Time `gorm:"type:timestamp;"`
+	FinishedAt *time.Time `gorm:"type:timestamp;"`
 }
 
 func (b *BackgroundJob) BeforeCreate(tx *gorm.DB) error {

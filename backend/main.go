@@ -4,9 +4,14 @@ import (
 	"codeforge/website-prospecting-api/internal/config"
 	"codeforge/website-prospecting-api/internal/db"
 	"codeforge/website-prospecting-api/internal/db/migrations"
+	"codeforge/website-prospecting-api/internal/jobs"
 	"codeforge/website-prospecting-api/internal/router"
+	"context"
 	"log"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
 	"time"
 )
 
@@ -48,11 +53,45 @@ func main() {
 	log.Print("Auto migrating database...")
 	migrations.Migrate()
 
+	// Setup workers
+	log.Print("Setting up email workers...")
+	emailWorkers := jobs.SetupEmailJobWorkers()
+	log.Printf("Email workers: %d", len(emailWorkers))
+	defer jobs.StopEmailJobWorkers(emailWorkers)
+
+	// Setup router
 	r := router.SetupRouter()
 
-	log.Printf("Application started on port 8080")
+	srv := &http.Server{
+		Addr:    ":8080",
+		Handler: r,
+	}
 
-	r.Run(":8080")
+	// Start server
+	go func() {
+		log.Printf("Server started on port %s", srv.Addr)
+		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatalf("Could not listen on port %s: %v", srv.Addr, err)
+			gracefulShutdown()
+		}
+	}()
+
+	// Signal handling
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+
+	<-quit // Wait until receive a signal (CTRL+C or KILL command)
+	log.Println("Received signal to shutdown...")
+
+	// Graceful shutdown
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	// Shutdown server
+	log.Println("Shutting down server...")
+	if err := srv.Shutdown(ctx); err != nil {
+		log.Fatalf("Could not shutdown server: %v", err)
+	}
 
 	gracefulShutdown()
 }

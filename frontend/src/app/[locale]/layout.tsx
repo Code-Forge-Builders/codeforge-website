@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from "next";
 import { Open_Sans, Source_Code_Pro } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { routing } from '@/i18n/routing';
