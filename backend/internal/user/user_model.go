@@ -8,12 +8,12 @@ import (
 )
 
 type User struct {
-	ID           uuid.UUID `gorm:"type:uuid;primaryKey;unique;"`
-	Name         string    `gorm:"size:255"`
-	Login        string    `gorm:"size:255"`
-	PasswordHash string    `gorm:"size:255"`
-	CreatedAt    time.Time
-	UpdatedAt    time.Time
+	ID           uuid.UUID `gorm:"type:uuid;primaryKey;unique;"json:"id"`
+	Name         string    `gorm:"size:255"json:"name"`
+	Login        string    `gorm:"size:255"json:"login"`
+	PasswordHash string    `gorm:"size:255"json:"password_hash"`
+	CreatedAt    time.Time `json:"created_at"`
+	UpdatedAt    time.Time `json:"updated_at"`
 }
 
 // UUID v7 fallback for PostgreSQL <17

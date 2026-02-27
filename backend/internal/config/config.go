@@ -20,8 +20,10 @@ type Config struct {
 	DBRetryDelay     time.Duration
 
 	// Optional: app settings
-	Port       string `env:"PORT" envDefault:"8080"`
-	IpHashSalt string `env:"IP_HASH_SALT" envDefault:"aa328a3ea9da7b9c926d093b243ee0fd0fd00b55e3674211506100afa5ed20af"`
+	Port               string `env:"PORT" envDefault:"8080"`
+	IpHashSalt         string `env:"IP_HASH_SALT" envDefault:"aa328a3ea9da7b9c926d093b243ee0fd0fd00b55e3674211506100afa5ed20af"`
+	JWTSecret          string `env:"JWT_SECRET" envRequired:"true"`
+	JWTExpiryInMinutes int    `env:"JWT_EXPIRY_IN_MINUTES" envDefault:"1440"`
 
 	// Optional: jobs settings
 	JobWorkerAmountFactor    float64 `env:"JOB_WORKER_AMOUNT_FACTOR" envDefault:"1.0"`
