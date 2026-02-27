@@ -5,8 +5,8 @@ import (
 	"codeforge/website-prospecting-api/internal/inquiries"
 	"codeforge/website-prospecting-api/internal/jobs"
 	"codeforge/website-prospecting-api/internal/metrics"
+	"codeforge/website-prospecting-api/internal/user"
 	"fmt"
-	"os/user"
 )
 
 func Migrate() error {
