@@ -11,6 +11,7 @@ import (
 type UserService interface {
 	Create(createUserDto CreateUserDto) (*User, error)
 	FindByLogin(login string) (*User, error)
+	GetCount() int64
 }
 
 type userService struct{}
@@ -53,4 +54,10 @@ func (s *userService) FindByLogin(login string) (*User, error) {
 		return nil, result.Error
 	}
 	return &user, nil
+}
+
+func (s *userService) GetCount() int64 {
+	var count int64
+	db.DB.Model(&User{}).Count(&count)
+	return count
 }

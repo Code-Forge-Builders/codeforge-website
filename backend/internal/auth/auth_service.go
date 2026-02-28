@@ -25,6 +25,7 @@ type AuthResult struct {
 type AuthService interface {
 	Register(dto user.CreateUserDto) (*user.User, error)
 	Login(dto LoginDto) (*AuthResult, error)
+	CheckInitialSetup() bool
 }
 
 type authService struct {
@@ -85,6 +86,15 @@ func (s *authService) Login(dto LoginDto) (*AuthResult, error) {
 		Token: token,
 		User:  mapUserToDto(foundUser),
 	}, nil
+}
+func (s *authService) CheckInitialSetup() bool {
+	count := s.userService.GetCount()
+
+	if count <= 0 {
+		return false
+	}
+
+	return true
 }
 
 func (s *authService) generateToken(u *user.User) (string, error) {

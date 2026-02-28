@@ -54,6 +54,14 @@ func HandleLogin(c *gin.Context, authService AuthService) {
 	c.JSON(http.StatusOK, result)
 }
 
+func HandleCheckInitialSetup(c *gin.Context, authService AuthService) {
+	setupDone := authService.CheckInitialSetup()
+
+	c.JSON(http.StatusOK, gin.H{
+		"setup_done": setupDone,
+	})
+}
+
 func handleValidationError(c *gin.Context, err error) {
 	messages := make(map[string]string)
 
@@ -74,4 +82,3 @@ func handleValidationError(c *gin.Context, err error) {
 		"message": err.Error(),
 	})
 }
-
