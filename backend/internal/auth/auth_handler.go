@@ -9,8 +9,17 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-func HandleRegister(c *gin.Context, authService AuthService) {
+func HandleInitialRegister(c *gin.Context, authService AuthService) {
 	var dto user.CreateUserDto
+
+	setupDone := authService.CheckInitialSetup()
+
+	if setupDone {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "Initial setup done, please contact the administrator",
+		})
+		return
+	}
 
 	if err := c.ShouldBindJSON(&dto); err != nil {
 		handleValidationError(c, err)
