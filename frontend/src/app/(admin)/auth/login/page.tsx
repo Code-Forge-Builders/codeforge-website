@@ -7,10 +7,13 @@ import checkInitialSetup from "../../services/checkInitialSetup";
 import { redirect } from "next/navigation";
 import handleLogin, { ILoginPayload } from "./handleLogin";
 import { useToast } from "@/components/Toast/ToastContext";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [initialSetup, setInitialSetup] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+
+  const router = useRouter()
 
   const { showToast } = useToast()
 
@@ -62,19 +65,9 @@ export default function Login() {
     }
     
     handleLogin(payload)
-      .then((response) => {
-        // Save the token in the local storage
-        localStorage.setItem('auth_token', response.token)
-        localStorage.setItem('auth_user', JSON.stringify(response.user))
+      .then(() => {
         // Redirect to the dashboard
-        setTimeout(() => {
-          redirect('/dashboard')
-        }, 1000)
-        // Alert the success
-        showToast({
-          message: "Login successful",
-          type: "success",
-        })
+        router.push('/admin/dashboard')
       })
       .catch((error) => {
         // Alert the error

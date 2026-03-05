@@ -18,14 +18,21 @@ type AuthUserDto struct {
 }
 
 type AuthResult struct {
-	Token string      `json:"token"`
-	User  AuthUserDto `json:"user"`
+	Token     string      `json:"token"`
+	ExpiresAt time.Time   `json:"expires_at"`
+	User      AuthUserDto `json:"user"`
+}
+
+type TokenPayload struct {
+	Token     string    `json:"token"`
+	ExpiresAt time.Time `json:"expires_at"`
 }
 
 type AuthService interface {
 	Register(dto user.CreateUserDto) (*user.User, error)
 	Login(dto LoginDto) (*AuthResult, error)
 	CheckInitialSetup() bool
+	ValidateToken(token string) (*AuthUserDto, error)
 }
 
 type authService struct {
@@ -77,14 +84,15 @@ func (s *authService) Login(dto LoginDto) (*AuthResult, error) {
 		return nil, ErrInvalidCredentials
 	}
 
-	token, err := s.generateToken(foundUser)
+	tokenPayload, err := s.generateToken(foundUser)
 	if err != nil {
 		return nil, err
 	}
 
 	return &AuthResult{
-		Token: token,
-		User:  mapUserToDto(foundUser),
+		Token:     tokenPayload.Token,
+		ExpiresAt: tokenPayload.ExpiresAt,
+		User:      mapUserToDto(foundUser),
 	}, nil
 }
 func (s *authService) CheckInitialSetup() bool {
@@ -97,7 +105,31 @@ func (s *authService) CheckInitialSetup() bool {
 	return true
 }
 
-func (s *authService) generateToken(u *user.User) (string, error) {
+func (s *authService) ValidateToken(token string) (*AuthUserDto, error) {
+	tokenParsed, err := jwt.ParseWithClaims(token, &jwt.RegisteredClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return s.secret, nil
+	})
+
+	if err != nil || !tokenParsed.Valid {
+		return nil, errors.New("invalid token")
+	}
+
+	claims := tokenParsed.Claims.(*jwt.RegisteredClaims)
+
+	user, err := s.userService.FindById(claims.Subject)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &AuthUserDto{
+		ID:    user.ID.String(),
+		Name:  user.Name,
+		Login: user.Login,
+	}, nil
+}
+
+func (s *authService) generateToken(u *user.User) (TokenPayload, error) {
 	now := time.Now()
 
 	claims := jwt.RegisteredClaims{
@@ -108,7 +140,15 @@ func (s *authService) generateToken(u *user.User) (string, error) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return token.SignedString(s.secret)
+	tokenString, err := token.SignedString(s.secret)
+	if err != nil {
+		return TokenPayload{}, err
+	}
+
+	return TokenPayload{
+		Token:     tokenString,
+		ExpiresAt: claims.ExpiresAt.Time,
+	}, nil
 }
 
 func mapUserToDto(u *user.User) AuthUserDto {

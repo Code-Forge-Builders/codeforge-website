@@ -15,11 +15,14 @@ const sourceCodePro = Source_Code_Pro({
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return <html lang="en" className="w-full h-full">
-    <ToastProvider>
-      <body className={`${openSans.variable} ${sourceCodePro.variable} bg-zinc-200 text-foreground-light w-full h-full flex justify-center items-center antialiased `}>
+    <head>
+      <title>Codeforge - Admin Login</title>
+    </head>
+    <body className={`${openSans.variable} ${sourceCodePro.variable} bg-zinc-200 text-foreground-light w-full h-full flex justify-center items-center antialiased `}>
+      <ToastProvider>
         {children}
         <ToastContainer/>
-      </body>
-    </ToastProvider>
+      </ToastProvider>
+    </body>
   </html>
 }

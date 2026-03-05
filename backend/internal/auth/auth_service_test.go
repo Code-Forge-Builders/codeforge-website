@@ -12,11 +12,12 @@ import (
 )
 
 type fakeUserService struct {
-	createdUser *user.User
-	findUser    *user.User
-	createErr   error
-	findErr     error
-	count       int64
+	createdUser  *user.User
+	findUser     *user.User
+	findByIdUser *user.User
+	createErr    error
+	findErr      error
+	count        int64
 }
 
 func (f *fakeUserService) Create(dto user.CreateUserDto) (*user.User, error) {
@@ -31,6 +32,13 @@ func (f *fakeUserService) FindByLogin(login string) (*user.User, error) {
 		return nil, f.findErr
 	}
 	return f.findUser, nil
+}
+
+func (f *fakeUserService) FindById(id string) (*user.User, error) {
+	if f.findErr != nil {
+		return nil, f.findErr
+	}
+	return f.findByIdUser, nil
 }
 
 func (f *fakeUserService) GetCount() int64 {

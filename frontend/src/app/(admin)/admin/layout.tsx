@@ -1,6 +1,7 @@
 import { ToastContainer } from "@/components/Toast/ToastContainer";
 import { ToastProvider } from "@/components/Toast/ToastContext";
 import { Open_Sans, Source_Code_Pro } from "next/font/google";
+import { authCheck } from "./authCheck";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -12,13 +13,19 @@ const sourceCodePro = Source_Code_Pro({
   subsets: ["latin"],
 })
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+export default async function AdminLayout({ children }: { children: React.ReactNode }) {
+  await authCheck()
+
+
   return <html lang="en">
-    <ToastProvider>
-      <body className={`${openSans.variable} ${sourceCodePro.variable} bg-zinc-200 text-foreground-light antialiased `}>
+    <head>
+      <title>Codeforge - Admin Dashboard</title>
+    </head>
+    <body className={`${openSans.variable} ${sourceCodePro.variable} bg-zinc-200 text-foreground-light antialiased `}>
+      <ToastProvider>
         {children}
         <ToastContainer/>
+      </ToastProvider>
       </body>
-    </ToastProvider>
   </html>
 }

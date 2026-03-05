@@ -28,6 +28,9 @@ type Config struct {
 	// Optional: jobs settings
 	JobWorkerAmountFactor    float64 `env:"JOB_WORKER_AMOUNT_FACTOR" envDefault:"1.0"`
 	EmailJobWorkersMaxAmount int     `env:"EMAIL_JOB_WORKERS_MAX_AMOUNT" envDefault:"32"`
+
+	// Cors settings
+	CorsOrigins []string `env:"CORS_ORIGINS" envRequired:"true"`
 }
 
 var (

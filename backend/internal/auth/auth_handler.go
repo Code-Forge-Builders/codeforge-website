@@ -4,6 +4,7 @@ import (
 	"codeforge/website-prospecting-api/internal/user"
 	"errors"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
@@ -60,7 +61,59 @@ func HandleLogin(c *gin.Context, authService AuthService) {
 		return
 	}
 
-	c.JSON(http.StatusOK, result)
+	c.SetCookie(
+		"auth_token",
+		result.Token,
+		int(result.ExpiresAt.Sub(time.Now()).Seconds()),
+		"/",
+		"",
+		false, // secure
+		true,  // httpOnly
+	)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message":    "login successful",
+		"expires_at": result.ExpiresAt,
+	})
+}
+
+func HandleLogout(c *gin.Context) {
+	c.SetCookie(
+		"auth_token",
+		"",
+		-1,
+		"/",
+		"",
+		false, // secure
+		true,  // httpOnly
+	)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "logout successful",
+	})
+}
+
+func HandleCheckAuth(c *gin.Context) {
+	user, ok := c.Get("user")
+	if !ok || user == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "unauthorized",
+		})
+		return
+	}
+
+	authUser, ok := user.(*AuthUserDto)
+	if !ok {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"message": "invalid user context",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "authorized",
+		"user":    authUser,
+	})
 }
 
 func HandleCheckInitialSetup(c *gin.Context, authService AuthService) {

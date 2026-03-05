@@ -7,6 +7,7 @@ export interface ILoginPayload {
 
 export interface ILoginResponse {
   token: string
+  expires_at: string
   user: {
     id: string
     name: string
@@ -16,6 +17,7 @@ export interface ILoginResponse {
 
 export default async function handleLogin(payload: ILoginPayload): Promise<ILoginResponse> {
   return await apiHttpClient.post<ILoginResponse>('/auth/login', {
+    credentials: "include",
     body: payload
   })
 }

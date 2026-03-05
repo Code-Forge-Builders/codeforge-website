@@ -5,12 +5,14 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type UserService interface {
 	Create(createUserDto CreateUserDto) (*User, error)
 	FindByLogin(login string) (*User, error)
+	FindById(id string) (*User, error)
 	GetCount() int64
 }
 
@@ -50,6 +52,15 @@ func (s *userService) Create(createUserDto CreateUserDto) (*User, error) {
 func (s *userService) FindByLogin(login string) (*User, error) {
 	user := User{}
 	result := db.DB.Where("login = ?", login).First(&user)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &user, nil
+}
+
+func (s *userService) FindById(id string) (*User, error) {
+	user := User{}
+	result := db.DB.Where("id = ?", uuid.MustParse(id)).First(&user)
 	if result.Error != nil {
 		return nil, result.Error
 	}

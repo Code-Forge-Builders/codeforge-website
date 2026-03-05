@@ -14,6 +14,13 @@ func RegisterRoutes(rg *gin.RouterGroup) {
 	{
 		authGroup.POST("/initial-register", func(c *gin.Context) { HandleInitialRegister(c, authService) })
 		authGroup.POST("/login", func(c *gin.Context) { HandleLogin(c, authService) })
+		authGroup.POST("/logout", HandleLogout)
 		authGroup.GET("/check-initial-setup", func(ctx *gin.Context) { HandleCheckInitialSetup(ctx, authService) })
+	}
+
+	protected := authGroup.Group("")
+	{
+		protected.Use(AuthMiddleware(authService))
+		protected.GET("/check-auth", HandleCheckAuth)
 	}
 }

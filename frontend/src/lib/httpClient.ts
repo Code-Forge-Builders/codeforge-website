@@ -20,6 +20,7 @@ export class HttpError extends Error {
 }
 
 export interface RequestOptions {
+  credentials?: "include" | "same-origin" | "omit";
   headers?: Record<string, string>;
   query?: Record<string, string>;
   body?: unknown;
@@ -46,42 +47,43 @@ export class HttpClient {
     const { headers = {}, query, body } = options;
     const url = this.buildUrl(path, query);
 
-  const fetchOptions: RequestInit = {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-  };
+    const fetchOptions: RequestInit = {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        ...headers,
+      },
+      credentials: options.credentials,
+    };
 
-  if (body !== undefined && body !== null && method !== "GET") {
-    fetchOptions.body = JSON.stringify(body);
-  }
-
-  const response = await fetch(url, fetchOptions);
-  const contentType = response.headers.get("content-type");
-  const hasJson = contentType?.includes("application/json");
-  let responseBody: unknown;
-  if (hasJson) {
-    try {
-      responseBody = await response.json();
-    } catch {
-      responseBody = undefined;
+    if (body !== undefined && body !== null && method !== "GET") {
+      fetchOptions.body = JSON.stringify(body);
     }
-  }
 
-  if (!response.ok) {
-    const message =
-      (responseBody as { message?: string })?.message ??
-      (response.statusText || `Request failed with status ${response.status}`);
-    throw new HttpError(message, response.status, response.statusText, responseBody);
-  }
+    const response = await fetch(url, fetchOptions);
+    const contentType = response.headers.get("content-type");
+    const hasJson = contentType?.includes("application/json");
+    let responseBody: unknown;
+    if (hasJson) {
+      try {
+        responseBody = await response.json();
+      } catch {
+        responseBody = undefined;
+      }
+    }
 
-  if (response.status === 204 || response.status === 205) {
-    return undefined as T;
-  }
+    if (!response.ok) {
+      const message =
+        (responseBody as { message?: string })?.message ??
+        (response.statusText || `Request failed with status ${response.status}`);
+      throw new HttpError(message, response.status, response.statusText, responseBody);
+    }
 
-  return (responseBody ?? undefined) as T;
+    if (response.status === 204 || response.status === 205) {
+      return undefined as T;
+    }
+
+    return (responseBody ?? undefined) as T;
   }
 
   get<T = unknown>(path: string, options: Omit<RequestOptions, "body"> = {}): Promise<T> {
