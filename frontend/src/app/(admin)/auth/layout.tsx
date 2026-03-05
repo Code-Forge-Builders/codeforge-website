@@ -1,5 +1,7 @@
+import { ToastProvider } from "@/components/Toast/ToastContext";
 import "../../globals.css"
 import { Open_Sans, Source_Code_Pro } from "next/font/google";
+import { ToastContainer } from "@/components/Toast/ToastContainer";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -13,6 +15,11 @@ const sourceCodePro = Source_Code_Pro({
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return <html lang="en" className="w-full h-full">
-    <body className={`${openSans.variable} ${sourceCodePro.variable} bg-zinc-200 text-foreground-light w-full h-full flex justify-center items-center antialiased `}>{children}</body>
+    <ToastProvider>
+      <body className={`${openSans.variable} ${sourceCodePro.variable} bg-zinc-200 text-foreground-light w-full h-full flex justify-center items-center antialiased `}>
+        {children}
+        <ToastContainer/>
+      </body>
+    </ToastProvider>
   </html>
 }
