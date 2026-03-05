@@ -9,10 +9,24 @@ import (
 	"time"
 )
 
-func CreateMetricsService(createMetricsDto CreateMetricsDto) (*Metrics, error) {
+type MetricsService interface {
+	Create(createMetricsDto CreateMetricsDto) (*Metrics, error)
+}
+
+type metricsService struct {
+	ipHasher utils.IPHasher
+}
+
+func NewMetricsService(ipHasher utils.IPHasher) MetricsService {
+	return &metricsService{
+		ipHasher: ipHasher,
+	}
+}
+
+func (s *metricsService) Create(createMetricsDto CreateMetricsDto) (*Metrics, error) {
 	ipInfo := getRegionFromIp(createMetricsDto.Ip)
 
-	IpHash := utils.HashIpUnrecoverable(createMetricsDto.Ip)
+	IpHash := s.ipHasher.Hash(createMetricsDto.Ip)
 
 	metrics := Metrics{
 		AccessAt:  time.Now(),

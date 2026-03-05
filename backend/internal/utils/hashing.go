@@ -1,19 +1,27 @@
 package utils
 
 import (
-	"codeforge/website-prospecting-api/internal/config"
+	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
 )
 
-func HashIpUnrecoverable(input string) string {
-	cfg, _ := config.Load()
+type IPHasher interface {
+	Hash(ip string) string
+}
 
-	salt := cfg.IpHashSalt
+type ipHasher struct {
+	salt []byte
+}
 
-	firstHash := sha256.Sum256([]byte(salt + input))
+func NewIPHasher(salt string) IPHasher {
+	return &ipHasher{
+		salt: []byte(salt),
+	}
+}
 
-	secondHash := sha256.Sum256([]byte(salt + hex.EncodeToString(firstHash[:])))
-
-	return hex.EncodeToString(secondHash[:])
+func (h *ipHasher) Hash(ip string) string {
+	mac := hmac.New(sha256.New, h.salt)
+	mac.Write([]byte(ip))
+	return hex.EncodeToString(mac.Sum(nil))
 }

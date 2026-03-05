@@ -1,22 +1,16 @@
 package utils
 
-import (
-	"log"
-	"regexp"
-)
-
 func NormalizePhone(input string) string {
-	prefix := ""
-	if len(input) > 0 && input[0] == '+' {
-		prefix = "+"
+	result := make([]rune, 0, len(input))
+	if len(input) > 0 && input[0] == '+' { // Append the + symbol
+		result = append(result, '+')
 	}
 
-	phoneRegex, err := regexp.Compile(`[^\d]`)
-	if err != nil {
-		log.Printf("Error during regex handling on phone")
+	for _, r := range input { // filter only digits
+		if r >= '0' && r <= '9' {
+			result = append(result, r)
+		}
 	}
 
-	digitsOnly := phoneRegex.ReplaceAllString(input, "")
-
-	return prefix + digitsOnly
+	return string(result)
 }

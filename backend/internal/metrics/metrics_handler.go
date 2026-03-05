@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func HandleCreateMetrics(c *gin.Context, rateLimiter *utils.RateLimiter) {
+func HandleCreateMetrics(c *gin.Context, metricsService MetricsService, rateLimiter *utils.RateLimiter) {
 	ip := c.ClientIP()
 
 	if rateLimiter.TooManyRequests(ip) {
@@ -23,7 +23,7 @@ func HandleCreateMetrics(c *gin.Context, rateLimiter *utils.RateLimiter) {
 	locale := c.GetHeader("Accept-Language")
 
 	// Create record
-	CreateMetricsService(CreateMetricsDto{
+	metricsService.Create(CreateMetricsDto{
 		Ip:        ip,
 		UserAgent: userAgent,
 		Locale:    locale,
