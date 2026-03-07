@@ -1,6 +1,7 @@
 package router
 
 import (
+	"codeforge/website-prospecting-api/internal/analytics"
 	"codeforge/website-prospecting-api/internal/auth"
 	"codeforge/website-prospecting-api/internal/config"
 	"codeforge/website-prospecting-api/internal/inquiries"
@@ -39,6 +40,7 @@ func SetupRouter() *gin.Engine {
 	auth.RegisterRoutes(api)
 	metrics.RegisterRoutes(api)
 	inquiries.RegisterRoutes(api)
+	analytics.RegisterRoutes(api)
 
 	return r
 }

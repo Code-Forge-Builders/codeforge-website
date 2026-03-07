@@ -1,0 +1,11 @@
+package analytics
+
+import "github.com/gin-gonic/gin"
+
+func RegisterRoutes(rg *gin.RouterGroup) {
+	analyticsService := NewAnalyticsService()
+	analytics := rg.Group("/analytics")
+	{
+		analytics.GET("/visits-grouped-by-period", func(c *gin.Context) { HandleGetVisitsGroupedByPeriod(c, analyticsService) })
+	}
+}

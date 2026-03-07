@@ -10,9 +10,9 @@ var AllowedPeriods = map[string]bool{
 }
 
 type TimeSeriesFilterDto struct {
-	StartDate *time.Time `json:"start_date"`
-	EndDate   *time.Time `json:"end_date"`
-	Period    *string    `json:"period"`
+	StartDate *time.Time `json:"start_date" form:"start_date" query:"start_date"`
+	EndDate   *time.Time `json:"end_date" form:"end_date" query:"end_date"`
+	Period    *string    `json:"period" form:"period" query:"period"`
 }
 
 type TimeSeriesPointsDto struct {

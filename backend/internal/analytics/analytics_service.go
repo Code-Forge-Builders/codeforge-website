@@ -24,20 +24,20 @@ func (s *analyticsService) GetVisitsGroupedByPeriod(filter TimeSeriesFilterDto) 
 
 	// Check if it has period, if so, use the period to get the data
 	if filter.Period != nil && AllowedPeriods[*filter.Period] {
-		now := time.Now()
+		now := time.Now().UTC()
 		filter.EndDate = &now
 		switch *filter.Period {
 		case "24h":
-			startDate := now.Add(-time.Hour * 24)
+			startDate := now.Add(-time.Hour * 24).UTC()
 			filter.StartDate = &startDate
 		case "7d":
-			startDate := now.Add(-time.Hour * 24 * 7)
+			startDate := now.Add(-time.Hour * 24 * 7).UTC()
 			filter.StartDate = &startDate
 		case "30d":
-			startDate := now.Add(-time.Hour * 24 * 30)
+			startDate := now.Add(-time.Hour * 24 * 30).UTC()
 			filter.StartDate = &startDate
 		case "90d":
-			startDate := now.Add(-time.Hour * 24 * 90)
+			startDate := now.Add(-time.Hour * 24 * 90).UTC()
 			filter.StartDate = &startDate
 		}
 	}
