@@ -22,7 +22,8 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
 
   try {
     visitPoints = await getVisitsByRange(payload)
-  } catch (_) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
     visitPoints = {
       bucket: BucketEnum.DAY,
       points: [],

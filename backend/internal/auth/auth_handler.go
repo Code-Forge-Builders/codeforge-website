@@ -64,7 +64,7 @@ func HandleLogin(c *gin.Context, authService AuthService) {
 	c.SetCookie(
 		"auth_token",
 		result.Token,
-		int(result.ExpiresAt.Sub(time.Now()).Seconds()),
+		int(time.Until(result.ExpiresAt).Seconds()),
 		"/",
 		"",
 		false, // secure

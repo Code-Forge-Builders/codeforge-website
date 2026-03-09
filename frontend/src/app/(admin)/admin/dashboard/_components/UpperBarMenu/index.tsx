@@ -77,6 +77,7 @@ export default function UpperBarMenu({ user }: IUpperBarMenuProps) {
         className="flex flex-row justify-between items-center gap-2 px-4 py-2 cursor-pointer"
       >
         <h2 className="text-lg font-bold">{user.name}</h2>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="https://placehold.co/32x32" alt="Avatar" width={32} height={32} className="rounded-full" />
       </button>
       {dropdownProfileOpen && (
