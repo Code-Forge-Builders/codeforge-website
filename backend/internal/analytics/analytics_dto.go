@@ -30,10 +30,3 @@ type TotalMetricsResultDto struct {
 	Change float64 `json:"change"`
 	Label  string  `json:"label"`
 }
-
-type GetTotalMetricsResponseDto struct {
-	TotalVisits         TotalMetricsResultDto `json:"total_visits"`
-	TotalUniqueVisitors TotalMetricsResultDto `json:"total_unique_visitors"`
-	TotalLeads          TotalMetricsResultDto `json:"total_leads"`
-	TotalConversionRate TotalMetricsResultDto `json:"total_conversion_rate"`
-}

@@ -8,7 +8,7 @@ import (
 
 type AnalyticsService interface {
 	GetVisitsGroupedByPeriod(filter TimeSeriesFilterDto) (GetVisitResponseDto, error)
-	GetTotalMetrics(filter TimeSeriesFilterDto) (GetTotalMetricsResponseDto, error)
+	GetTotalMetrics(filter TimeSeriesFilterDto) ([]TotalMetricsResultDto, error)
 }
 
 type analyticsService struct {
@@ -124,9 +124,9 @@ func (s *analyticsService) GetVisitsGroupedByPeriod(filter TimeSeriesFilterDto) 
 	}, nil
 }
 
-func (s *analyticsService) GetTotalMetrics(filter TimeSeriesFilterDto) (GetTotalMetricsResponseDto, error) {
+func (s *analyticsService) GetTotalMetrics(filter TimeSeriesFilterDto) ([]TotalMetricsResultDto, error) {
 	if err := validateFilter(filter); err != nil {
-		return GetTotalMetricsResponseDto{}, err
+		return []TotalMetricsResultDto{}, err
 	}
 
 	// Check if it has period, if so, use the period to get the data
@@ -165,7 +165,7 @@ func (s *analyticsService) GetTotalMetrics(filter TimeSeriesFilterDto) (GetTotal
 	).Scan(&totalVisits).Error
 
 	if err != nil {
-		return GetTotalMetricsResponseDto{}, err
+		return []TotalMetricsResultDto{}, err
 	}
 
 	err = db.DB.Raw(`
@@ -179,7 +179,7 @@ func (s *analyticsService) GetTotalMetrics(filter TimeSeriesFilterDto) (GetTotal
 	).Scan(&totalUniqueVisitors).Error
 
 	if err != nil {
-		return GetTotalMetricsResponseDto{}, err
+		return []TotalMetricsResultDto{}, err
 	}
 
 	err = db.DB.Raw(`
@@ -193,29 +193,29 @@ func (s *analyticsService) GetTotalMetrics(filter TimeSeriesFilterDto) (GetTotal
 	).Scan(&totalLeads).Error
 
 	if err != nil {
-		return GetTotalMetricsResponseDto{}, err
+		return []TotalMetricsResultDto{}, err
 	}
 
 	// Calculate approximate conversion rate
 	totalConversionRate = float64(totalLeads) / float64(totalUniqueVisitors) * 100
 
-	return GetTotalMetricsResponseDto{
-		TotalVisits: TotalMetricsResultDto{
+	return []TotalMetricsResultDto{
+		{
 			Value:  float64(totalVisits),
 			Change: 0,
 			Label:  "Total Visits",
 		},
-		TotalUniqueVisitors: TotalMetricsResultDto{
+		{
 			Value:  float64(totalUniqueVisitors),
 			Change: 0,
 			Label:  "Total Unique Visitors",
 		},
-		TotalLeads: TotalMetricsResultDto{
+		{
 			Value:  float64(totalLeads),
 			Change: 0,
 			Label:  "Total Leads",
 		},
-		TotalConversionRate: TotalMetricsResultDto{
+		{
 			Value:  totalConversionRate,
 			Change: 0,
 			Label:  "Total Conversion Rate",
