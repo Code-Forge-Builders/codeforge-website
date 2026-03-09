@@ -144,3 +144,18 @@ func handleValidationError(c *gin.Context, err error) {
 		"message": err.Error(),
 	})
 }
+
+func HandleCheckUser(c *gin.Context) {
+	user, ok := c.Get("user")
+	if !ok || user == nil {
+		c.JSON(http.StatusUnauthorized, gin.H{
+			"message": "unauthorized",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "authorized",
+		"user":    user,
+	})
+}

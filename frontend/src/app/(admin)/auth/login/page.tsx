@@ -66,6 +66,10 @@ export default function Login() {
     
     handleLogin(payload)
       .then(() => {
+        showToast({
+          message: "Login successful",
+          type: "success",
+        })
         // Redirect to the dashboard
         router.push('/admin/dashboard')
       })

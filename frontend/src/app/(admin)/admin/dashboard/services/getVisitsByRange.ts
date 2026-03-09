@@ -15,8 +15,8 @@ export enum BucketEnum {
 }
 
 export interface IGetVisitsByRangePayload {
-  startDate?: string
-  endDate?: string
+  start_date?: string
+  end_date?: string
   period?: PeriodEnum
 }
 

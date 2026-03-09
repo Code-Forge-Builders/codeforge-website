@@ -5,7 +5,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input = forwardRef<HTMLInputElement, InputProps>(({ label, id, className, ...rest }: InputProps, ref) => {
-  return <div className={`flex flex-col gap-2 ${className}`}>
+  return <div className={`flex flex-col gap-2 ${className ?? ""}`}>
     <label htmlFor={id}>{label}</label>
     <input ref={ref} className="px-2 py-1 rounded-sm bg-zinc-800 text-white" id={id} {...rest} />
   </div>

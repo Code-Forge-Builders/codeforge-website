@@ -22,5 +22,6 @@ func RegisterRoutes(rg *gin.RouterGroup) {
 	{
 		protected.Use(AuthMiddleware(authService))
 		protected.GET("/check-auth", HandleCheckAuth)
+		protected.GET("/get-user", HandleCheckUser)
 	}
 }

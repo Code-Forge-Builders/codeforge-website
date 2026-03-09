@@ -5,6 +5,8 @@ import { authCheck } from "./authCheck";
 import SideMenu from "./_components/SideMenu";
 import "../../globals.css";
 import PageContentContainer from "./_components/PageContentContainer";
+import UpperBarMenu from "./dashboard/_components/UpperBarMenu";
+import getUser from "./getUser";
 
 const openSans = Open_Sans({
   variable: "--font-open-sans",
@@ -19,6 +21,7 @@ const sourceCodePro = Source_Code_Pro({
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   await authCheck()
 
+  const { user } = await getUser()
 
   return <html lang="en">
     <head>
@@ -29,6 +32,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <div className="flex">
           <SideMenu />
           <main className="flex-1 ml-90">
+            <UpperBarMenu user={user} />
             <PageContentContainer>
               {children}
             </PageContentContainer>
