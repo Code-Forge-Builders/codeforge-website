@@ -2,6 +2,7 @@ import VisitMetricsChart from "./_components/VisitMetricsChart"
 import { BucketEnum, getVisitsByRange, IGetVisitsByRangePayload, IGetVisitsByRangeResponse, PeriodEnum } from "./services/getVisitsByRange"
 import Card from "./_components/Card"
 import FiltersSelector from "./_components/VisitMetricsChart/FiltersSelector"
+import { getTotalMetrics, IGetTotalMetricsResponse } from "./getTotalMetrics"
 
 export default async function Dashboard({ searchParams }: { searchParams: Promise<IGetVisitsByRangePayload> }) {
   const { period, start_date, end_date } = await searchParams
@@ -30,6 +31,36 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
     }
   }
 
+  let totalMetrics: IGetTotalMetricsResponse;
+
+  try {
+    totalMetrics = await getTotalMetrics(payload)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  } catch (error) {
+    totalMetrics = {
+      total_visits: {
+        value: 0,
+        change: 0,
+        label: "Total Visits",
+      },
+      total_unique_visitors: {
+        value: 0,
+        change: 0,
+        label: "Total Unique Visitors",
+      },
+      total_leads: {
+        value: 0,
+        change: 0,
+        label: "Total Leads",
+      },
+      total_conversion_rate: {
+        value: 0,
+        change: 0,
+        label: "Total Conversion Rate",
+      },
+    }
+  }
+
   return <div className="flex flex-col gap-4">
     <Card>
       <div className="flex flex-row justify-between gap-2">
@@ -39,20 +70,20 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
     </Card>
     <div className="flex flex-row gap-4">
       <Card>
-        <h2 className="text-xl font-bold">Total Visits</h2>
-        <h1 className="text-3xl font-bold">2354</h1>
+        <h2 className="text-xl font-bold">{totalMetrics.total_visits.label}</h2>
+        <h1 className="text-3xl font-bold">{totalMetrics.total_visits.value}</h1>
       </Card>
       <Card>
-        <h2 className="text-xl font-bold">Total Unique Visitors</h2>
-        <h1 className="text-3xl font-bold">28</h1>
+        <h2 className="text-xl font-bold">{totalMetrics.total_unique_visitors.label}</h2>
+        <h1 className="text-3xl font-bold">{totalMetrics.total_unique_visitors.value}</h1>
       </Card>
       <Card>
-        <h2 className="text-xl font-bold">Total Leads</h2>
-        <h1 className="text-3xl font-bold">12</h1>
+        <h2 className="text-xl font-bold">{totalMetrics.total_leads.label}</h2>
+        <h1 className="text-3xl font-bold">{totalMetrics.total_leads.value}</h1>
       </Card>
       <Card>
-        <h2 className="text-xl font-bold">Total Conversion Rate</h2>
-        <h1 className="text-3xl font-bold">42.86%</h1>
+        <h2 className="text-xl font-bold">{totalMetrics.total_conversion_rate.label}</h2>
+        <h1 className="text-3xl font-bold">{totalMetrics.total_conversion_rate.value.toFixed(2)}%</h1>
       </Card>
     </div>
     <div className="flex flex-row gap-4">

@@ -8,6 +8,7 @@ import (
 
 type AnalyticsService interface {
 	GetVisitsGroupedByPeriod(filter TimeSeriesFilterDto) (GetVisitResponseDto, error)
+	GetTotalMetrics(filter TimeSeriesFilterDto) (GetTotalMetricsResponseDto, error)
 }
 
 type analyticsService struct {
@@ -120,6 +121,105 @@ func (s *analyticsService) GetVisitsGroupedByPeriod(filter TimeSeriesFilterDto) 
 	return GetVisitResponseDto{
 		Bucket: bucket,
 		Points: timeSeriesPoints,
+	}, nil
+}
+
+func (s *analyticsService) GetTotalMetrics(filter TimeSeriesFilterDto) (GetTotalMetricsResponseDto, error) {
+	if err := validateFilter(filter); err != nil {
+		return GetTotalMetricsResponseDto{}, err
+	}
+
+	// Check if it has period, if so, use the period to get the data
+	if filter.Period != nil && AllowedPeriods[*filter.Period] {
+		now := time.Now().UTC()
+		filter.EndDate = &now
+		switch *filter.Period {
+		case "24h":
+			startDate := now.Add(-time.Hour * 24).UTC()
+			filter.StartDate = &startDate
+		case "7d":
+			startDate := now.Add(-time.Hour * 24 * 7).UTC()
+			filter.StartDate = &startDate
+		case "30d":
+			startDate := now.Add(-time.Hour * 24 * 30).UTC()
+			filter.StartDate = &startDate
+		case "90d":
+			startDate := now.Add(-time.Hour * 24 * 90).UTC()
+			filter.StartDate = &startDate
+		}
+	}
+
+	totalVisits := 0
+	totalUniqueVisitors := 0
+	totalLeads := 0
+	totalConversionRate := 0.0
+
+	err := db.DB.Raw(`
+		SELECT
+			COALESCE(COUNT(*), 0) AS total_visits
+		FROM metrics
+		WHERE access_at BETWEEN ? AND ?
+	`,
+		filter.StartDate,
+		filter.EndDate,
+	).Scan(&totalVisits).Error
+
+	if err != nil {
+		return GetTotalMetricsResponseDto{}, err
+	}
+
+	err = db.DB.Raw(`
+		SELECT
+			COALESCE(COUNT(DISTINCT ip_hash), 0) AS total_unique_visitors
+		FROM metrics
+		WHERE access_at BETWEEN ? AND ?
+	`,
+		filter.StartDate,
+		filter.EndDate,
+	).Scan(&totalUniqueVisitors).Error
+
+	if err != nil {
+		return GetTotalMetricsResponseDto{}, err
+	}
+
+	err = db.DB.Raw(`
+		SELECT
+			COALESCE(COUNT(*), 0) AS total_leads
+		FROM inquiries
+		WHERE created_at BETWEEN ? AND ?
+	`,
+		filter.StartDate,
+		filter.EndDate,
+	).Scan(&totalLeads).Error
+
+	if err != nil {
+		return GetTotalMetricsResponseDto{}, err
+	}
+
+	// Calculate approximate conversion rate
+	totalConversionRate = float64(totalLeads) / float64(totalUniqueVisitors) * 100
+
+	return GetTotalMetricsResponseDto{
+		TotalVisits: TotalMetricsResultDto{
+			Value:  float64(totalVisits),
+			Change: 0,
+			Label:  "Total Visits",
+		},
+		TotalUniqueVisitors: TotalMetricsResultDto{
+			Value:  float64(totalUniqueVisitors),
+			Change: 0,
+			Label:  "Total Unique Visitors",
+		},
+		TotalLeads: TotalMetricsResultDto{
+			Value:  float64(totalLeads),
+			Change: 0,
+			Label:  "Total Leads",
+		},
+		TotalConversionRate: TotalMetricsResultDto{
+			Value:  totalConversionRate,
+			Change: 0,
+			Label:  "Total Conversion Rate",
+		},
 	}, nil
 }
 

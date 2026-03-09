@@ -7,5 +7,6 @@ func RegisterRoutes(rg *gin.RouterGroup) {
 	analytics := rg.Group("/analytics")
 	{
 		analytics.GET("/visits-grouped-by-period", func(c *gin.Context) { HandleGetVisitsGroupedByPeriod(c, analyticsService) })
+		analytics.GET("/total-metrics", func(ctx *gin.Context) { HandleGetTotalMetrics(ctx, analyticsService) })
 	}
 }
