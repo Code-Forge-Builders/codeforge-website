@@ -81,7 +81,7 @@ export default function Login() {
         })
       })
       .finally(() => setIsLoading(false))
-  }, [setIsLoading, showToast])
+  }, [setIsLoading, showToast, router])
 
   if (!initialSetup) {
     return <div>First access, redirecting to initial setup...</div>

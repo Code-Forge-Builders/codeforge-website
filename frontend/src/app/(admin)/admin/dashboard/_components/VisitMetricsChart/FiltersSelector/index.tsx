@@ -42,7 +42,7 @@ export default function FiltersSelector({ period }: IFiltersSelectorProps) {
     else {
       setSelectedOption(PeriodEnum.CUSTOM)
     }
-  }, [pathname, router, searchParams, setSelectedOption])
+  }, [pathname, router, setSelectedOption])
 
   const handleSubmit = useCallback((event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -57,7 +57,7 @@ export default function FiltersSelector({ period }: IFiltersSelectorProps) {
       params.set("endDate", to.toISOString())
       router.push(`${pathname}?${params.toString()}`)
     }
-  }, [handleSetPeriod])
+  }, [pathname, router, searchParams])
 
   return <div className="flex flex-col gap-2 items-end">
     <div className="flex flex-row gap-2">
