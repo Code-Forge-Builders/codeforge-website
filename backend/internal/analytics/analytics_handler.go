@@ -37,3 +37,19 @@ func HandleGetTotalMetrics(c *gin.Context, analyticsService AnalyticsService) {
 
 	c.JSON(http.StatusOK, metrics)
 }
+
+func HandleGetVisitorsByRegion(c *gin.Context, analyticsService AnalyticsService) {
+	var filter TimeSeriesFilterDto
+	if err := c.ShouldBindQuery(&filter); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	results, err := analyticsService.GetVisitorsByRegion(filter)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, results)
+}

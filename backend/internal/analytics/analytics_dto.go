@@ -26,7 +26,16 @@ type GetVisitResponseDto struct {
 }
 
 type TotalMetricsResultDto struct {
-	Value  float64 `json:"value"`
-	Change float64 `json:"change"`
-	Label  string  `json:"label"`
+	Value        float64 `json:"value"`
+	Change       float64 `json:"change"`
+	Label        string  `json:"label"`
+	IsPercentage bool    `json:"is_percentage"`
+	IsInteger    bool    `json:"is_integer"`
+}
+
+type VisitorsByRegionResultDto struct {
+	Country        string `json:"country"`
+	Region         string `json:"region"`
+	City           string `json:"city"`
+	UniqueVisitors int    `json:"unique_visitors"`
 }

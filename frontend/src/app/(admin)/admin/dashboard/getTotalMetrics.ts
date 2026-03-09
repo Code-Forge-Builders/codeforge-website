@@ -5,6 +5,8 @@ export interface TotalMetricsDto {
   value: number
   change: number
   label: string
+  is_percentage: boolean
+  is_integer: boolean
 }
 
 export async function getTotalMetrics(payload: IGetVisitsByRangePayload) {

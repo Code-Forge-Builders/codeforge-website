@@ -9,6 +9,7 @@ import (
 type AnalyticsService interface {
 	GetVisitsGroupedByPeriod(filter TimeSeriesFilterDto) (GetVisitResponseDto, error)
 	GetTotalMetrics(filter TimeSeriesFilterDto) ([]TotalMetricsResultDto, error)
+	GetVisitorsByRegion(filter TimeSeriesFilterDto) ([]VisitorsByRegionResultDto, error)
 }
 
 type analyticsService struct {
@@ -201,26 +202,82 @@ func (s *analyticsService) GetTotalMetrics(filter TimeSeriesFilterDto) ([]TotalM
 
 	return []TotalMetricsResultDto{
 		{
-			Value:  float64(totalVisits),
-			Change: 0,
-			Label:  "Total Visits",
+			Value:        float64(totalVisits),
+			Change:       0,
+			Label:        "Total Visits",
+			IsInteger:    true,
+			IsPercentage: false,
 		},
 		{
-			Value:  float64(totalUniqueVisitors),
-			Change: 0,
-			Label:  "Total Unique Visitors",
+			Value:        float64(totalUniqueVisitors),
+			Change:       0,
+			Label:        "Total Unique Visitors",
+			IsInteger:    true,
+			IsPercentage: false,
 		},
 		{
-			Value:  float64(totalLeads),
-			Change: 0,
-			Label:  "Total Leads",
+			Value:        float64(totalLeads),
+			Change:       0,
+			Label:        "Total Leads",
+			IsInteger:    true,
+			IsPercentage: false,
 		},
 		{
-			Value:  totalConversionRate,
-			Change: 0,
-			Label:  "Total Conversion Rate",
+			Value:        totalConversionRate,
+			Change:       0,
+			Label:        "Total Conversion Rate",
+			IsPercentage: true,
+			IsInteger:    false,
 		},
 	}, nil
+}
+
+func (s *analyticsService) GetVisitorsByRegion(filter TimeSeriesFilterDto) ([]VisitorsByRegionResultDto, error) {
+	if err := validateFilter(filter); err != nil {
+		return []VisitorsByRegionResultDto{}, err
+	}
+
+	if filter.Period != nil && AllowedPeriods[*filter.Period] {
+		now := time.Now().UTC()
+		filter.EndDate = &now
+		switch *filter.Period {
+		case "24h":
+			startDate := now.Add(-time.Hour * 24).UTC()
+			filter.StartDate = &startDate
+		case "7d":
+			startDate := now.Add(-time.Hour * 24 * 7).UTC()
+			filter.StartDate = &startDate
+		case "30d":
+			startDate := now.Add(-time.Hour * 24 * 30).UTC()
+			filter.StartDate = &startDate
+		case "90d":
+			startDate := now.Add(-time.Hour * 24 * 90).UTC()
+			filter.StartDate = &startDate
+		}
+	}
+
+	results := []VisitorsByRegionResultDto{}
+
+	err := db.DB.Raw(`
+		SELECT
+			COALESCE(country, '') AS country,
+			COALESCE(region, '') AS region,
+			COALESCE(city, '') AS city,
+			COALESCE(COUNT(DISTINCT ip_hash), 0) AS unique_visitors
+		FROM metrics
+		WHERE access_at BETWEEN ? AND ?
+		GROUP BY country, region, city
+		ORDER BY unique_visitors DESC, country ASC, region ASC, city ASC
+	`,
+		filter.StartDate,
+		filter.EndDate,
+	).Scan(&results).Error
+
+	if err != nil {
+		return []VisitorsByRegionResultDto{}, err
+	}
+
+	return results, nil
 }
 
 func validateFilter(filter TimeSeriesFilterDto) error {

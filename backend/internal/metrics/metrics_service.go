@@ -35,6 +35,7 @@ func (s *metricsService) Create(createMetricsDto CreateMetricsDto) (*Metrics, er
 		Locale:    createMetricsDto.Locale,
 		Country:   ipInfo.Country,
 		Region:    ipInfo.Region,
+		City:      ipInfo.City,
 	}
 
 	result := db.DB.Create(&metrics)
