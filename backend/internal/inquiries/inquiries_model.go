@@ -14,6 +14,8 @@ type Inquiries struct {
 	CustomerPhone      string    `json:"customer_phone" gorm:"size:18;not null;"`
 	ServiceKey         string    `json:"service_key" gorm:"size:50;not null;"`
 	ProjectDescription string    `json:"project_description" gorm:"type:text"`
+	State              int16     `json:"state" gorm:"type:smallint;not null;default:0"`
+	Searchable         string    `json:"" gorm:"type:text;->"`
 	CreatedAt          time.Time `json:"created_at"`
 	UpdatedAt          time.Time `json:"updated_at"`
 }

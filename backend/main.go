@@ -51,7 +51,12 @@ func main() {
 	}
 
 	log.Print("Auto migrating database...")
-	migrations.Migrate()
+	err = migrations.Migrate()
+	if err != nil {
+		log.Printf("Migration failed: %v", err)
+		gracefulShutdown()
+		return
+	}
 
 	// Setup workers
 	log.Print("Setting up email workers...")
