@@ -5,14 +5,17 @@ import (
 	"codeforge/website-prospecting-api/internal/jobs"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"time"
 
 	"gorm.io/gorm"
 )
 
 var (
-	DEFAULT_PAGE      int16 = 1
-	DEFAULT_PAGE_SIZE int16 = 15
+	DEFAULT_PAGE      int16  = 1
+	DEFAULT_PAGE_SIZE int16  = 15
+	DEFAULT_ORDER_BY  string = "created_at"
+	DEFAULT_ORDER     string = "desc"
 )
 
 type InquiryService interface {
@@ -70,6 +73,11 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 	var inquiries []Inquiries
 	var page = DEFAULT_PAGE
 	var pageSize = DEFAULT_PAGE_SIZE
+	var now = time.Now()
+	var startDate = now.Add(-30 * 24 * time.Hour)
+	var endDate = now
+	var orderBy = DEFAULT_ORDER_BY
+	var order = DEFAULT_ORDER
 	var total int64
 
 	if err := validateFilter(queryParams); err != nil {
@@ -88,8 +96,20 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 	}
 
 	if queryParams.PageSize != nil {
-		if allowed, ok := AllowedPageSizes[fmt.Sprint(*queryParams.PageSize)]; ok {
-			pageSize = allowed
+		if allowedPageSize, ok := AllowedPageSizes[fmt.Sprint(*queryParams.PageSize)]; ok {
+			pageSize = allowedPageSize
+		}
+	}
+
+	if queryParams.OrderBy != nil && *queryParams.OrderBy != "" {
+		if allowedField, ok := AllowedOrderingFields[strings.ToLower(fmt.Sprint(*queryParams.OrderBy))]; ok {
+			orderBy = allowedField
+		}
+	}
+
+	if queryParams.Order != nil && *queryParams.Order != "" {
+		if allowedOrder, ok := AllowedOrders[strings.ToLower(fmt.Sprint(*queryParams.Order))]; ok {
+			order = allowedOrder
 		}
 	}
 
@@ -103,14 +123,18 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 			Order(gorm.Expr("similarity(searchable, ?) DESC", *queryParams.Search))
 	}
 
-	// Optional start date
-	if queryParams.StartDate != nil {
+	// Both were sent
+	if queryParams.StartDate != nil && queryParams.EndDate != nil {
+		query = query.Where("created_at BETWEEN ? AND ?", *queryParams.StartDate, *queryParams.EndDate)
+	} else if queryParams.StartDate != nil {
+		// Just start date were sent
 		query = query.Where("created_at >= ?", *queryParams.StartDate)
-	}
-
-	// Optional end date
-	if queryParams.EndDate != nil {
+	} else if queryParams.EndDate != nil {
+		// Just end date were sent
 		query = query.Where("created_at <= ?", *queryParams.EndDate)
+	} else {
+		// None were sent (defaults)
+		query = query.Where("created_at BETWEEN ? AND ?", startDate, endDate)
 	}
 
 	// -- Count total maching rows --
@@ -123,9 +147,14 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 		}, err
 	}
 
-	// -- Include pagination
+	// Order the result
+	query = query.Order(fmt.Sprintf("%s %s", orderBy, strings.ToUpper(order)))
 
-	if err := query.Limit(int(pageSize)).Offset(int(offset)).Find(&inquiries).Error; err != nil {
+	// -- Include pagination
+	query = query.Limit(int(pageSize)).Offset(int(offset))
+
+	// Execute all
+	if err := query.Find(&inquiries).Error; err != nil {
 		return InquiryListReturn{
 			Inquiries: []Inquiries{},
 			Page:      page,
@@ -143,17 +172,15 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 }
 
 func validateFilter(filter InquiryQueryParamsDto) error {
-	if filter.StartDate == nil || filter.EndDate == nil {
-		return fmt.Errorf("start date and end date are required")
-	}
+	if filter.StartDate != nil || filter.EndDate != nil {
+		if filter.StartDate.After(*filter.EndDate) {
+			return fmt.Errorf("invalid date range")
+		}
 
-	if filter.StartDate.After(*filter.EndDate) {
-		return fmt.Errorf("invalid date range")
-	}
-
-	diff := filter.EndDate.Sub(*filter.StartDate)
-	if diff > time.Hour*24*365 {
-		return fmt.Errorf("date range is too long, max is 1 year")
+		diff := filter.EndDate.Sub(*filter.StartDate)
+		if diff > time.Hour*24*365 {
+			return fmt.Errorf("date range is too long, max is 1 year")
+		}
 	}
 
 	return nil

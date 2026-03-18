@@ -9,6 +9,20 @@ var AllowedPageSizes = map[string]int16{
 	"100": 100,
 }
 
+var AllowedOrderingFields = map[string]string{
+	"customer_name":  "customer_name",
+	"customer_email": "customer_email",
+	"customer_phone": "customer_phone",
+	"state":          "state",
+	"created_at":     "created_at",
+	"updated_at":     "updated_at",
+}
+
+var AllowedOrders = map[string]string{
+	"asc":  "asc",
+	"desc": "desc",
+}
+
 type CreateInquiryDto struct {
 	CustomerName       string `json:"customer_name" binding:"required"`
 	CustomerEmail      string `json:"customer_email" binding:"required,email"`
@@ -23,11 +37,15 @@ type InquiryQueryParamsDto struct {
 	EndDate   *time.Time `json:"end_date" form:"end_date" query:"end_date"`
 	Page      *int16     `json:"page" form:"page" query:"page"`
 	PageSize  *int16     `json:"page_size" form:"page_size" query:"page_size"`
+	OrderBy   *string    `json:"order_by" form:"order_by" query:"order_by"`
+	Order     *string    `json:"order" form:"order" query:"order"`
 }
 
 type InquiryListReturn struct {
 	Inquiries []Inquiries `json:"inquiries"`
 	Page      int16       `json:"page"`
 	PageSize  int16       `json:"page_size"`
+	OrderBy   string      `json:"order_by"`
+	Order     string      `json:"order"`
 	Total     int64       `json:"total"`
 }
