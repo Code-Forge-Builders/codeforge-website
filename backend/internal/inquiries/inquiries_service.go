@@ -85,6 +85,8 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 			Inquiries: inquiries,
 			Page:      page,
 			PageSize:  pageSize,
+			OrderBy:   orderBy,
+			Order:     order,
 			Total:     0,
 		}, err
 	}
@@ -127,11 +129,13 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 	if queryParams.StartDate != nil && queryParams.EndDate != nil {
 		query = query.Where("created_at BETWEEN ? AND ?", *queryParams.StartDate, *queryParams.EndDate)
 	} else if queryParams.StartDate != nil {
-		// Just start date were sent
-		query = query.Where("created_at >= ?", *queryParams.StartDate)
+		// Just start date was sent, so set the end date to be 30 days after start date (inclusive range)
+		endDate := queryParams.StartDate.AddDate(0, 0, 30).Add(-time.Nanosecond)
+		query = query.Where("created_at BETWEEN ? AND ?", *&queryParams.StartDate, endDate)
 	} else if queryParams.EndDate != nil {
-		// Just end date were sent
-		query = query.Where("created_at <= ?", *queryParams.EndDate)
+		// Just end date was sent, so set start date to be 30 days before end date (inclusive range)
+		start := queryParams.EndDate.AddDate(0, 0, -30).Add(time.Nanosecond)
+		query = query.Where("created_at BETWEEN ? AND ?", start, *queryParams.EndDate)
 	} else {
 		// None were sent (defaults)
 		query = query.Where("created_at BETWEEN ? AND ?", startDate, endDate)
@@ -143,6 +147,8 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 			Inquiries: []Inquiries{},
 			Page:      page,
 			PageSize:  pageSize,
+			OrderBy:   orderBy,
+			Order:     order,
 			Total:     0,
 		}, err
 	}
@@ -159,6 +165,8 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 			Inquiries: []Inquiries{},
 			Page:      page,
 			PageSize:  pageSize,
+			OrderBy:   orderBy,
+			Order:     order,
 			Total:     0,
 		}, err
 	}
@@ -167,6 +175,8 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 		Inquiries: inquiries,
 		Page:      page,
 		PageSize:  pageSize,
+		OrderBy:   orderBy,
+		Order:     order,
 		Total:     total,
 	}, nil
 }

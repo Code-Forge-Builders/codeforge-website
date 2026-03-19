@@ -11,6 +11,7 @@ export interface VisitorsByRegionDto {
 export async function getVisitorsByRegion(payload: IGetVisitsByRangePayload) {
   const response = await apiHttpClient.get<VisitorsByRegionDto[]>("/analytics/visitors-by-region", {
     credentials: "include",
+    cache: "no-store",
     query: payload as Record<string, string>,
   })
   return response

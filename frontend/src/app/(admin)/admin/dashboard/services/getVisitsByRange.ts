@@ -30,6 +30,8 @@ export interface IGetVisitsByRangeResponse {
 
 export async function getVisitsByRange(payload: IGetVisitsByRangePayload) {
   const points = await apiHttpClient.get<IGetVisitsByRangeResponse>("/analytics/visits-grouped-by-period", {
+    credentials: 'include',
+    cache: "no-store",
     query: payload as Record<string, string>,
   })
   return points

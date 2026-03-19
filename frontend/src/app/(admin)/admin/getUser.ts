@@ -18,6 +18,7 @@ export default async function getUser() {
 
   return apiHttpClient.get<IGetUserResponse>('/auth/get-user', {
     credentials: "include",
+    cache: "no-store",
     headers: {
       Cookie: cookieStore.toString(),
     },

@@ -22,6 +22,7 @@ export class HttpError extends Error {
 export interface RequestOptions {
   credentials?: "include" | "same-origin" | "omit";
   headers?: Record<string, string>;
+  cache?: "force-cache" | "no-store" | "no-cache" | "reload" | "default" | "only-if-cached"
   query?: Record<string, string>;
   body?: unknown;
 }
@@ -55,6 +56,10 @@ export class HttpClient {
       },
       credentials: options.credentials,
     };
+
+    if (options.cache) {
+      fetchOptions.cache = options.cache
+    }
 
     if (body !== undefined && body !== null && method !== "GET") {
       fetchOptions.body = JSON.stringify(body);

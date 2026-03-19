@@ -14,6 +14,7 @@ export async function authCheck() {
       '/auth/check-auth',
       {
         credentials: 'include',
+        cache: "no-store",
         headers: {
           Cookie: cookieStore.toString(),
         }
