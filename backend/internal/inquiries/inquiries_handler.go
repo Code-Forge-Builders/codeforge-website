@@ -58,3 +58,25 @@ func HandleCreateInquiry(c *gin.Context, inquiryService InquiryService, rateLimi
 
 	c.JSON(http.StatusCreated, newInquiry)
 }
+
+func HandleListInquiries(c *gin.Context, inquiryService InquiryService) {
+	var queryParams InquiryQueryParamsDto
+
+	if err := c.ShouldBindQuery(&queryParams); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	var result, err = inquiryService.List(queryParams)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
