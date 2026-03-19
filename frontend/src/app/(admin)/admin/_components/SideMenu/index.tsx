@@ -1,4 +1,5 @@
 import { AiFillDashboard } from "react-icons/ai";
+import { FaUsers } from "react-icons/fa";
 import MenuItem, { IMenuItem } from "./MenuItem";
 import Image from "next/image";
 
@@ -7,6 +8,11 @@ const MENU_TREE: IMenuItem[] = [
     title: 'Dashboard',
     url: '/admin/dashboard',
     icon: <AiFillDashboard />
+  },
+  {
+    title: 'Leads',
+    url: '/admin/leads',
+    icon: <FaUsers />
   },
 ]
 
