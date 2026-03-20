@@ -10,8 +10,8 @@ const MENU_TREE: IMenuItem[] = [
     icon: <AiFillDashboard />
   },
   {
-    title: 'Leads',
-    url: '/admin/leads',
+    title: 'Inquiries',
+    url: '/admin/inquiries',
     icon: <FaUsers />
   },
 ]
