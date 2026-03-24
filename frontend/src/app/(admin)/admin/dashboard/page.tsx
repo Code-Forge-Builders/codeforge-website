@@ -111,7 +111,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
       </div>
     </Card>
     <div className="flex flex-row gap-4">
-      {totalMetrics.map((metric) => (
+      {totalMetrics && totalMetrics.map((metric) => (
         <Card key={metric.label}>
           <h2 className="text-xl font-bold">{metric.label}</h2>
           <h1 className="text-3xl font-bold">

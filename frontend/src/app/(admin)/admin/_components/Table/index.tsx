@@ -25,7 +25,7 @@ export default function Table<T extends { [key: string]: any }>({
             {columns.map((col) => (
               <th
                 key={String(col.key)}
-                className="px-6 py-3 border-b bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                className="px-6 py-3 border-b bg-table-header-bg text-left text-sm font-medium text-white tracking-wider"
               >
                 {col.label}
               </th>
@@ -43,12 +43,12 @@ export default function Table<T extends { [key: string]: any }>({
           {data.map((row, rowIndex) => (
             <tr
               key={rowIndex}
-              className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-50"}
+              className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"}
             >
               {columns.map((col) => (
                 <td
                   key={String(col.key)}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-700 border-b"
+                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
                 >
                   {col.render
                     ? col.render(row[col.key], row)

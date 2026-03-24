@@ -10,6 +10,7 @@
   --side-menu-bg: #1b283f;
   --side-menu-active: #dedee833;
   --side-menu-hover: #dedee822;
+  --table-header-bg: var(--side-menu-bg)
 }
 
 @theme inline {
@@ -20,6 +21,7 @@
   --color-side-menu-bg: var(--side-menu-bg);
   --color-side-menu-active: var(--side-menu-active);
   --color-side-menu-hover: var(--side-menu-hover);
+  --color-table-header-bg: var(--table-header-bg);
   --color-primary: var(--primary);
   --font-sans: var(--font-open-sans);
   --font-mono: var(--font-source-code-pro);

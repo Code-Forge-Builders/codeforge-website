@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Input from "../../_components/Input"
 import Button from "../../_components/Button"
-import registerInitialSetup, { IPayloadRegisterInitialSetup } from "./registerInitialSetup"
+import registerInitialSetup, { IPayloadRegisterInitialSetup } from "./register-initial-setup.ts"
 import { useToast } from "@/components/Toast/ToastContext"
 
 export default function InitialSetup() {

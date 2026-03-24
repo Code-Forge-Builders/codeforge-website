@@ -1,11 +1,11 @@
-import Table, { Column } from "../_components/Table"
 import Card from "../dashboard/_components/Card"
+import getInquiries, { Inquiries } from "./getInquiries.ts"
+import { InquiriesTable } from "./InquiriesTable.tsx"
 
-const InquiriesColumns: Column<any>[] = [
-  
-]
 
-export default function Inquiries() {
+export default async function InquiriesPage() {
+  const result = await getInquiries()
+
   return (
     <div className="flex flex-col gap-4">
       <Card>
@@ -14,7 +14,7 @@ export default function Inquiries() {
         </div>
       </Card>
       <Card>
-        <Table  />
+        <InquiriesTable result={result}/>
       </Card>
     </div>
   )

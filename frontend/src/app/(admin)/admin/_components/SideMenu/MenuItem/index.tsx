@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useCallback, useEffect, useState } from "react"
 import { FaChevronRight } from "react-icons/fa"
 import { FaChevronDown } from "react-icons/fa6"
+import { usePathname } from "next/navigation";
 
 export interface IMenuItem {
   title: string
@@ -15,23 +16,25 @@ export default function MenuItem({ item }: { item: IMenuItem }) {
   const [isActive, setIsActive] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
+  const pathname = usePathname();
+
   const checkChildrenActiveRecursively = useCallback((children: IMenuItem[]) : boolean => {
     return children.some(child => {
       if (child.url && !child.children) {
-        return window.location.pathname === child.url
+        return pathname === child.url
       }
       return checkChildrenActiveRecursively(child.children || [])
     })
-  }, [])
+  }, [pathname])
 
   useEffect(() => {
     if (item.url) {
-      setIsActive(window.location.pathname === item.url)
+      setIsActive(pathname === item.url)
     }
     if (item.children) {
       setIsActive(checkChildrenActiveRecursively(item.children))
     }
-  }, [checkChildrenActiveRecursively])
+  }, [checkChildrenActiveRecursively, pathname])
 
   useEffect(() => {
     if (item.children) {
