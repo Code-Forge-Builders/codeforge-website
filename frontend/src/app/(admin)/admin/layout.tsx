@@ -25,7 +25,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return <html lang="en">
     <head>
-      <title>Codeforge - Admin Dashboard</title>
+      <title>Codeforge</title>
     </head>
     <body className={`${openSans.variable} ${sourceCodePro.variable} bg-zinc-200 text-foreground-light antialiased `}>
       <ToastProvider>
@@ -38,8 +38,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </PageContentContainer>
           </main>
         </div>
-        <ToastContainer/>
+        <ToastContainer />
       </ToastProvider>
-      </body>
+    </body>
   </html>
 }
