@@ -7,6 +7,7 @@ import (
 	"codeforge/website-prospecting-api/internal/jobs"
 	"codeforge/website-prospecting-api/internal/router"
 	"context"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -67,8 +68,15 @@ func main() {
 	// Setup router
 	r := router.SetupRouter()
 
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080" // fallback local
+	}
+
+	addr := fmt.Sprintf(":%s", port)
+
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    addr,
 		Handler: r,
 	}
 
