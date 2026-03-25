@@ -1,4 +1,5 @@
 import React from "react"
+import TableControls from "./TableControls"
 
 export interface Column<T> {
   key: keyof T
@@ -9,56 +10,66 @@ export interface Column<T> {
 interface TableProps<T> {
   columns: Column<T>[]
   data: T[]
+  totalRows?: number
+  page?: number
+  pageSize?: number
   className?: string
 }
 
 export default function Table<T extends { [key: string]: any }>({
   columns,
   data,
+  totalRows,
+  page,
+  pageSize,
   className = "",
 }: TableProps<T>) {
   return (
-    <div className={`overflow-x-auto rounded shadow ${className}`}>
-      <table className="min-w-full bg-white border border-gray-200">
-        <thead>
-          <tr>
-            {columns.map((col) => (
-              <th
-                key={String(col.key)}
-                className="px-6 py-3 border-b bg-table-header-bg text-left text-sm font-medium text-white tracking-wider"
-              >
-                {col.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 && (
+    <div className="flex flex-col gap-2">
+      <div className={`overflow-x-auto rounded shadow ${className}`}>
+        <table className="min-w-full bg-white border border-gray-200">
+          <thead>
             <tr>
-              <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-400">
-                No data available
-              </td>
-            </tr>
-          )}
-          {data.map((row, rowIndex) => (
-            <tr
-              key={rowIndex}
-              className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"}
-            >
               {columns.map((col) => (
-                <td
+                <th
                   key={String(col.key)}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                  className="px-6 py-3 border-b bg-table-header-bg text-left text-sm font-medium text-white tracking-wider"
                 >
-                  {col.render
-                    ? col.render(row[col.key], row)
-                    : (row[col.key] ?? "")}
-                </td>
+                  {col.label}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+          </thead>
+          <tbody>
+            {data.length === 0 && (
+              <tr>
+                <td colSpan={columns.length} className="px-6 py-4 text-center text-gray-400">
+                  No data available
+                </td>
+              </tr>
+            )}
+            {data.map((row, rowIndex) => (
+              <tr
+                key={rowIndex}
+                className={rowIndex % 2 === 0 ? "bg-white" : "bg-gray-100"}
+              >
+                {columns.map((col) => (
+                  <td
+                    key={String(col.key)}
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-700"
+                  >
+                    {col.render
+                      ? col.render(row[col.key], row)
+                      : (row[col.key] ?? "")}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <TableControls currentRows={data.length} totalRows={totalRows} page={page} pageSize={pageSize} />
+    </ div >
+
   )
 }

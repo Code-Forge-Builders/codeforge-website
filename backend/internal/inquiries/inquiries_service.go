@@ -131,7 +131,7 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 	} else if queryParams.StartDate != nil {
 		// Just start date was sent, so set the end date to be 30 days after start date (inclusive range)
 		endDate := queryParams.StartDate.AddDate(0, 0, 30).Add(-time.Nanosecond)
-		query = query.Where("created_at BETWEEN ? AND ?", *&queryParams.StartDate, endDate)
+		query = query.Where("created_at BETWEEN ? AND ?", *queryParams.StartDate, endDate)
 	} else if queryParams.EndDate != nil {
 		// Just end date was sent, so set start date to be 30 days before end date (inclusive range)
 		start := queryParams.EndDate.AddDate(0, 0, -30).Add(time.Nanosecond)
