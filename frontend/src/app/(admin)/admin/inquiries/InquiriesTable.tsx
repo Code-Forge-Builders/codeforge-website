@@ -11,7 +11,7 @@ interface InquiriesTableProps {
   result: InquiriesResponseBody
 }
 
-var InquiriesStates = [
+const InquiriesStates = [
   "Open",
   "Attempting Contact",
   "Contact Stablished",
@@ -34,11 +34,11 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
     {
       key: "customer_email",
       label: "Customer Email",
-      render: (value: string | number) => {
+      render: (value) => {
         return <div className="flex flex-row gap-2 items-center">
           <span className="px-4 py-2 bg-zinc-300 rounded-full text-zinc-700">{value}</span>
           <button className="p-1 rounded-full cursor-pointer hover:bg-gray-900 hover:text-white" onClick={() => {
-            copy(value)
+            copy(value.toString())
             showToast({
               message: "Copied email to clipboard",
               type: "success"
@@ -71,7 +71,7 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       key: "state",
       label: "State",
       render: (value: string | number) => {
-        var label = InquiriesStates[value as number]
+        const label = InquiriesStates[value as number]
 
         return (
           <span>
@@ -89,5 +89,5 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
     }
   ]
 
-  return <Table columns={InquiriesColumns} data={result.inquiries} totalRows={result.total} pageSize={searchParams.get('page_size') ?? result.page_size} page={result.page} />
+  return <Table columns={InquiriesColumns} data={result.inquiries} totalRows={result.total} pageSize={parseInt(searchParams.get('page_size') ?? '1') ?? result.page_size} page={result.page} />
 }

@@ -5,7 +5,7 @@ import { FormEvent, useCallback, useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Input from "../../_components/Input"
 import Button from "../../_components/Button"
-import registerInitialSetup, { IPayloadRegisterInitialSetup } from "./register-initial-setup.ts"
+import registerInitialSetup, { IPayloadRegisterInitialSetup } from "./register-initial-setup"
 import { useToast } from "@/components/Toast/ToastContext"
 
 export default function InitialSetup() {
@@ -100,44 +100,44 @@ export default function InitialSetup() {
   }
 
   return <div className="flex flex-col w-full max-w-sm bg-zinc-100 p-6 rounded-md border border-zinc-300 mx-4">
-      <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-        <Image width={300} height={63} src="/assets/banner-logo-light-300x63.webp" alt="Codeforge's logo" className="w-[300px] h-auto mb-4" />
-        <Input
-          ref={nameInputRef}
-          id="register-name"
-          label="Name"
-          name="name"
-          placeholder="John Doe"
-          required
-        />
-        <Input
-          ref={loginInputRef}
-          id="register-login"
-          label="Login"
-          name="login"
-          type="email"
-          placeholder="user@email.com"
-          required
-        />
-        <Input
-          ref={passwordInputRef}
-          id="register-password"
-          label="Password"
-          type="password"
-          name="password"
-          placeholder="P4ssw0rd"
-          required
-        />
-        <Input
-          ref={confirmPasswordInputRef}
-          id="register-confirm-password"
-          label="Confirm password"
-          type="password"
-          name="confirm-password"
-          placeholder="P4ssw0rd"
-          required
-        />
-        <Button type="submit" className="mt-8" loading={isLoading}>Register initial user</Button>
-      </form>
+    <form onSubmit={handleSubmit} className="flex flex-col gap-2">
+      <Image width={300} height={63} src="/assets/banner-logo-light-300x63.webp" alt="Codeforge's logo" className="w-[300px] h-auto mb-4" />
+      <Input
+        ref={nameInputRef}
+        id="register-name"
+        label="Name"
+        name="name"
+        placeholder="John Doe"
+        required
+      />
+      <Input
+        ref={loginInputRef}
+        id="register-login"
+        label="Login"
+        name="login"
+        type="email"
+        placeholder="user@email.com"
+        required
+      />
+      <Input
+        ref={passwordInputRef}
+        id="register-password"
+        label="Password"
+        type="password"
+        name="password"
+        placeholder="P4ssw0rd"
+        required
+      />
+      <Input
+        ref={confirmPasswordInputRef}
+        id="register-confirm-password"
+        label="Confirm password"
+        type="password"
+        name="confirm-password"
+        placeholder="P4ssw0rd"
+        required
+      />
+      <Button type="submit" className="mt-8" loading={isLoading}>Register initial user</Button>
+    </form>
   </div>
 }

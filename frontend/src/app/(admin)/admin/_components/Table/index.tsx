@@ -16,6 +16,7 @@ interface TableProps<T> {
   className?: string
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default function Table<T extends { [key: string]: any }>({
   columns,
   data,

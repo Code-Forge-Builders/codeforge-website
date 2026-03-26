@@ -1,4 +1,4 @@
-export async function copy (text) {
+export async function copy(text: string) {
   if (!navigator?.clipboard) {
     console.warn('Clipboard not supported');
     return false;

@@ -1,6 +1,6 @@
 import Card from "../dashboard/_components/Card"
-import getInquiries, { Inquiries } from "./getInquiries.ts"
-import { InquiriesTable } from "./InquiriesTable.tsx"
+import getInquiries from "./getInquiries"
+import { InquiriesTable } from "./InquiriesTable"
 
 
 export default async function InquiriesPage() {
@@ -14,7 +14,7 @@ export default async function InquiriesPage() {
         </div>
       </Card>
       <Card>
-        <InquiriesTable result={result}/>
+        <InquiriesTable result={result} />
       </Card>
     </div>
   )

@@ -17,7 +17,7 @@ export async function getTotalMetrics(payload: IGetVisitsByRangePayload) {
   if (!authToken) {
     redirect('/auth/login')
   }
-  try{
+  try {
     const response = await apiHttpClient.get<TotalMetricsDto[]>('/analytics/total-metrics', {
       credentials: "include",
       cache: "no-store",
@@ -28,7 +28,7 @@ export async function getTotalMetrics(payload: IGetVisitsByRangePayload) {
     })
     return response
   }
-  catch(error) {
+  catch {
     redirect('/auth/login')
   }
 }

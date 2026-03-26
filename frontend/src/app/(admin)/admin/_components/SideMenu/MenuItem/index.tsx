@@ -18,7 +18,7 @@ export default function MenuItem({ item }: { item: IMenuItem }) {
 
   const pathname = usePathname();
 
-  const checkChildrenActiveRecursively = useCallback((children: IMenuItem[]) : boolean => {
+  const checkChildrenActiveRecursively = useCallback((children: IMenuItem[]): boolean => {
     return children.some(child => {
       if (child.url && !child.children) {
         return pathname === child.url
@@ -34,13 +34,13 @@ export default function MenuItem({ item }: { item: IMenuItem }) {
     if (item.children) {
       setIsActive(checkChildrenActiveRecursively(item.children))
     }
-  }, [checkChildrenActiveRecursively, pathname])
+  }, [checkChildrenActiveRecursively, item.children, item.url, pathname])
 
   useEffect(() => {
     if (item.children) {
       setIsOpen(isActive)
     }
-  }, [isActive])
+  }, [isActive, item.children])
 
   if (item.children) {
     return (
@@ -62,7 +62,7 @@ export default function MenuItem({ item }: { item: IMenuItem }) {
       </li>
     )
   }
-  
+
   return (
     <li className="flex flex-col gap-2">
       <Link className={`${isActive ? 'bg-side-menu-active' : ''} flex items-center gap-2 hover:bg-side-menu-hover p-2 rounded-sm`} href={item.url || ''}>

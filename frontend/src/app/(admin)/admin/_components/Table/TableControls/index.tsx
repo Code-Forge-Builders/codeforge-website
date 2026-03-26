@@ -34,20 +34,20 @@ export default function TableControls({ currentRows, totalRows, page = 1, pageSi
       params.set('page_size', option.toString())
       router.push(`${pathname}?${params.toString()}`)
     }
-  }, [pathname,])
+  }, [pathname, router, searchParams])
 
   if (!totalRows) {
     return <></>
   }
 
-  const pageAmount = Math.ceil(parseInt(totalRows) / parseInt(pageSize))
+  const pageAmount = Math.ceil(totalRows / pageSize)
 
   return <div className="flex flex-row justify-between p-2 gap-2">
     <span className="text-zinc-500">Showing {currentRows} of {totalRows} entries</span>
     <div className="flex flex-row gap-2 items-center">
       <div className="flex flex-row gap-2 items-center">
         <span className="text-zinc-500">Show</span>
-        <select value={selectedPageSize} onChange={(event) => handlePageSizeChange(event.target.value)} className="px-2 py-1 rounded-sm cursor-pointer border border-gray-900">
+        <select value={selectedPageSize} onChange={(event) => handlePageSizeChange(parseInt(event.target.value))} className="px-2 py-1 rounded-sm cursor-pointer border border-gray-900">
           {PageSizes.map((ps, idx) => (
             <option key={idx} value={ps}>{ps}</option>
           ))}
