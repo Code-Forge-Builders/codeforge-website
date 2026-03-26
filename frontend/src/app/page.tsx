@@ -5,6 +5,16 @@ import Home from './[locale]/page';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 
+import en from '../../translations/en.json';
+import pt from '../../translations/pt.json';
+import es from '../../translations/es.json';
+
+const messObj = {
+  "en": en,
+  "pt": pt,
+  "es": es,
+}
+
 export default async function RootPage() {
   const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value;
 
@@ -26,9 +36,7 @@ export default async function RootPage() {
 
   const locale = routing.defaultLocale;
 
-  const messages = (
-    await import(`../../translations/${locale}.json`)
-  ).default;
+  const messages = messObj[locale].default
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
