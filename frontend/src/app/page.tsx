@@ -22,7 +22,7 @@ export default async function RootPage() {
   }
 
   if (browserLocale) {
-    redirect(`${browserLocale}`)
+    redirect(`/${browserLocale}`)
   }
 
   const locale = routing.defaultLocale;
