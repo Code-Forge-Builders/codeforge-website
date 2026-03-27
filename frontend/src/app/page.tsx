@@ -9,7 +9,8 @@ import en from '../../translations/en.json';
 import pt from '../../translations/pt.json';
 import es from '../../translations/es.json';
 
-const messObj = {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const messObj: Record<string, any> = {
   "en": en,
   "pt": pt,
   "es": es,
@@ -36,7 +37,8 @@ export default async function RootPage() {
 
   const locale = routing.defaultLocale;
 
-  const messages = messObj[locale].default
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const messages: any = messObj[locale]
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
