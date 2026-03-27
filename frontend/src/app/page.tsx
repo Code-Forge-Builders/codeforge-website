@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import Home from './[locale]/page';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { getMessages } from 'next-intl/server';
 
 export default async function RootPage() {
   const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value;
@@ -21,14 +22,12 @@ export default async function RootPage() {
   }
 
   if (browserLocale) {
-    redirect(browserLocale)
+    redirect(`/${browserLocale}`)
   }
 
   const locale = routing.defaultLocale;
 
-  const messages = (
-    await import(`../../translations/${locale}.json`)
-  ).default;
+  const messages = getMessages({ locale })
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
