@@ -4,17 +4,7 @@ import { NextIntlClientProvider } from 'next-intl';
 import Home from './[locale]/page';
 import { cookies, headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-
-import en from '../../translations/en.json';
-import pt from '../../translations/pt.json';
-import es from '../../translations/es.json';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const messObj: Record<string, any> = {
-  "en": en,
-  "pt": pt,
-  "es": es,
-}
+import { getMessages } from 'next-intl/server';
 
 export default async function RootPage() {
   const cookieLocale = (await cookies()).get('NEXT_LOCALE')?.value;
@@ -32,13 +22,12 @@ export default async function RootPage() {
   }
 
   if (browserLocale) {
-    redirect(browserLocale)
+    redirect(`${browserLocale}`)
   }
 
   const locale = routing.defaultLocale;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const messages: any = messObj[locale]
+  const messages = getMessages({ locale })
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
