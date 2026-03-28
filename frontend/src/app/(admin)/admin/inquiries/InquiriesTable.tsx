@@ -89,5 +89,5 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
     }
   ]
 
-  return <Table columns={InquiriesColumns} data={result.inquiries} totalRows={result.total} pageSize={parseInt(searchParams.get('page_size') ?? '1') ?? result.page_size} page={result.page} />
+  return <Table columns={InquiriesColumns} data={result.inquiries} totalRows={result.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? result.page_size} page={result.page} />
 }

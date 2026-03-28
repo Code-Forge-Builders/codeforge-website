@@ -2,6 +2,10 @@ import { apiHttpClient } from "@/lib/httpClient"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
+export interface IGetInquiriesPayload {
+  search?: string
+}
+
 export interface Inquiries {
   customer_name: string
   customer_email: string
@@ -13,13 +17,13 @@ export interface Inquiries {
 export interface InquiriesResponseBody {
   inquiries: Inquiries[]
   page: number
-	page_size: number
-	order_by: string
-	order: string
-	total: number
+  page_size: number
+  order_by: string
+  order: string
+  total: number
 }
 
-export default async function getInquiries(): Promise<InquiriesResponseBody> {
+export default async function getInquiries(payload: GetInquiriesPayload): Promise<InquiriesResponseBody> {
   const cookieStore = await cookies()
   const authToken = cookieStore.get('auth_token')
   if (!authToken) {
@@ -33,7 +37,10 @@ export default async function getInquiries(): Promise<InquiriesResponseBody> {
       headers: {
         Cookie: cookieStore.toString(),
       },
+      query: payload as Record<string, string>
     })
+
+    console.log(payload)
 
     return result
   }
