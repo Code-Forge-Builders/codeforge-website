@@ -120,8 +120,13 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 
 	query := db.DB.Model(&Inquiries{})
 
-	if queryParams.Search != nil && *queryParams.Search != "" {
-		query = query.Where("searchable % ?", *queryParams.Search).
+	if queryParams.Search != nil && *queryParams.Search != "" && *queryParams.Search != "undefined" {
+		query = query.
+			Where(
+				"(searchable ILIKE ? OR searchable % ?)",
+				"%"+*queryParams.Search+"%",
+				*queryParams.Search,
+			).
 			Order(gorm.Expr("similarity(searchable, ?) DESC", *queryParams.Search))
 	}
 

@@ -34,15 +34,13 @@ func Migrate() error {
 	CREATE OR REPLACE FUNCTION generate_inquiries_searchable(
 		name text,
 		email text,
-		phone text,
-		description text
+		phone text
 	) RETURNS text AS $$
 	BEGIN
 		RETURN
 			coalesce(name, '') || ' ' ||
 			coalesce(email, '') || ' ' ||
-			coalesce(phone, '') || ' ' ||
-			coalesce(description, '');
+			coalesce(phone, '');
 	END;
 	$$ LANGUAGE plpgsql IMMUTABLE;
 	`)
@@ -59,12 +57,18 @@ func Migrate() error {
 	res = db.DB.Exec(`
 	ALTER TABLE inquiries
 	ADD COLUMN searchable text GENERATED ALWAYS AS (
-		generate_inquiries_searchable(customer_name, customer_email, customer_phone, project_description)
+		generate_inquiries_searchable(customer_name, customer_email, customer_phone)
 	) STORED;
 	`)
 	if res.Error != nil {
 		return fmt.Errorf("error creating searchable column gin index: %w", res.Error)
 	}
+
+	// Set pg_trgm similarity threshold to 0.05
+	res = db.DB.Exec(`
+		SET pg_trgm.similarity_threshold = 0.05;
+	`)
+
 	// Add trigram index
 	res = db.DB.Exec(`
 	CREATE INDEX IF NOT EXISTS idx_inquiries_searchable_trgm

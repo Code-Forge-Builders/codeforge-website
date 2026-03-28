@@ -17,7 +17,7 @@ const PageSizes = [
   100
 ]
 
-export default function TableControls({ currentRows, totalRows, page = 1, pageSize = PageSizes[0] }: TableControlsProps) {
+export default function TableControls({ currentRows, totalRows, page = 1, pageSize = 15 }: TableControlsProps) {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -41,6 +41,8 @@ export default function TableControls({ currentRows, totalRows, page = 1, pageSi
   }
 
   const pageAmount = Math.ceil(totalRows / pageSize)
+
+  console.log(pageSize)
 
   return <div className="flex flex-row justify-between p-2 gap-2">
     <span className="text-zinc-500">Showing {currentRows} of {totalRows} entries</span>
