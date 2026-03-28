@@ -42,8 +42,6 @@ export default function TableControls({ currentRows, totalRows, page = 1, pageSi
 
   const pageAmount = Math.ceil(totalRows / pageSize)
 
-  console.log(pageSize)
-
   return <div className="flex flex-row justify-between p-2 gap-2">
     <span className="text-zinc-500">Showing {currentRows} of {totalRows} entries</span>
     <div className="flex flex-row gap-2 items-center">

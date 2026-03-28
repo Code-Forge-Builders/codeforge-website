@@ -40,8 +40,6 @@ export default async function getInquiries(payload: IGetInquiriesPayload): Promi
       query: payload as Record<string, string>
     })
 
-    console.log(payload)
-
     return result
   }
   catch (error) {
