@@ -23,7 +23,7 @@ export interface InquiriesResponseBody {
   total: number
 }
 
-export default async function getInquiries(payload: GetInquiriesPayload): Promise<InquiriesResponseBody> {
+export default async function getInquiries(payload: IGetInquiriesPayload): Promise<InquiriesResponseBody> {
   const cookieStore = await cookies()
   const authToken = cookieStore.get('auth_token')
   if (!authToken) {
