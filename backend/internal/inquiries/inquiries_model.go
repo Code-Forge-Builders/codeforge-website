@@ -7,6 +7,17 @@ import (
 	"gorm.io/gorm"
 )
 
+const (
+	StateOpen = iota
+	StateAttemptingContact
+	StateContactEstablished
+	StateContactUnreachable
+	StateScheduledMeeting
+	StateDiscovery
+	StateInProgress
+	StateResolved
+)
+
 type Inquiries struct {
 	ID                 uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;"`
 	CustomerName       string    `json:"customer_name" gorm:"size:255;not null;"`

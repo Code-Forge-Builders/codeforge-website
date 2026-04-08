@@ -14,7 +14,7 @@ interface InquiriesTableProps {
 const InquiriesStates = [
   "Open",
   "Attempting Contact",
-  "Contact Stablished",
+  "Contact Established",
   "Contact Unreachable",
   "Scheduled Meeting",
   "Discovery",
