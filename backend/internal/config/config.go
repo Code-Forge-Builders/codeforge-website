@@ -25,6 +25,9 @@ type Config struct {
 	JWTSecret          string `env:"JWT_SECRET" envRequired:"true"`
 	JWTExpiryInMinutes int    `env:"JWT_EXPIRY_IN_MINUTES" envDefault:"1440"`
 
+	// Notifications
+	NotificationEmail string `env:"NOTIFICATION_EMAIL"`
+
 	// Optional: jobs settings
 	JobWorkerAmountFactor    float64 `env:"JOB_WORKER_AMOUNT_FACTOR" envDefault:"1.0"`
 	EmailJobWorkersMaxAmount int     `env:"EMAIL_JOB_WORKERS_MAX_AMOUNT" envDefault:"32"`

@@ -1,6 +1,7 @@
 package inquiries
 
 import (
+	"codeforge/website-prospecting-api/internal/config"
 	"codeforge/website-prospecting-api/internal/db"
 	"codeforge/website-prospecting-api/internal/jobs"
 	"encoding/json"
@@ -48,8 +49,14 @@ func (s *inquiryService) Create(createInquiryDto CreateInquiryDto) (*Inquiries, 
 		return nil, fmt.Errorf("error during creation of inquiry record: %w", result.Error)
 	}
 
+	cfg, err := config.Load()
+
+	if err != nil {
+		return nil, fmt.Errorf("error loading config: %w", err)
+	}
+
 	emailPayload, err := json.Marshal(jobs.EmailJobPayload{
-		To:           []string{createInquiryDto.CustomerEmail},
+		To:           []string{cfg.NotificationEmail},
 		Subject:      "New Inquiry",
 		TemplateName: "new_inquiry_alert",
 		Data: map[string]any{
