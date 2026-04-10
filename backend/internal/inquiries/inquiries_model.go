@@ -7,6 +7,20 @@ import (
 	"gorm.io/gorm"
 )
 
+type State int16
+type Event int16
+
+const (
+	EventStartContact = iota
+	EventContacted
+	EventContactFailed
+	EventRetry
+	EventScheduleMeeting
+	EventStartDiscovery
+	EventStartImplementation
+	EventFinish
+)
+
 const (
 	StateOpen = iota
 	StateAttemptingContact
@@ -17,6 +31,12 @@ const (
 	StateInProgress
 	StateResolved
 )
+
+var Transitions = map[State]map[Event]State{
+	StateOpen: {
+		EventStartContact: StateAttemptingContact,
+	},
+}
 
 type Inquiries struct {
 	ID                 uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;"`
