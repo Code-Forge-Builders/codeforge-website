@@ -14,6 +14,43 @@ func Migrate() error {
 		return fmt.Errorf("database is not initialized")
 	}
 
+	// Legacy: state was smallint; application uses int State, DB stores string labels.
+	res := db.DB.Exec(`
+DO $$
+BEGIN
+	IF EXISTS (
+		SELECT 1 FROM information_schema.columns
+		WHERE table_schema = current_schema()
+			AND table_name = 'inquiries'
+			AND column_name = 'state'
+			AND udt_name = 'int2'
+	) THEN
+		ALTER TABLE inquiries
+			ALTER COLUMN state DROP DEFAULT;
+		ALTER TABLE inquiries
+			ALTER COLUMN state TYPE varchar(32)
+			USING (
+				CASE state::integer
+					WHEN 0 THEN 'open'
+					WHEN 1 THEN 'attempting_contact'
+					WHEN 2 THEN 'contact_established'
+					WHEN 3 THEN 'contact_unreachable'
+					WHEN 4 THEN 'scheduled_meeting'
+					WHEN 5 THEN 'discovery'
+					WHEN 6 THEN 'in_progress'
+					WHEN 7 THEN 'resolved'
+					ELSE 'open'
+				END
+			);
+		ALTER TABLE inquiries
+			ALTER COLUMN state SET DEFAULT 'open';
+	END IF;
+END $$;
+`)
+	if res.Error != nil {
+		return fmt.Errorf("failed migrating inquiries.state to varchar: %w", res.Error)
+	}
+
 	if err := db.DB.AutoMigrate(
 		&metrics.Metrics{},
 		&inquiries.Inquiries{},
@@ -25,7 +62,7 @@ func Migrate() error {
 
 	// Adjusting the inquiries table to have searchable field
 	// Add support to the pg trigram extension
-	res := db.DB.Exec(`CREATE EXTENSION IF NOT EXISTS pg_trgm;`)
+	res = db.DB.Exec(`CREATE EXTENSION IF NOT EXISTS pg_trgm;`)
 	if res.Error != nil {
 		return fmt.Errorf("failed while creating pg_trgm extension: %w", res.Error)
 	}
