@@ -27,7 +27,7 @@ const (
 const (
 	StateOpen State = iota
 	StateAttemptingContact
-	StateContactEstablished
+	StateContacted
 	StateContactFailed
 	StateScheduledMeeting
 	StateDiscovery
@@ -43,8 +43,8 @@ func (s State) ToString() string {
 		return "open"
 	case StateAttemptingContact:
 		return "attempting_contact"
-	case StateContactEstablished:
-		return "contact_established"
+	case StateContacted:
+		return "contacted"
 	case StateContactFailed:
 		return "contact_failed"
 	case StateScheduledMeeting:
@@ -68,8 +68,8 @@ func parseStateString(v string) (State, error) {
 		return StateOpen, nil
 	case "attempting_contact":
 		return StateAttemptingContact, nil
-	case "contact_established":
-		return StateContactEstablished, nil
+	case "contacted":
+		return StateContacted, nil
 	case "contact_failed":
 		return StateContactFailed, nil
 	case "scheduled_meeting":
@@ -118,24 +118,24 @@ var Transitions = map[State]map[Event]State{
 		EventStartContact: StateAttemptingContact,
 	},
 	StateAttemptingContact: {
-		EventContactEstablished: StateContactEstablished,
+		EventContacted:     StateContacted,
 		EventContactFailed: StateContactFailed,
 	},
-	StateContactEstablished: {
+	StateContacted: {
 		EventScheduleMeeting: StateScheduledMeeting,
-		EventCancelInquiry: StateCancelled,
+		EventCancelInquiry:   StateCancelled,
 	},
 	StateScheduledMeeting: {
 		EventStartDiscovery: StateDiscovery,
-		EventCancelInquiry: StateCancelled,
+		EventCancelInquiry:  StateCancelled,
 	},
 	StateContactFailed: {
-		EventRetryContact: StateAttemptingContact,
+		EventRetryContact:  StateAttemptingContact,
 		EventCancelInquiry: StateCancelled,
 	},
 	StateDiscovery: {
 		EventStartImplementation: StateInProgress,
-		EventCancelInquiry: StateCancelled,
+		EventCancelInquiry:       StateCancelled,
 	},
 	StateInProgress: {
 		EventCancelInquiry: StateCancelled,
@@ -150,7 +150,7 @@ type Inquiries struct {
 	CustomerPhone      string    `json:"customer_phone" gorm:"size:18;not null;"`
 	ServiceKey         string    `json:"service_key" gorm:"size:50;not null;"`
 	ProjectDescription string    `json:"project_description" gorm:"type:text"`
-	State              State     `json:"state" gorm:"type:varchar(50);not null;default:'open'"`
+	State              State     `json:"state" gorm:"type:varchar(50);not null"`
 	Searchable         string    `json:"" gorm:"type:text;->"`
 	CreatedAt          time.Time `json:"created_at"`
 	UpdatedAt          time.Time `json:"updated_at"`
@@ -160,6 +160,10 @@ func (i *Inquiries) BeforeCreate(tx *gorm.DB) error {
 	if i.ID == uuid.Nil {
 		newIdV7, _ := uuid.NewV7()
 		i.ID = newIdV7
+	}
+	// App-level enum remains int; Value() persists it as string.
+	if i.State < StateOpen || i.State > StateResolved {
+		i.State = StateOpen
 	}
 	return nil
 }

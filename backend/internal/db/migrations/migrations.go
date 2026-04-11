@@ -14,6 +14,15 @@ func Migrate() error {
 		return fmt.Errorf("database is not initialized")
 	}
 
+	if err := db.DB.AutoMigrate(
+		&metrics.Metrics{},
+		&inquiries.Inquiries{},
+		&jobs.BackgroundJob{},
+		&user.User{},
+	); err != nil {
+		return fmt.Errorf("migration failed: %w", err)
+	}
+
 	// Legacy: state was smallint; application uses int State, DB stores string labels.
 	res := db.DB.Exec(`
 DO $$
@@ -33,12 +42,13 @@ BEGIN
 				CASE state::integer
 					WHEN 0 THEN 'open'
 					WHEN 1 THEN 'attempting_contact'
-					WHEN 2 THEN 'contact_established'
-					WHEN 3 THEN 'contact_unreachable'
+					WHEN 2 THEN 'contacted'
+					WHEN 3 THEN 'contact_failed'
 					WHEN 4 THEN 'scheduled_meeting'
 					WHEN 5 THEN 'discovery'
 					WHEN 6 THEN 'in_progress'
-					WHEN 7 THEN 'resolved'
+					WHEN 7 THEN 'cancelled'
+					WHEN 8 THEN 'resolved'
 					ELSE 'open'
 				END
 			);
@@ -49,15 +59,6 @@ END $$;
 `)
 	if res.Error != nil {
 		return fmt.Errorf("failed migrating inquiries.state to varchar: %w", res.Error)
-	}
-
-	if err := db.DB.AutoMigrate(
-		&metrics.Metrics{},
-		&inquiries.Inquiries{},
-		&jobs.BackgroundJob{},
-		&user.User{},
-	); err != nil {
-		return fmt.Errorf("migration failed: %w", err)
 	}
 
 	// Adjusting the inquiries table to have searchable field

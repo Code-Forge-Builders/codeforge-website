@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 func HandleCreateInquiry(c *gin.Context, inquiryService InquiryService, rateLimiter *utils.RateLimiter) {
@@ -79,4 +80,26 @@ func HandleListInquiries(c *gin.Context, inquiryService InquiryService) {
 	}
 
 	c.JSON(http.StatusOK, result)
+}
+
+func HandleContactInquiryCustomer(c *gin.Context, inquiryService InquiryService) {
+	inquiryIdStr := c.Param("id")
+	inquiryId, err := uuid.Parse(inquiryIdStr)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Invalid inquiry ID",
+		})
+		return
+	}
+
+	if err := inquiryService.ChangeState(inquiryId, EventStartContact); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "Inquiry customer contacted successfully",
+	})
 }

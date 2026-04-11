@@ -25,5 +25,6 @@ func RegisterRoutes(rg *gin.RouterGroup) {
 	{
 		protected.Use(auth.AuthMiddleware(authService))
 		protected.GET("", func(c *gin.Context) { HandleListInquiries(c, inquiryService) })
+		protected.PATCH("/:id/contact-customer", func(c *gin.Context) { HandleContactInquiryCustomer(c, inquiryService) })
 	}
 }

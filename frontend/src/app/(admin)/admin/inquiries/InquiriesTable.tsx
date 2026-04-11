@@ -6,6 +6,7 @@ import { IoCopyOutline } from "react-icons/io5";
 import { parsePhoneNumber } from "libphonenumber-js/min";
 import { useToast } from "@/components/Toast/ToastContext"
 import { useSearchParams } from "next/navigation";
+import { FaPhone, FaPlay } from "react-icons/fa";
 
 interface InquiriesTableProps {
   result: InquiriesResponseBody
@@ -14,19 +15,20 @@ interface InquiriesTableProps {
 const InquiriesStates = [
   "Open",
   "Attempting Contact",
-  "Contact Established",
-  "Contact Unreachable",
+  "Contacted",
+  "Contact Failed",
   "Scheduled Meeting",
   "Discovery",
   "In progress",
-  "Resolved"
+  "Cancelled",
+  "Resolved",
 ]
 
 export function InquiriesTable({ result }: InquiriesTableProps) {
   const { showToast } = useToast()
   const searchParams = useSearchParams()
 
-  const InquiriesColumns: Column<Inquiries>[] = [
+  const InquiriesColumns: Column<any>[] = [
     {
       key: "customer_name",
       label: "Customer Name"
@@ -86,6 +88,18 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       render: (value: string | number) => {
         return new Date(value).toLocaleString()
       }
+    },
+    {
+      key: "",
+      label: "Actions",
+      render: (value: Inquiries) => {
+        return <div className="flex flex-row gap-2 items-center">
+          <button className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white" onClick={() => {}}>
+            <FaPlay />
+          </button>
+        </div>
+      }
+
     }
   ]
 

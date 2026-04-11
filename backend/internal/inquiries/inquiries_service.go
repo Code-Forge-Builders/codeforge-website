@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -22,6 +23,7 @@ var (
 type InquiryService interface {
 	Create(createInquiryDto CreateInquiryDto) (*Inquiries, error)
 	List(filterInquiryDto InquiryQueryParamsDto) (InquiryListReturn, error)
+	ChangeState(inquiryId uuid.UUID, event Event) error
 }
 
 type inquiryService struct {
@@ -191,6 +193,26 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 		Order:     order,
 		Total:     total,
 	}, nil
+}
+
+func (s *inquiryService) ChangeState(inquiryId uuid.UUID, event Event) error {
+	inquiry := Inquiries{}
+
+	if err := db.DB.Where("id = ?", inquiryId).First(&inquiry).Error; err != nil {
+		return fmt.Errorf("error fetching inquiry: %w", err)
+	}
+
+	if !inquiry.CanTransition(event) {
+		return fmt.Errorf("event %v cannot be applied to state %v", event, inquiry.State)
+	}
+
+	inquiry.State = Transitions[inquiry.State][event]
+
+	if err := db.DB.Save(&inquiry).Error; err != nil {
+		return fmt.Errorf("error updating inquiry state: %w", err)
+	}
+
+	return nil
 }
 
 func validateFilter(filter InquiryQueryParamsDto) error {
