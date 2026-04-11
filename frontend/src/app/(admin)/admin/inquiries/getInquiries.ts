@@ -4,9 +4,14 @@ import { redirect } from "next/navigation"
 
 export interface IGetInquiriesPayload {
   search?: string
+  page?: number
+  page_size?: number
+  order_by?: string
+  order?: string
 }
 
 export interface Inquiries {
+  id: string
   customer_name: string
   customer_email: string
   customer_phone: string
@@ -42,7 +47,8 @@ export default async function getInquiries(payload: IGetInquiriesPayload): Promi
 
     return result
   }
-  catch (error) {
+  catch (error: any) {
+    console.error(error.body)
     throw error
   }
 }

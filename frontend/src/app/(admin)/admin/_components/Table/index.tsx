@@ -71,6 +71,5 @@ export default function Table<T extends { [key: string]: any }>({
       </div>
       <TableControls currentRows={data.length} totalRows={totalRows} page={page} pageSize={pageSize} />
     </ div >
-
   )
 }

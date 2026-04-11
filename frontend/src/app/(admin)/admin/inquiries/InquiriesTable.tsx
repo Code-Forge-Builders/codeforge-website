@@ -7,6 +7,8 @@ import { parsePhoneNumber } from "libphonenumber-js/min";
 import { useToast } from "@/components/Toast/ToastContext"
 import { useSearchParams } from "next/navigation";
 import { FaPhone, FaPlay } from "react-icons/fa";
+import { useCallback, useEffect, useState } from "react";
+import { apiHttpClient } from "@/lib/httpClient";
 
 interface InquiriesTableProps {
   result: InquiriesResponseBody
@@ -27,6 +29,43 @@ const InquiriesStates = [
 export function InquiriesTable({ result }: InquiriesTableProps) {
   const { showToast } = useToast()
   const searchParams = useSearchParams()
+
+  const [currentResult, setCurrentResult] = useState<InquiriesResponseBody>(result)
+
+  useEffect(() => {
+    setCurrentResult(result)
+  }, [result])
+
+  const handleStartContact = useCallback((inquiryId: string) => {
+    apiHttpClient.patch(`/inquiries/${inquiryId}/contact-customer`, {
+      credentials: "include",
+    })
+    .then(() => {
+      apiHttpClient.get<InquiriesResponseBody>(`/inquiries?${new URLSearchParams(searchParams.toString()).toString()}`, {
+        credentials: "include",
+      })
+      .then((res) => {
+        setCurrentResult(res)
+      })
+      .catch((err) => {
+        showToast({
+          message: "Failed to get inquiries",
+          type: "error"
+        })
+      })
+
+      showToast({
+        message: "Inquiry customer contacted successfully",
+        type: "success"
+      })
+    })
+    .catch((err) => {
+      showToast({
+        message: "Failed to contact inquiry customer",
+        type: "error"
+      })
+    })
+  }, [showToast])
 
   const InquiriesColumns: Column<any>[] = [
     {
@@ -92,16 +131,23 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
     {
       key: "",
       label: "Actions",
-      render: (value: Inquiries) => {
-        return <div className="flex flex-row gap-2 items-center">
-          <button className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white" onClick={() => {}}>
-            <FaPlay />
-          </button>
-        </div>
+      render: (_: any, row: Inquiries) => {
+        const state = InquiriesStates[row.state as number]
+        return <>
+        {
+          state === InquiriesStates[0] && (
+            <div className="flex flex-row gap-2 items-center">
+              <button className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white" onClick={() => handleStartContact(row.id)}>
+                <FaPlay />
+              </button>
+            </div>
+          )
+        }
+        </>
       }
 
     }
   ]
 
-  return <Table columns={InquiriesColumns} data={result.inquiries} totalRows={result.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? result.page_size} page={result.page} />
+  return <Table columns={InquiriesColumns} data={currentResult.inquiries} totalRows={currentResult.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? currentResult.page_size} page={ parseInt(searchParams.get('page') ?? '1') ?? currentResult.page} />
 }

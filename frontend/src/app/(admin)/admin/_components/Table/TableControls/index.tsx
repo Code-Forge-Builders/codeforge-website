@@ -23,15 +23,29 @@ export default function TableControls({ currentRows, totalRows, page = 1, pageSi
   const searchParams = useSearchParams()
 
   const [selectedPageSize, setSelectedPageSize] = useState(pageSize)
+  const [selectedPage, setSelectedPage] = useState(page)
 
   useEffect(() => {
     setSelectedPageSize(pageSize)
   }, [pageSize])
 
+  useEffect(() => {
+    setSelectedPage(page)
+  }, [page])
+
   const handlePageSizeChange = useCallback((option: number) => {
     if (searchParams.get('page_size') !== option.toString()) {
       const params = new URLSearchParams(searchParams.toString())
       params.set('page_size', option.toString())
+      router.push(`${pathname}?${params.toString()}`)
+    }
+  }, [pathname, router, searchParams])
+
+
+  const handlePageChange = useCallback((page: number) => {
+    if (searchParams.get('page') !== page.toString()) {
+      const params = new URLSearchParams(searchParams.toString())
+      params.set('page', page.toString())
       router.push(`${pathname}?${params.toString()}`)
     }
   }, [pathname, router, searchParams])
@@ -56,7 +70,7 @@ export default function TableControls({ currentRows, totalRows, page = 1, pageSi
       </div>
       <div className="flex flex-row gap-2 ml-4">
         {Array.from({ length: pageAmount }).map((_, i) => {
-          return <button className={`px-2 py-1 w-10 h-10 cursor-pointer rounded-sm border border-gray-900 ${page === (i + 1) ? 'bg-gray-900 text-white' : ''}`} key={i}>{i + 1}</button>
+          return <button className={`px-2 py-1 w-10 h-10 cursor-pointer rounded-sm border border-gray-900 ${selectedPage === (i + 1) ? 'bg-gray-900 text-white' : ''}`} key={i} onClick={() => handlePageChange(i + 1)}>{i + 1}</button>
         })}
       </div>
     </div>
