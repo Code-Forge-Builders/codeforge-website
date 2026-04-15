@@ -5,6 +5,7 @@ import (
 	"codeforge/website-prospecting-api/internal/db"
 	"codeforge/website-prospecting-api/internal/jobs"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -14,10 +15,12 @@ import (
 )
 
 var (
-	DEFAULT_PAGE      int16  = 1
-	DEFAULT_PAGE_SIZE int16  = 15
-	DEFAULT_ORDER_BY  string = "created_at"
-	DEFAULT_ORDER     string = "desc"
+	DEFAULT_PAGE              int16  = 1
+	DEFAULT_PAGE_SIZE         int16  = 15
+	DEFAULT_ORDER_BY          string = "created_at"
+	DEFAULT_ORDER             string = "desc"
+	ErrInquiryNotFound               = errors.New("inquiry not found")
+	ErrInvalidStateTransition        = errors.New("invalid inquiry state transition")
 )
 
 type InquiryService interface {
@@ -203,11 +206,14 @@ func (s *inquiryService) ChangeState(inquiryId uuid.UUID, event Event) error {
 	inquiry := Inquiries{}
 
 	if err := db.DB.Where("id = ?", inquiryId).First(&inquiry).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("%w", ErrInquiryNotFound)
+		}
 		return fmt.Errorf("error fetching inquiry: %w", err)
 	}
 
 	if !inquiry.CanTransition(event) {
-		return fmt.Errorf("event %v cannot be applied to state %v", event, inquiry.State)
+		return fmt.Errorf("%w: event %v cannot be applied to state %v", ErrInvalidStateTransition, event, inquiry.State)
 	}
 
 	inquiry.State = Transitions[inquiry.State][event]

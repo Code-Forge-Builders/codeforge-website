@@ -2,6 +2,7 @@ package inquiries
 
 import (
 	"codeforge/website-prospecting-api/internal/utils"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -83,6 +84,42 @@ func HandleListInquiries(c *gin.Context, inquiryService InquiryService) {
 }
 
 func HandleContactInquiryCustomer(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventStartContact, "Inquiry customer contacted successfully")
+}
+
+func HandleMarkInquiryContacted(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventContacted, "Inquiry marked as contacted successfully")
+}
+
+func HandleMarkInquiryContactFailed(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventContactFailed, "Inquiry marked as contact failed successfully")
+}
+
+func HandleRetryInquiryContact(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventRetryContact, "Inquiry moved back to attempting contact successfully")
+}
+
+func HandleScheduleInquiryMeeting(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventScheduleMeeting, "Inquiry meeting scheduled successfully")
+}
+
+func HandleStartInquiryDiscovery(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventStartDiscovery, "Inquiry moved to discovery successfully")
+}
+
+func HandleStartInquiryImplementation(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventStartImplementation, "Inquiry moved to in progress successfully")
+}
+
+func HandleCancelInquiry(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventCancelInquiry, "Inquiry cancelled successfully")
+}
+
+func HandleFinishInquiry(c *gin.Context, inquiryService InquiryService) {
+	handleInquiryStateTransition(c, inquiryService, EventFinishInquiry, "Inquiry finished successfully")
+}
+
+func handleInquiryStateTransition(c *gin.Context, inquiryService InquiryService, event Event, successMessage string) {
 	inquiryIdStr := c.Param("id")
 	inquiryId, err := uuid.Parse(inquiryIdStr)
 	if err != nil {
@@ -92,7 +129,19 @@ func HandleContactInquiryCustomer(c *gin.Context, inquiryService InquiryService)
 		return
 	}
 
-	if err := inquiryService.ChangeState(inquiryId, EventStartContact); err != nil {
+	if err := inquiryService.ChangeState(inquiryId, event); err != nil {
+		if errors.Is(err, ErrInquiryNotFound) {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+		if errors.Is(err, ErrInvalidStateTransition) {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
@@ -100,6 +149,6 @@ func HandleContactInquiryCustomer(c *gin.Context, inquiryService InquiryService)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Inquiry customer contacted successfully",
+		"message": successMessage,
 	})
 }

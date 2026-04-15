@@ -6,10 +6,11 @@ import { IoCopyOutline } from "react-icons/io5";
 import { parsePhoneNumber } from "libphonenumber-js/min";
 import { useToast } from "@/components/Toast/ToastContext"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaPhone, FaPlay } from "react-icons/fa";
+import { FaCheck, FaPlay } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
 import { apiHttpClient } from "@/lib/httpClient";
 import ConfirmationModal from "../_components/ConfirmationModal";
+import { FaX } from "react-icons/fa6";
 
 interface InquiriesTableProps {
   result: InquiriesResponseBody
@@ -27,6 +28,157 @@ const InquiriesStates = [
   "Resolved",
 ]
 
+interface TransitionAction {
+  endpoint: string
+  targetState: number
+  confirmTitle: string
+  confirmMessage: string
+  confirmLabel: string
+  successMessage: string
+  errorMessage: string
+}
+
+const TransitionActionsByState: Record<number, TransitionAction[]> = {
+  0: [
+    {
+      endpoint: "contact-customer",
+      targetState: 1,
+      confirmTitle: "Start inquiry?",
+      confirmMessage: 'Are you sure you want to start this inquiry and move it to the "Attempting Contact" state?',
+      confirmLabel: "Yes, start inquiry",
+      successMessage: "Inquiry customer contacted successfully",
+      errorMessage: "Failed to contact inquiry customer"
+    }
+  ],
+  1: [
+    {
+      endpoint: "mark-contacted",
+      targetState: 2,
+      confirmTitle: "Mark as contacted?",
+      confirmMessage: 'Are you sure you want to move this inquiry to the "Contacted" state?',
+      confirmLabel: "Yes, mark contacted",
+      successMessage: "Inquiry marked as contacted successfully",
+      errorMessage: "Failed to mark inquiry as contacted"
+    },
+    {
+      endpoint: "mark-contact-failed",
+      targetState: 3,
+      confirmTitle: "Mark as contact failed?",
+      confirmMessage: 'Are you sure you want to move this inquiry to the "Contact Failed" state?',
+      confirmLabel: "Yes, mark failed",
+      successMessage: "Inquiry marked as contact failed successfully",
+      errorMessage: "Failed to mark inquiry as contact failed"
+    }
+  ],
+  2: [
+    {
+      endpoint: "schedule-meeting",
+      targetState: 4,
+      confirmTitle: "Schedule meeting?",
+      confirmMessage: 'Are you sure you want to move this inquiry to the "Scheduled Meeting" state?',
+      confirmLabel: "Yes, schedule meeting",
+      successMessage: "Inquiry meeting scheduled successfully",
+      errorMessage: "Failed to schedule inquiry meeting"
+    },
+    {
+      endpoint: "cancel",
+      targetState: 7,
+      confirmTitle: "Cancel inquiry?",
+      confirmMessage: "Are you sure you want to cancel this inquiry?",
+      confirmLabel: "Yes, cancel inquiry",
+      successMessage: "Inquiry cancelled successfully",
+      errorMessage: "Failed to cancel inquiry"
+    }
+  ],
+  3: [
+    {
+      endpoint: "retry-contact",
+      targetState: 1,
+      confirmTitle: "Retry contact?",
+      confirmMessage: 'Are you sure you want to move this inquiry back to the "Attempting Contact" state?',
+      confirmLabel: "Yes, retry contact",
+      successMessage: "Inquiry moved back to attempting contact successfully",
+      errorMessage: "Failed to retry inquiry contact"
+    },
+    {
+      endpoint: "cancel",
+      targetState: 7,
+      confirmTitle: "Cancel inquiry?",
+      confirmMessage: "Are you sure you want to cancel this inquiry?",
+      confirmLabel: "Yes, cancel inquiry",
+      successMessage: "Inquiry cancelled successfully",
+      errorMessage: "Failed to cancel inquiry"
+    }
+  ],
+  4: [
+    {
+      endpoint: "start-discovery",
+      targetState: 5,
+      confirmTitle: "Start discovery?",
+      confirmMessage: 'Are you sure you want to move this inquiry to the "Discovery" state?',
+      confirmLabel: "Yes, start discovery",
+      successMessage: "Inquiry moved to discovery successfully",
+      errorMessage: "Failed to start inquiry discovery"
+    },
+    {
+      endpoint: "cancel",
+      targetState: 7,
+      confirmTitle: "Cancel inquiry?",
+      confirmMessage: "Are you sure you want to cancel this inquiry?",
+      confirmLabel: "Yes, cancel inquiry",
+      successMessage: "Inquiry cancelled successfully",
+      errorMessage: "Failed to cancel inquiry"
+    }
+  ],
+  5: [
+    {
+      endpoint: "start-implementation",
+      targetState: 6,
+      confirmTitle: "Start implementation?",
+      confirmMessage: 'Are you sure you want to move this inquiry to the "In progress" state?',
+      confirmLabel: "Yes, start implementation",
+      successMessage: "Inquiry moved to in progress successfully",
+      errorMessage: "Failed to start inquiry implementation"
+    },
+    {
+      endpoint: "cancel",
+      targetState: 7,
+      confirmTitle: "Cancel inquiry?",
+      confirmMessage: "Are you sure you want to cancel this inquiry?",
+      confirmLabel: "Yes, cancel inquiry",
+      successMessage: "Inquiry cancelled successfully",
+      errorMessage: "Failed to cancel inquiry"
+    }
+  ],
+  6: [
+    {
+      endpoint: "finish",
+      targetState: 8,
+      confirmTitle: "Finish inquiry?",
+      confirmMessage: 'Are you sure you want to move this inquiry to the "Resolved" state?',
+      confirmLabel: "Yes, finish inquiry",
+      successMessage: "Inquiry finished successfully",
+      errorMessage: "Failed to finish inquiry"
+    },
+    {
+      endpoint: "cancel",
+      targetState: 7,
+      confirmTitle: "Cancel inquiry?",
+      confirmMessage: "Are you sure you want to cancel this inquiry?",
+      confirmLabel: "Yes, cancel inquiry",
+      successMessage: "Inquiry cancelled successfully",
+      errorMessage: "Failed to cancel inquiry"
+    }
+  ]
+}
+
+const getActionLabel = (action: TransitionAction) => {
+  if (action.endpoint === "contact-customer") return <FaPlay />
+  if (action.endpoint === "mark-contacted") return <FaCheck/>
+  if (action.endpoint === "mark-contact-failed" || action.endpoint === "cancel" ) return <FaX />
+  return InquiriesStates[action.targetState]
+}
+
 export function InquiriesTable({ result }: InquiriesTableProps) {
   const { showToast } = useToast()
   const router = useRouter()
@@ -34,7 +186,7 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
   const searchParams = useSearchParams()
 
   const [currentResult, setCurrentResult] = useState<InquiriesResponseBody>(result)
-  const [pendingInquiryId, setPendingInquiryId] = useState<string | null>(null)
+  const [pendingTransition, setPendingTransition] = useState<{ inquiryId: string, action: TransitionAction } | null>(null)
   const currentState: Number = searchParams.get("state") ? parseInt(searchParams.get("state") ?? '0') : 0
 
   const handleStateTabClick = useCallback((state: number | null) => {
@@ -52,25 +204,25 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
     setCurrentResult(result)
   }, [result])
 
-  const handleStartContact = useCallback((inquiryId: string) => {
-    apiHttpClient.patch(`/inquiries/${inquiryId}/contact-customer`, {
+  const handleStateTransition = useCallback((inquiryId: string, action: TransitionAction) => {
+    apiHttpClient.patch(`/inquiries/${inquiryId}/${action.endpoint}`, {
       credentials: "include",
     })
     .then(() => {
-      const newState = 1;
+      const newState = action.targetState;
 
       const params = new URLSearchParams(searchParams.toString())
       params.set("state", `${newState}`)
       router.push(`${pathname}?${params.toString()}`)
 
       showToast({
-        message: "Inquiry customer contacted successfully",
+        message: action.successMessage,
         type: "success"
       })
     })
     .catch((_err) => {
       showToast({
-        message: "Failed to contact inquiry customer",
+        message: action.errorMessage,
         type: "error"
       })
     })
@@ -141,20 +293,24 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       key: "",
       label: "Actions",
       render: (_: any, row: Inquiries) => {
-        const state = InquiriesStates[row.state as number]
-        return <>
-        {
-          state === InquiriesStates[0] && (
-            <div className="flex flex-row gap-2 items-center">
-              <button
-                className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white"
-                onClick={() => setPendingInquiryId(row.id)}
-              >
-                <FaPlay />
-              </button>
-            </div>
-          )
+        const actions = TransitionActionsByState[row.state as number] ?? []
+
+        if (actions.length === 0) {
+          return null
         }
+
+        return <>
+          <div className="flex flex-row gap-2 items-center">
+            {actions.map((action) => (
+              <button
+                key={`${row.id}-${action.endpoint}`}
+                className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white"
+                onClick={() => setPendingTransition({ inquiryId: row.id, action })}
+              >
+                {getActionLabel(action)}
+              </button>
+            ))}
+          </div>
         </>
       }
 
@@ -177,16 +333,16 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       <Table columns={InquiriesColumns} data={currentResult.inquiries} totalRows={currentResult.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? currentResult.page_size} page={ parseInt(searchParams.get('page') ?? '1') ?? currentResult.page} />
 
       <ConfirmationModal
-        isOpen={!!pendingInquiryId}
-        title="Start inquiry?"
-        message={'Are you sure you want to start this inquiry and move it to the "Attempting Contact" state?'}
-        confirmLabel="Yes, start inquiry"
+        isOpen={!!pendingTransition}
+        title={pendingTransition?.action.confirmTitle ?? "Confirm action"}
+        message={pendingTransition?.action.confirmMessage ?? "Are you sure you want to continue?"}
+        confirmLabel={pendingTransition?.action.confirmLabel ?? "Confirm"}
         cancelLabel="Cancel"
-        onCancel={() => setPendingInquiryId(null)}
+        onCancel={() => setPendingTransition(null)}
         onConfirm={() => {
-          if (!pendingInquiryId) return
-          handleStartContact(pendingInquiryId)
-          setPendingInquiryId(null)
+          if (!pendingTransition) return
+          handleStateTransition(pendingTransition.inquiryId, pendingTransition.action)
+          setPendingTransition(null)
         }}
       />
     </div>

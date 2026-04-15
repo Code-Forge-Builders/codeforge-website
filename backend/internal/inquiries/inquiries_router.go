@@ -26,5 +26,13 @@ func RegisterRoutes(rg *gin.RouterGroup) {
 		protected.Use(auth.AuthMiddleware(authService))
 		protected.GET("", func(c *gin.Context) { HandleListInquiries(c, inquiryService) })
 		protected.PATCH("/:id/contact-customer", func(c *gin.Context) { HandleContactInquiryCustomer(c, inquiryService) })
+		protected.PATCH("/:id/mark-contacted", func(c *gin.Context) { HandleMarkInquiryContacted(c, inquiryService) })
+		protected.PATCH("/:id/mark-contact-failed", func(c *gin.Context) { HandleMarkInquiryContactFailed(c, inquiryService) })
+		protected.PATCH("/:id/retry-contact", func(c *gin.Context) { HandleRetryInquiryContact(c, inquiryService) })
+		protected.PATCH("/:id/schedule-meeting", func(c *gin.Context) { HandleScheduleInquiryMeeting(c, inquiryService) })
+		protected.PATCH("/:id/start-discovery", func(c *gin.Context) { HandleStartInquiryDiscovery(c, inquiryService) })
+		protected.PATCH("/:id/start-implementation", func(c *gin.Context) { HandleStartInquiryImplementation(c, inquiryService) })
+		protected.PATCH("/:id/cancel", func(c *gin.Context) { HandleCancelInquiry(c, inquiryService) })
+		protected.PATCH("/:id/finish", func(c *gin.Context) { HandleFinishInquiry(c, inquiryService) })
 	}
 }
