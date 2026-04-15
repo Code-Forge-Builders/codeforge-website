@@ -5,12 +5,18 @@ import SearchForm from "./_components/SearchForm"
 
 
 export default async function InquiriesPage({ searchParams }: { searchParams: Promise<IGetInquiriesPayload> }) {
-  const { search, page, page_size, order_by, order } = await searchParams
+  const { search, state, page, page_size, order_by, order } = await searchParams
 
   const payload: IGetInquiriesPayload = {}
 
   if (search) {
     payload.search = search
+  }
+  if (state !== undefined) {
+    payload.state = Number(state)
+  }
+  else {
+    payload.state = 0
   }
   if (page) {
     payload.page = page

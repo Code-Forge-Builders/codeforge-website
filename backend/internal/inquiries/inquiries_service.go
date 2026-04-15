@@ -129,6 +129,10 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 
 	query := db.DB.Model(&Inquiries{})
 
+	if queryParams.State != nil {
+		query = query.Where("state = ?", State(*queryParams.State).ToString())
+	}
+
 	if queryParams.Search != nil && *queryParams.Search != "" && *queryParams.Search != "undefined" {
 		query = query.
 			Where(
@@ -216,7 +220,17 @@ func (s *inquiryService) ChangeState(inquiryId uuid.UUID, event Event) error {
 }
 
 func validateFilter(filter InquiryQueryParamsDto) error {
+	if filter.State != nil {
+		if *filter.State < StateOpen || *filter.State > StateResolved {
+			return fmt.Errorf("invalid state")
+		}
+	}
+
 	if filter.StartDate != nil || filter.EndDate != nil {
+		if filter.StartDate == nil || filter.EndDate == nil {
+			return nil
+		}
+
 		if filter.StartDate.After(*filter.EndDate) {
 			return fmt.Errorf("invalid date range")
 		}

@@ -5,7 +5,7 @@ import { Inquiries, InquiriesResponseBody } from "./getInquiries"
 import { IoCopyOutline } from "react-icons/io5";
 import { parsePhoneNumber } from "libphonenumber-js/min";
 import { useToast } from "@/components/Toast/ToastContext"
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaPhone, FaPlay } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
 import { apiHttpClient } from "@/lib/httpClient";
@@ -28,9 +28,23 @@ const InquiriesStates = [
 
 export function InquiriesTable({ result }: InquiriesTableProps) {
   const { showToast } = useToast()
+  const router = useRouter()
+  const pathname = usePathname()
   const searchParams = useSearchParams()
 
   const [currentResult, setCurrentResult] = useState<InquiriesResponseBody>(result)
+  const currentState: Number = searchParams.get("state") ? parseInt(searchParams.get("state") ?? '0') : 0
+
+  const handleStateTabClick = useCallback((state: number | null) => {
+    const params = new URLSearchParams(searchParams.toString())
+    if (state === null) {
+      params.delete("state")
+    } else {
+      params.set("state", `${state}`)
+    }
+    params.delete("page")
+    router.push(`${pathname}?${params.toString()}`)
+  }, [pathname, router, searchParams])
 
   useEffect(() => {
     setCurrentResult(result)
@@ -41,25 +55,18 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       credentials: "include",
     })
     .then(() => {
-      apiHttpClient.get<InquiriesResponseBody>(`/inquiries?${new URLSearchParams(searchParams.toString()).toString()}`, {
-        credentials: "include",
-      })
-      .then((res) => {
-        setCurrentResult(res)
-      })
-      .catch((err) => {
-        showToast({
-          message: "Failed to get inquiries",
-          type: "error"
-        })
-      })
+      const newState = 1;
+
+      const params = new URLSearchParams(searchParams.toString())
+      params.set("state", `${newState}`)
+      router.push(`${pathname}?${params.toString()}`)
 
       showToast({
         message: "Inquiry customer contacted successfully",
         type: "success"
       })
     })
-    .catch((err) => {
+    .catch((_err) => {
       showToast({
         message: "Failed to contact inquiry customer",
         type: "error"
@@ -149,5 +156,20 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
     }
   ]
 
-  return <Table columns={InquiriesColumns} data={currentResult.inquiries} totalRows={currentResult.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? currentResult.page_size} page={ parseInt(searchParams.get('page') ?? '1') ?? currentResult.page} />
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-row gap-2 items-center overflow-x-auto border-b border-zinc-200">
+        {InquiriesStates.map((stateLabel, index) => (
+          <button
+            key={stateLabel}
+            className={`px-4 py-2 rounded-t-sm whitespace-nowrap cursor-pointer ${currentState === index ? "bg-gray-900 text-white" : "text-zinc-700 hover:bg-zinc-200 bg-zinc-100"}`}
+            onClick={() => handleStateTabClick(index)}
+          >
+            {stateLabel}
+          </button>
+        ))}
+      </div>
+      <Table columns={InquiriesColumns} data={currentResult.inquiries} totalRows={currentResult.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? currentResult.page_size} page={ parseInt(searchParams.get('page') ?? '1') ?? currentResult.page} />
+    </div>
+  )
 }

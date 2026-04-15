@@ -33,6 +33,7 @@ type CreateInquiryDto struct {
 
 type InquiryQueryParamsDto struct {
 	Search    *string    `json:"search,omitempty" form:"search,omitempty" query:"search,omitempty"`
+	State     *State     `json:"state" form:"state" query:"state"`
 	StartDate *time.Time `json:"start_date" form:"start_date" query:"start_date"`
 	EndDate   *time.Time `json:"end_date" form:"end_date" query:"end_date"`
 	Page      *int16     `json:"page" form:"page" query:"page"`

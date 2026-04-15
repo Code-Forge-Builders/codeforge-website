@@ -4,6 +4,7 @@ import { redirect } from "next/navigation"
 
 export interface IGetInquiriesPayload {
   search?: string
+  state?: number
   page?: number
   page_size?: number
   order_by?: string
