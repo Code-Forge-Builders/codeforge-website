@@ -9,6 +9,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FaPhone, FaPlay } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
 import { apiHttpClient } from "@/lib/httpClient";
+import ConfirmationModal from "../_components/ConfirmationModal";
 
 interface InquiriesTableProps {
   result: InquiriesResponseBody
@@ -175,34 +176,19 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       </div>
       <Table columns={InquiriesColumns} data={currentResult.inquiries} totalRows={currentResult.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? currentResult.page_size} page={ parseInt(searchParams.get('page') ?? '1') ?? currentResult.page} />
 
-      {pendingInquiryId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
-          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-semibold text-zinc-900">Start inquiry?</h2>
-            <p className="mt-2 text-sm text-zinc-600">
-              Are you sure you want to start this inquiry and move it to the
-              &quot;Attempting Contact&quot; state?
-            </p>
-            <div className="mt-6 flex justify-end gap-2">
-              <button
-                className="rounded cursor-pointer border border-zinc-300 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
-                onClick={() => setPendingInquiryId(null)}
-              >
-                Cancel
-              </button>
-              <button
-                className="rounded cursor-pointer bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700"
-                onClick={() => {
-                  handleStartContact(pendingInquiryId)
-                  setPendingInquiryId(null)
-                }}
-              >
-                Yes, start inquiry
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <ConfirmationModal
+        isOpen={!!pendingInquiryId}
+        title="Start inquiry?"
+        message={'Are you sure you want to start this inquiry and move it to the "Attempting Contact" state?'}
+        confirmLabel="Yes, start inquiry"
+        cancelLabel="Cancel"
+        onCancel={() => setPendingInquiryId(null)}
+        onConfirm={() => {
+          if (!pendingInquiryId) return
+          handleStartContact(pendingInquiryId)
+          setPendingInquiryId(null)
+        }}
+      />
     </div>
   )
 }
