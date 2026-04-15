@@ -6,11 +6,11 @@ import { IoCopyOutline } from "react-icons/io5";
 import { parsePhoneNumber } from "libphonenumber-js/min";
 import { useToast } from "@/components/Toast/ToastContext"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaCheck, FaPlay } from "react-icons/fa";
+import { FaCheck, FaCompass, FaPlay, FaWrench } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
 import { apiHttpClient } from "@/lib/httpClient";
 import ConfirmationModal from "../_components/ConfirmationModal";
-import { FaX } from "react-icons/fa6";
+import { FaArrowRotateLeft, FaCalendarCheck, FaX } from "react-icons/fa6";
 
 interface InquiriesTableProps {
   result: InquiriesResponseBody
@@ -36,6 +36,7 @@ interface TransitionAction {
   confirmLabel: string
   successMessage: string
   errorMessage: string
+  tooltip: string
 }
 
 const TransitionActionsByState: Record<number, TransitionAction[]> = {
@@ -47,7 +48,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to start this inquiry and move it to the "Attempting Contact" state?',
       confirmLabel: "Yes, start inquiry",
       successMessage: "Inquiry customer contacted successfully",
-      errorMessage: "Failed to contact inquiry customer"
+      errorMessage: "Failed to contact inquiry customer",
+      tooltip: "Start inquiry"
     }
   ],
   1: [
@@ -58,7 +60,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to move this inquiry to the "Contacted" state?',
       confirmLabel: "Yes, mark contacted",
       successMessage: "Inquiry marked as contacted successfully",
-      errorMessage: "Failed to mark inquiry as contacted"
+      errorMessage: "Failed to mark inquiry as contacted",
+      tooltip: "Mark as contacted"
     },
     {
       endpoint: "mark-contact-failed",
@@ -67,7 +70,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to move this inquiry to the "Contact Failed" state?',
       confirmLabel: "Yes, mark failed",
       successMessage: "Inquiry marked as contact failed successfully",
-      errorMessage: "Failed to mark inquiry as contact failed"
+      errorMessage: "Failed to mark inquiry as contact failed",
+      tooltip: "Mark as contact failed"
     }
   ],
   2: [
@@ -78,7 +82,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to move this inquiry to the "Scheduled Meeting" state?',
       confirmLabel: "Yes, schedule meeting",
       successMessage: "Inquiry meeting scheduled successfully",
-      errorMessage: "Failed to schedule inquiry meeting"
+      errorMessage: "Failed to schedule inquiry meeting",
+      tooltip: "Schedule meeting"
     },
     {
       endpoint: "cancel",
@@ -87,7 +92,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: "Are you sure you want to cancel this inquiry?",
       confirmLabel: "Yes, cancel inquiry",
       successMessage: "Inquiry cancelled successfully",
-      errorMessage: "Failed to cancel inquiry"
+      errorMessage: "Failed to cancel inquiry",
+      tooltip: "Cancel inquiry"
     }
   ],
   3: [
@@ -98,7 +104,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to move this inquiry back to the "Attempting Contact" state?',
       confirmLabel: "Yes, retry contact",
       successMessage: "Inquiry moved back to attempting contact successfully",
-      errorMessage: "Failed to retry inquiry contact"
+      errorMessage: "Failed to retry inquiry contact",
+      tooltip: "Retry contact"
     },
     {
       endpoint: "cancel",
@@ -107,7 +114,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: "Are you sure you want to cancel this inquiry?",
       confirmLabel: "Yes, cancel inquiry",
       successMessage: "Inquiry cancelled successfully",
-      errorMessage: "Failed to cancel inquiry"
+      errorMessage: "Failed to cancel inquiry",
+      tooltip: "Cancel inquiry"
     }
   ],
   4: [
@@ -118,7 +126,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to move this inquiry to the "Discovery" state?',
       confirmLabel: "Yes, start discovery",
       successMessage: "Inquiry moved to discovery successfully",
-      errorMessage: "Failed to start inquiry discovery"
+      errorMessage: "Failed to start inquiry discovery",
+      tooltip: "Start discovery"
     },
     {
       endpoint: "cancel",
@@ -127,7 +136,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: "Are you sure you want to cancel this inquiry?",
       confirmLabel: "Yes, cancel inquiry",
       successMessage: "Inquiry cancelled successfully",
-      errorMessage: "Failed to cancel inquiry"
+      errorMessage: "Failed to cancel inquiry",
+      tooltip: "Cancel inquiry"
     }
   ],
   5: [
@@ -138,7 +148,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to move this inquiry to the "In progress" state?',
       confirmLabel: "Yes, start implementation",
       successMessage: "Inquiry moved to in progress successfully",
-      errorMessage: "Failed to start inquiry implementation"
+      errorMessage: "Failed to start inquiry implementation",
+      tooltip: "Start implementation"
     },
     {
       endpoint: "cancel",
@@ -147,7 +158,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: "Are you sure you want to cancel this inquiry?",
       confirmLabel: "Yes, cancel inquiry",
       successMessage: "Inquiry cancelled successfully",
-      errorMessage: "Failed to cancel inquiry"
+      errorMessage: "Failed to cancel inquiry",
+      tooltip: "Cancel inquiry"
     }
   ],
   6: [
@@ -158,7 +170,8 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: 'Are you sure you want to move this inquiry to the "Resolved" state?',
       confirmLabel: "Yes, finish inquiry",
       successMessage: "Inquiry finished successfully",
-      errorMessage: "Failed to finish inquiry"
+      errorMessage: "Failed to finish inquiry",
+      tooltip: "Finish inquiry"
     },
     {
       endpoint: "cancel",
@@ -167,16 +180,21 @@ const TransitionActionsByState: Record<number, TransitionAction[]> = {
       confirmMessage: "Are you sure you want to cancel this inquiry?",
       confirmLabel: "Yes, cancel inquiry",
       successMessage: "Inquiry cancelled successfully",
-      errorMessage: "Failed to cancel inquiry"
+      errorMessage: "Failed to cancel inquiry",
+      tooltip: "Cancel inquiry"
     }
   ]
 }
 
 const getActionLabel = (action: TransitionAction) => {
   if (action.endpoint === "contact-customer") return <FaPlay />
-  if (action.endpoint === "mark-contacted") return <FaCheck/>
+  if (action.endpoint === "mark-contacted" || action.endpoint === "finish") return <FaCheck/>
   if (action.endpoint === "mark-contact-failed" || action.endpoint === "cancel" ) return <FaX />
-  return InquiriesStates[action.targetState]
+  if (action.endpoint === "schedule-meeting") return <FaCalendarCheck />
+  if (action.endpoint === "retry-contact") return <FaArrowRotateLeft />
+  if (action.endpoint === "start-discovery") return <FaCompass />
+  if (action.endpoint === "start-implementation") return <FaWrench />
+  return action.tooltip // defaults to its tooltip
 }
 
 export function InquiriesTable({ result }: InquiriesTableProps) {
@@ -306,6 +324,7 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
                 key={`${row.id}-${action.endpoint}`}
                 className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white"
                 onClick={() => setPendingTransition({ inquiryId: row.id, action })}
+                title={action.tooltip}
               >
                 {getActionLabel(action)}
               </button>
