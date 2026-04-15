@@ -33,6 +33,7 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
   const searchParams = useSearchParams()
 
   const [currentResult, setCurrentResult] = useState<InquiriesResponseBody>(result)
+  const [pendingInquiryId, setPendingInquiryId] = useState<string | null>(null)
   const currentState: Number = searchParams.get("state") ? parseInt(searchParams.get("state") ?? '0') : 0
 
   const handleStateTabClick = useCallback((state: number | null) => {
@@ -72,7 +73,7 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
         type: "error"
       })
     })
-  }, [showToast])
+  }, [pathname, router, searchParams, showToast])
 
   const InquiriesColumns: Column<any>[] = [
     {
@@ -144,7 +145,10 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
         {
           state === InquiriesStates[0] && (
             <div className="flex flex-row gap-2 items-center">
-              <button className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white" onClick={() => handleStartContact(row.id)}>
+              <button
+                className="p-2 rounded cursor-pointer hover:bg-gray-900 hover:text-white"
+                onClick={() => setPendingInquiryId(row.id)}
+              >
                 <FaPlay />
               </button>
             </div>
@@ -170,6 +174,35 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
         ))}
       </div>
       <Table columns={InquiriesColumns} data={currentResult.inquiries} totalRows={currentResult.total} pageSize={parseInt(searchParams.get('page_size') ?? '15') ?? currentResult.page_size} page={ parseInt(searchParams.get('page') ?? '1') ?? currentResult.page} />
+
+      {pendingInquiryId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <h2 className="text-lg font-semibold text-zinc-900">Start inquiry?</h2>
+            <p className="mt-2 text-sm text-zinc-600">
+              Are you sure you want to start this inquiry and move it to the
+              &quot;Attempting Contact&quot; state?
+            </p>
+            <div className="mt-6 flex justify-end gap-2">
+              <button
+                className="rounded cursor-pointer border border-zinc-300 px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
+                onClick={() => setPendingInquiryId(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="rounded cursor-pointer bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700"
+                onClick={() => {
+                  handleStartContact(pendingInquiryId)
+                  setPendingInquiryId(null)
+                }}
+              >
+                Yes, start inquiry
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
