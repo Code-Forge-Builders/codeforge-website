@@ -25,6 +25,7 @@ func RegisterRoutes(rg *gin.RouterGroup) {
 	{
 		protected.Use(auth.AuthMiddleware(authService))
 		protected.GET("", func(c *gin.Context) { HandleListInquiries(c, inquiryService) })
+		protected.GET("/count-by-state", func(c *gin.Context) { HandleCountInquiriesByState(c, inquiryService) })
 		protected.PATCH("/:id/contact-customer", func(c *gin.Context) { HandleContactInquiryCustomer(c, inquiryService) })
 		protected.PATCH("/:id/mark-contacted", func(c *gin.Context) { HandleMarkInquiryContacted(c, inquiryService) })
 		protected.PATCH("/:id/mark-contact-failed", func(c *gin.Context) { HandleMarkInquiryContactFailed(c, inquiryService) })

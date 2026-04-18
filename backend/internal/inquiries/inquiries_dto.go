@@ -50,3 +50,9 @@ type InquiryListReturn struct {
 	Order     string      `json:"order"`
 	Total     int64       `json:"total"`
 }
+
+type CountByStateResponseBody struct {
+	State State  `json:"state"`
+	Label string `json:"label"`
+	Count int64  `json:"count"`
+}

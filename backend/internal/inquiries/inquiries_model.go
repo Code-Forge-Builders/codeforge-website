@@ -36,6 +36,20 @@ const (
 	StateResolved
 )
 
+func GetAllStates() []State {
+	return []State{
+		StateOpen,
+		StateAttemptingContact,
+		StateContacted,
+		StateContactFailed,
+		StateScheduledMeeting,
+		StateDiscovery,
+		StateInProgress,
+		StateCancelled,
+		StateResolved,
+	}
+}
+
 // ToString returns the persisted form of the state (lowercase snake_case).
 func (s State) ToString() string {
 	switch s {

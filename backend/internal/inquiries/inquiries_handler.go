@@ -83,6 +83,28 @@ func HandleListInquiries(c *gin.Context, inquiryService InquiryService) {
 	c.JSON(http.StatusOK, result)
 }
 
+func HandleCountInquiriesByState(c *gin.Context, inquiryService InquiryService) {
+	var queryParams InquiryQueryParamsDto
+
+	if err := c.ShouldBindQuery(&queryParams); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	var countsByState, err = inquiryService.CountByState(queryParams)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, countsByState)
+}
+
 func HandleContactInquiryCustomer(c *gin.Context, inquiryService InquiryService) {
 	handleInquiryStateTransition(c, inquiryService, EventStartContact, "Inquiry customer contacted successfully")
 }

@@ -6,27 +6,17 @@ import { IoCopyOutline } from "react-icons/io5";
 import { parsePhoneNumber } from "libphonenumber-js/min";
 import { useToast } from "@/components/Toast/ToastContext"
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaCheck, FaCompass, FaPlay, FaWrench } from "react-icons/fa";
+import { FaCheck, FaCompass, FaEnvelope, FaPhone, FaPlay, FaWhatsapp, FaWrench } from "react-icons/fa";
 import { useCallback, useEffect, useState } from "react";
 import { apiHttpClient } from "@/lib/httpClient";
 import ConfirmationModal from "../_components/ConfirmationModal";
 import { FaArrowRotateLeft, FaCalendarCheck, FaX } from "react-icons/fa6";
+import { InquiriesCountByStateResponseBody } from "./getInquiries";
 
 interface InquiriesTableProps {
   result: InquiriesResponseBody
+  inquiriesStates: InquiriesCountByStateResponseBody[]
 }
-
-const InquiriesStates = [
-  "Open",
-  "Attempting Contact",
-  "Contacted",
-  "Contact Failed",
-  "Scheduled Meeting",
-  "Discovery",
-  "In progress",
-  "Cancelled",
-  "Resolved",
-]
 
 interface TransitionAction {
   endpoint: string
@@ -197,7 +187,7 @@ const getActionLabel = (action: TransitionAction) => {
   return action.tooltip // defaults to its tooltip
 }
 
-export function InquiriesTable({ result }: InquiriesTableProps) {
+export function InquiriesTable({ result, inquiriesStates }: InquiriesTableProps) {
   const { showToast } = useToast()
   const router = useRouter()
   const pathname = usePathname()
@@ -256,7 +246,7 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       label: "Customer Email",
       render: (value) => {
         return <div className="flex flex-row gap-2 items-center">
-          <span className="px-4 py-2 bg-zinc-300 rounded-full text-zinc-700">{value}</span>
+          <span className="flex flex-row gap-2 items-center px-4 py-2 bg-zinc-300 rounded-full text-zinc-700"><FaEnvelope /> {value}</span>
           <button className="p-1 rounded-full cursor-pointer hover:bg-gray-900 hover:text-white" onClick={() => {
             copy(value.toString())
             showToast({
@@ -274,7 +264,7 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       label: "Customer Phone",
       render: (value) => {
         return <div className="flex flex-row gap-2 items-center">
-          <span className="px-4 py-2 bg-zinc-300 rounded-full text-zinc-700">{parsePhoneNumber(value.toString()).format('INTERNATIONAL')}</span>
+          <span className="flex flex-row gap-2 items-center px-4 py-2 bg-zinc-300 rounded-full text-zinc-700"><FaPhone /> {parsePhoneNumber(value.toString()).format('INTERNATIONAL')}</span>
           <button className="p-1 rounded-full cursor-pointer hover:bg-gray-900 hover:text-white" onClick={() => {
             copy(parsePhoneNumber(value.toString()).format('INTERNATIONAL'))
             showToast({
@@ -284,6 +274,9 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
           }}>
             <IoCopyOutline />
           </button>
+          <a href={`https://wa.me/${parsePhoneNumber(value.toString()).format('E.164')}`} target="_blank" rel="noopener noreferrer nofollow" className="p-1 rounded-full cursor-pointer hover:bg-gray-900 hover:text-white">
+            <FaWhatsapp />
+          </a>
         </div>
       }
     },
@@ -291,13 +284,9 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
       key: "state",
       label: "State",
       render: (value: string | number) => {
-        const label = InquiriesStates[value as number]
+        const label = inquiriesStates[value as number].label
 
-        return (
-          <span>
-            {label}
-          </span>
-        )
+        return <span>{label.replace("_", " ").replace(/\b\w/g, char => char.toUpperCase())}</span>
       }
     },
     {
@@ -339,13 +328,14 @@ export function InquiriesTable({ result }: InquiriesTableProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-row gap-2 items-center overflow-x-auto border-b border-zinc-200">
-        {InquiriesStates.map((stateLabel, index) => (
+        {inquiriesStates.map((state, index) => (
           <button
-            key={stateLabel}
-            className={`px-4 py-2 rounded-t-sm whitespace-nowrap cursor-pointer ${currentState === index ? "bg-gray-900 text-white" : "text-zinc-700 hover:bg-zinc-200 bg-zinc-100"}`}
+            key={state.label}
+            className={`flex flex-row gap-2 px-4 py-2 rounded-t-sm whitespace-nowrap cursor-pointer ${currentState === index ? "bg-gray-900 text-white" : "text-zinc-700 hover:bg-zinc-200 bg-zinc-100"}`}
             onClick={() => handleStateTabClick(index)}
           >
-            {stateLabel}
+            {state.label.replace("_", " ").replace(/\b\w/g, char => char.toUpperCase())}
+            {state.count > 0 && <span className={`w-6 h-6 flex items-center justify-center p-1 text-xs ${currentState === index ? "bg-white text-gray-900" : "bg-gray-900 text-white"} rounded-full`}>{state.count}</span>}
           </button>
         ))}
       </div>
