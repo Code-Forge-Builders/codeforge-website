@@ -5,23 +5,30 @@ import (
 	"codeforge/website-prospecting-api/internal/db"
 	"codeforge/website-prospecting-api/internal/jobs"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
 var (
-	DEFAULT_PAGE      int16  = 1
-	DEFAULT_PAGE_SIZE int16  = 15
-	DEFAULT_ORDER_BY  string = "created_at"
-	DEFAULT_ORDER     string = "desc"
+	DEFAULT_PAGE              int16  = 1
+	DEFAULT_PAGE_SIZE         int16  = 15
+	DEFAULT_ORDER_BY          string = "created_at"
+	DEFAULT_ORDER             string = "desc"
+	DEFAULT_STATE             State  = StateOpen
+	ErrInquiryNotFound               = errors.New("inquiry not found")
+	ErrInvalidStateTransition        = errors.New("invalid inquiry state transition")
 )
 
 type InquiryService interface {
 	Create(createInquiryDto CreateInquiryDto) (*Inquiries, error)
 	List(filterInquiryDto InquiryQueryParamsDto) (InquiryListReturn, error)
+	CountByState(filterInquiryDto InquiryQueryParamsDto) ([]CountByStateResponseBody, error)
+	ChangeState(inquiryId uuid.UUID, event Event) error
 }
 
 type inquiryService struct {
@@ -83,6 +90,7 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 	var now = time.Now()
 	var startDate = now.Add(-30 * 24 * time.Hour)
 	var endDate = now
+	var state = DEFAULT_STATE
 	var orderBy = DEFAULT_ORDER_BY
 	var order = DEFAULT_ORDER
 	var total int64
@@ -126,6 +134,12 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 	offset := (page - 1) * pageSize
 
 	query := db.DB.Model(&Inquiries{})
+
+	if queryParams.State != nil {
+		query = query.Where("state = ?", State(*queryParams.State).ToString())
+	} else {
+		query = query.Where("state = ?", state.ToString())
+	}
 
 	if queryParams.Search != nil && *queryParams.Search != "" && *queryParams.Search != "undefined" {
 		query = query.
@@ -193,8 +207,107 @@ func (s *inquiryService) List(queryParams InquiryQueryParamsDto) (InquiryListRet
 	}, nil
 }
 
+func (s *inquiryService) CountByState(queryParams InquiryQueryParamsDto) ([]CountByStateResponseBody, error) {
+	var now = time.Now()
+	var startDate = now.Add(-30 * 24 * time.Hour)
+	var endDate = now
+
+	var states []CountByStateResponseBody
+
+	if err := validateFilter(queryParams); err != nil {
+		return []CountByStateResponseBody{}, err
+	}
+
+	query := db.DB.Model(&Inquiries{})
+
+	if queryParams.Search != nil && *queryParams.Search != "" && *queryParams.Search != "undefined" {
+		query = query.
+			Where(
+				"(searchable ILIKE ? OR searchable % ?)",
+				"%"+*queryParams.Search+"%",
+				*queryParams.Search,
+			).
+			Order(gorm.Expr("similarity(searchable, ?) DESC", *queryParams.Search))
+	}
+
+	// Both were sent
+	if queryParams.StartDate != nil && queryParams.EndDate != nil {
+		query = query.Where("created_at BETWEEN ? AND ?", *queryParams.StartDate, *queryParams.EndDate)
+	} else if queryParams.StartDate != nil {
+		// Just start date was sent, so set the end date to be 30 days after start date (inclusive range)
+		endDate := queryParams.StartDate.AddDate(0, 0, 30).Add(-time.Nanosecond)
+		query = query.Where("created_at BETWEEN ? AND ?", *queryParams.StartDate, endDate)
+	} else if queryParams.EndDate != nil {
+		// Just end date was sent, so set start date to be 30 days before end date (inclusive range)
+		start := queryParams.EndDate.AddDate(0, 0, -30).Add(time.Nanosecond)
+		query = query.Where("created_at BETWEEN ? AND ?", start, *queryParams.EndDate)
+	} else {
+		// None were sent (defaults)
+		query = query.Where("created_at BETWEEN ? AND ?", startDate, endDate)
+	}
+
+	// Add grouping by state
+	query = query.Group("state").Select("state, COUNT(*) as count")
+
+	// Execute all
+	if err := query.Find(&states).Error; err != nil {
+		return []CountByStateResponseBody{}, err
+	}
+
+	// Include empty states
+	countsMap := make(map[State]int64)
+	for _, state := range states {
+		countsMap[State(state.State)] = state.Count
+	}
+
+	result := []CountByStateResponseBody{}
+
+	for _, state := range GetAllStates() {
+		result = append(result, CountByStateResponseBody{
+			State: state,
+			Label: state.ToString(),
+			Count: countsMap[state],
+		})
+	}
+
+	return result, nil
+}
+
+func (s *inquiryService) ChangeState(inquiryId uuid.UUID, event Event) error {
+	inquiry := Inquiries{}
+
+	if err := db.DB.Where("id = ?", inquiryId).First(&inquiry).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return fmt.Errorf("%w", ErrInquiryNotFound)
+		}
+		return fmt.Errorf("error fetching inquiry: %w", err)
+	}
+
+	if !inquiry.CanTransition(event) {
+		return fmt.Errorf("%w: event %v cannot be applied to state %v", ErrInvalidStateTransition, event, inquiry.State)
+	}
+
+	inquiry.State = Transitions[inquiry.State][event]
+
+	if err := db.DB.Save(&inquiry).Error; err != nil {
+		return fmt.Errorf("error updating inquiry state: %w", err)
+	}
+
+	return nil
+}
+
 func validateFilter(filter InquiryQueryParamsDto) error {
+	if filter.State != nil {
+		if *filter.State < StateOpen || *filter.State > StateResolved {
+			return fmt.Errorf("invalid state")
+		}
+	}
+
 	if filter.StartDate != nil || filter.EndDate != nil {
+		if filter.StartDate == nil || filter.EndDate == nil {
+			return nil
+		}
+
 		if filter.StartDate.After(*filter.EndDate) {
 			return fmt.Errorf("invalid date range")
 		}

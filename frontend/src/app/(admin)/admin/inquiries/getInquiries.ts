@@ -4,9 +4,17 @@ import { redirect } from "next/navigation"
 
 export interface IGetInquiriesPayload {
   search?: string
+  state?: number
+  start_date?: string
+  end_date?: string
+  page?: number
+  page_size?: number
+  order_by?: string
+  order?: string
 }
 
 export interface Inquiries {
+  id: string
   customer_name: string
   customer_email: string
   customer_phone: string
@@ -23,7 +31,13 @@ export interface InquiriesResponseBody {
   total: number
 }
 
-export default async function getInquiries(payload: IGetInquiriesPayload): Promise<InquiriesResponseBody> {
+export interface InquiriesCountByStateResponseBody {
+  state: number
+  label: string
+  count: number
+}
+
+export async function getInquiries(payload: IGetInquiriesPayload): Promise<InquiriesResponseBody> {
   const cookieStore = await cookies()
   const authToken = cookieStore.get('auth_token')
   if (!authToken) {
@@ -42,7 +56,35 @@ export default async function getInquiries(payload: IGetInquiriesPayload): Promi
 
     return result
   }
-  catch (error) {
+  catch (error: any) {
+    console.error(error)
+    throw error
+  }
+}
+
+export async function getInquiriesCountByState(payload: IGetInquiriesPayload): Promise<InquiriesCountByStateResponseBody[]> {
+  const cookieStore = await cookies()
+  const authToken = cookieStore.get('auth_token')
+  if (!authToken) {
+    redirect('/auth/login')
+  }
+
+  try {
+    const result = await apiHttpClient.get<InquiriesCountByStateResponseBody[]>("/inquiries/count-by-state", {
+      credentials: "include",
+      cache: "no-store",
+      headers: {
+        Cookie: cookieStore.toString(),
+      },
+      query: {
+        ...payload,
+      } as unknown as Record<string, string>
+    })
+
+    return result
+  }
+  catch (error: any) {
+    console.error(error)
     throw error
   }
 }
